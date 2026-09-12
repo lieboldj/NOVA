@@ -175,3 +175,7 @@ blockquote { margin:14px 0; padding:12px; border-left:3px solid var(--blue); bac
 .dark-mode .starter-message,.dark-mode .starter-option { background:#123b5f; color:#e6f1ff; }
 .dark-mode .starter-message.user { background:#1c5889; }
 @media(max-width:520px) { .starter-option { align-items:flex-start; flex-direction:column; } }
+
+.process-preview { margin-top:20px; border-top:1px solid var(--line); padding-top:12px; }
+.audience-option { display:flex; align-items:flex-start; gap:10px; line-height:1.6; cursor:pointer; }
+.audience-option input { flex-shrink:0; margin-top:5px; }

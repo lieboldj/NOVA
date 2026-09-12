@@ -29,6 +29,7 @@ CSV_COLUMNS = [
     "Status",
 ]
 V2_COLUMNS = CSV_COLUMNS[:3] + ["Country"] + CSV_COLUMNS[3:] + ["Workflow status", "Last contact date"]
+TARGETING_COLUMNS = ["Region", "Industry"]
 OUTSTANDING = {"Missing", "Outdated", "Flagged (needs supplier confirmation)"}
 STATUSES = OUTSTANDING | {"Complete", "N/A (informational field)"}
 ACTIVE_DRAFTS = ["pending", "approved", "sending", "uncertain"]
@@ -73,8 +74,10 @@ def enqueue(db, kind, target_id, dedupe_key):
 def parse_csv(content: bytes):
     try:
         reader = csv.DictReader(io.StringIO(content.decode("utf-8-sig")), strict=True)
-        if reader.fieldnames not in [CSV_COLUMNS, V2_COLUMNS]:
-            fail("CSV headers must match the v1 or v2 supplier submission test set", 422)
+        headers = reader.fieldnames or []
+        base = [name for name in headers if name not in TARGETING_COLUMNS]
+        if base not in [CSV_COLUMNS, V2_COLUMNS] or len(headers) != len(set(headers)):
+            fail("CSV headers must match v1 or v2, with optional Region and Industry columns", 422)
         rows = list(reader)
     except (UnicodeError, csv.Error):
         fail("Invalid UTF-8 CSV", 422)
@@ -182,7 +185,7 @@ def invalidate_drafts(db, case):
     case.revision += 1
 
 
-def create_draft(db, case, kind):
+def create_draft(db, case, kind, use_case=None):
     if not case.recipient:
         fail("Approve a supplier email contact before drafting.")
     if pending_review(db, case.id) or blocking_message(db, case.id):
@@ -191,6 +194,8 @@ def create_draft(db, case, kind):
     if existing:
         return existing
     fields = outstanding(db, case.id)
+    if use_case:
+        fields = [f for f in fields if f.data["Use case"].strip().casefold() == use_case.casefold()]
     if not fields:
         fail("No outstanding fields.")
     heading = {
@@ -198,6 +203,8 @@ def create_draft(db, case, kind):
         "followup": "Outstanding information",
         "reminder": "Reminder",
     }[kind]
+    if use_case:
+        heading = f"{use_case} {heading}"
     lines = []
     for field in fields:
         d = field.data

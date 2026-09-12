@@ -55,6 +55,10 @@ export default function ImportDialog({ onClose, onChanged }) {
       <Notice error>{error}</Notice>
       {!batch ? (
         <form onSubmit={preview}>
+          <p>
+            For requests by region and industry, include optional Region and
+            Industry columns in your supplier submissions CSV.
+          </p>
           <label className="field-label">
             Supplier submissions CSV
             <input

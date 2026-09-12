@@ -16,6 +16,7 @@ from nova.config import get_settings
 from nova.db import initialize, make_engine, sessions
 from nova.gmail import Gmail, install_gmail_routes
 from nova.inbox import ingest_message
+from nova.initiation import install_initiation_routes
 from nova.models import (
     Audit,
     Case,
@@ -39,6 +40,7 @@ from nova.schemas import (
 from nova.workflow import (
     CSV_COLUMNS,
     OUTSTANDING,
+    TARGETING_COLUMNS,
     V2_COLUMNS,
     audit,
     blocking_message,
@@ -143,6 +145,7 @@ def create_app(settings=None, engine=None):
     )
     app.state.settings, app.state.engine = settings, engine
     app.state.factory = sessions(engine)
+    install_initiation_routes(app, settings, DB, Reviewer)
 
     @app.get("/health", tags=["Operations"])
     def health():
@@ -529,6 +532,7 @@ def create_app(settings=None, engine=None):
         output = io.StringIO(newline="")
         fields = db.scalars(select(SupplierField).order_by(SupplierField.id)).all()
         columns = V2_COLUMNS if any("Country" in f.data for f in fields) else CSV_COLUMNS
+        columns = columns + [key for key in TARGETING_COLUMNS if any(key in f.data for f in fields)]
         writer = csv.DictWriter(output, fieldnames=columns)
         writer.writeheader()
         for field in fields:

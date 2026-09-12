@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Bot, Search } from "lucide-react";
 import { api } from "./api";
 import { Modal, Notice, StatusBadge } from "./components";
+import NaturalLanguageStarter from "./NaturalLanguageStarter";
 
 export default function ProcessStarter({
   cases,
@@ -88,13 +89,13 @@ export default function ProcessStarter({
   return (
     <Modal
       title="Start a supplier process"
-      subtitle="Choose the supplier, check what is missing, and prepare an email for review."
+      subtitle="Describe who should receive a questionnaire, or choose a supplier to start."
       onClose={onClose}
       busy={busy}
     >
       <div className="starter-message">
         <Bot size={22} />
-        <p>Which supplier or article should we work on?</p>
+        <p>Who should receive an MDF request?</p>
       </div>
       {!selected ? (
         <>
@@ -110,6 +111,11 @@ export default function ProcessStarter({
             </div>
           ) : (
             <>
+              <NaturalLanguageStarter
+                onChanged={onChanged}
+                onOpenReview={onOpenReview}
+                onBusyChange={setBusy}
+              />
               <label className="field-label">
                 Find a supplier or article
                 <div className="search">
@@ -127,6 +133,7 @@ export default function ProcessStarter({
                   <button
                     className="starter-option"
                     key={c.id}
+                    disabled={busy}
                     onClick={() => setSelected(c.id)}
                   >
                     <span>
@@ -152,7 +159,11 @@ export default function ProcessStarter({
                   find the right article.
                 </p>
               )}
-              <button className="secondary-btn" onClick={onImport}>
+              <button
+                className="secondary-btn"
+                onClick={onImport}
+                disabled={busy}
+              >
                 Import another supplier CSV
               </button>
             </>

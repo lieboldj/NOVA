@@ -137,3 +137,40 @@ API bypasses the configured response deadlines or approval requirements.
 
 See [the Gmail integration contract](gmail-setup.md#frontend-and-n8n-contract) for connection status,
 inbox reading, paginated n8n synchronization, and retry/reconciliation behavior.
+
+## Human-initiated questionnaire batches
+
+In **Start process**, internal reviewers can describe an audience, preview it, select article cases,
+and prepare the corresponding MDF emails. For example:
+
+> For suppliers who are in region APAC and are in automotive industry, send the MDF request.
+
+`POST /processes/preview` accepts `{"command":"Send the MDF request to APAC automotive suppliers"}`.
+It returns interpreted `criteria`, matching cases with recipients and outstanding MDF fields,
+eligibility/blocking reasons, the number of cases missing required targeting metadata, and a signed
+`preview_token` valid for 30 minutes. Previewing creates no drafts or jobs.
+
+`POST /processes/start` accepts `{"preview_token":"...","case_ids":["..."]}`. Select any nonempty subset
+of eligible cases from the preview, up to 500. The server locks and revalidates the complete selection
+before creating a pending email per article case. Changed cases return `409` and require a new preview;
+unpreviewed cases return `422`. Retries cannot duplicate active requests. Each case records a
+`process.initiated` audit event with the human actor, original command, criteria, and draft ID.
+Emails use the existing individual review, approval, and delivery endpoints. Both process endpoints
+require reviewer credentials; automation credentials cannot initiate a human request.
+
+This first version interprets commands locally using imported supplier names/IDs, region and industry
+values, and the MDF questionnaire. It supports one region and one industry joined with `and`, multiple
+named suppliers joined with `and`, and explicit `all suppliers`. Different criteria intersect.
+It rejects unknown terms, exclusions, disjunctions, and other questionnaire types rather than ignoring
+them. It does not require an external language model. Empty results and blocked cases remain visible.
+Cases awaiting replies, with active drafts or unreviewed replies, or requiring individual restart
+review cannot be started as part of a batch.
+
+Supplier submissions CSVs may include optional `Region` and `Industry` columns alongside either v1
+or v2 headers. These attributes are retained in approved field rows and CSV exports; no database
+migration is needed. Matching ignores case and surrounding/repeated whitespace. Missing or conflicting
+attributes within an article case exclude it from the corresponding filter. Region and industry are
+not inferred from supplier names or country. Existing sample CSVs do not contain these attributes;
+include them in new imports to use audience targeting. Imports retain the existing non-overwrite rule
+for row IDs. This flow requests outstanding supplier-editable MDF fields from already imported cases;
+it does not create questionnaire definitions or new suppliers.

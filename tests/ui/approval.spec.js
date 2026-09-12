@@ -260,3 +260,98 @@ test("mobile layout, filters and real empty operation state", async ({
     ),
   ).toBe(true);
 });
+
+test("human describes an audience and prepares selected MDF requests", async ({
+  page,
+  request,
+}) => {
+  const apiHeaders = { Authorization: "Bearer ui-review-secret" };
+  const records = [
+    ["NL-A1", "APAC", "Automotive"],
+    ["NL-A2", "APAC", "Automotive"],
+    ["NL-E1", "EMEA", "Automotive"],
+  ].map(([id, region, industry]) => {
+    const record = [...row];
+    record[0] = `${id}-F1`;
+    record[1] = id;
+    record[2] = `Natural Language ${id}`;
+    record[3] = `${id}-ARTICLE`;
+    return [...record, region, industry];
+  });
+  const imported = await request.post("/api/imports", {
+    headers: apiHeaders,
+    multipart: {
+      file: {
+        name: "audience.csv",
+        mimeType: "text/csv",
+        buffer: Buffer.from(
+          [...columns, "Region", "Industry"].join(",") +
+            "\n" +
+            records.map((record) => record.join(",")).join("\n") +
+            "\n",
+        ),
+      },
+    },
+  });
+  expect(imported.status()).toBe(201);
+  const batch = await imported.json();
+  expect(
+    (
+      await request.post(`/api/imports/${batch.id}/approve`, {
+        headers: apiHeaders,
+        data: {
+          contacts: {
+            "NL-A1": "a1@example.com",
+            "NL-A2": "a2@example.com",
+            "NL-E1": "e1@example.com",
+          },
+        },
+      })
+    ).ok(),
+  ).toBe(true);
+  await login(page);
+  await page
+    .getByRole("button", { name: "Start process", exact: true })
+    .click();
+  await page
+    .getByLabel("Describe your supplier request")
+    .fill(
+      "For suppliers who are in region APAC and are in automotive industry, send the MDF request.",
+    );
+  await page
+    .getByRole("button", { name: "Preview matching suppliers", exact: true })
+    .click();
+  const audience = page.getByRole("region", {
+    name: "Request questionnaires in natural language",
+  });
+  await expect(
+    audience.getByText("2 suppliers · 2 article cases", { exact: true }),
+  ).toBeVisible();
+  await expect(audience.getByRole("checkbox")).toHaveCount(2);
+  await expect(
+    audience.getByText("Natural Language NL-E1", { exact: true }),
+  ).toHaveCount(0);
+  await audience.getByRole("checkbox").last().uncheck();
+  await audience
+    .getByRole("button", { name: "Prepare 1 request for review", exact: true })
+    .click();
+  await expect(
+    audience.getByText("1 request prepared", { exact: true }),
+  ).toBeVisible();
+  const drafts = (
+    await (await request.get("/api/drafts", { headers: apiHeaders })).json()
+  ).filter((draft) =>
+    draft.requested_fields.some((id) => id.startsWith("NL-")),
+  );
+  expect(drafts).toHaveLength(1);
+  expect(drafts[0].status).toBe("pending");
+  await audience
+    .getByRole("button", { name: /Review Natural Language/ })
+    .click();
+  await expect(page.getByLabel("Email subject")).toHaveValue(
+    /MDF Information request/,
+  );
+  await expect(
+    page.getByRole("button", { name: "Approve email & send", exact: true }),
+  ).toBeEnabled();
+});
