@@ -323,9 +323,15 @@ function ProposalReview({ proposal, field, busy, act }) {
   );
 }
 
-export default function CaseDrawer({ caseId, config, onClose, onChanged }) {
+export default function CaseDrawer({
+  caseId,
+  config,
+  initialTab,
+  onClose,
+  onChanged,
+}) {
   const [data, setData] = useState(null);
-  const [tab, setTab] = useState("email");
+  const [tab, setTab] = useState(initialTab || "email");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
@@ -348,10 +354,11 @@ export default function CaseDrawer({ caseId, config, onClose, onChanged }) {
     setData({ detail, drafts, proposals, messages, jobs, activity });
     if (first.current) {
       setRecipient(detail.recipient);
-      if (proposals.some((p) => p.status === "pending")) setTab("data");
+      if (!initialTab && proposals.some((p) => p.status === "pending"))
+        setTab("data");
       first.current = false;
     }
-  }, [caseId]);
+  }, [caseId, initialTab]);
   useEffect(() => {
     load().catch((e) => setError(e.message));
     return () => {

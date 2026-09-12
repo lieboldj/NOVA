@@ -40,12 +40,24 @@ the Vite server process. No credentials are injected by this proxy.
 For a local Python API process, run `npm run build` before starting it to serve the frontend from port
 8000. `FRONTEND_DIST` defaults to `dist`. `npm run preview` has the same API proxy for build checks.
 
+## Start a process from the portal
+
+Use **Start process** on the overview to open the guided conversation. Search for a supplier or article,
+select its case, and review the outstanding fields. If its contact is missing or changed, approve the
+recipient first. **Prepare request for review** creates a pending draft and opens the email review screen;
+it does not approve or send the email. Existing drafts and replies needing review are opened instead of
+starting duplicate requests. When no cases exist, the starter guides you through CSV import and returns
+to supplier selection after import approval.
+
+The starter uses backend records and explicit choices. It does not send chat text or supplier identities
+to a model. **Check due cases** runs the separate scheduled-work check across existing due cases.
+
 ## Review workflow
 
 1. Import CSV: upload and preview its sample, counts, and optional contacts. Only **Approve import into
    database** adds accepted supplier records. Unknown contact addresses can be approved later per case.
 2. Open a case. Approve its supplier contact if missing or incorrect. Contact changes invalidate old drafts.
-3. Create a draft or use **Run agent** to check due cases. This prepares drafts; it does not approve them.
+3. Create a draft or use **Check due cases** to check due cases. This prepares drafts; it does not approve them.
 4. Review recipient, subject, and body. Save edits as a new version, then press **Approve email & send**.
    Delivery is queued to the worker; the status updates when Gmail accepts it. Reminders and follow-ups
    use this same explicit approval. The test Gmail transport only sends to its configured supplier mailbox.

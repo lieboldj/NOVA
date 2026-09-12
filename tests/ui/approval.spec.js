@@ -53,7 +53,15 @@ test("email approval and data approval remain separate across reloads", async ({
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await login(page);
-  await page.getByRole("button", { name: "Import CSV", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Start process", exact: true })
+    .click();
+  await expect(
+    page.getByText(/No supplier data has been imported yet/),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Import supplier CSV", exact: true })
+    .click();
   await page.getByLabel("Supplier CSV", { exact: true }).setInputFiles({
     name: "supplier.csv",
     mimeType: "text/csv",
@@ -64,17 +72,30 @@ test("email approval and data approval remain separate across reloads", async ({
     .click();
   await expect(page.getByText("1 fields · 1 suppliers")).toBeVisible();
   await page
-    .getByText("Optional supplier contacts (1)", { exact: true })
-    .click();
-  await page
-    .getByLabel("UI-SUPPLIER", { exact: true })
-    .fill("supplier@example.com");
-  await page
     .getByRole("button", { name: "Approve import into database", exact: true })
     .click();
-  await page.getByRole("button").filter({ hasText: "UI-ARTICLE" }).click();
+  const starter = page.getByRole("dialog", {
+    name: "Start a supplier process",
+    exact: true,
+  });
+  await expect(starter).toBeVisible();
+  await starter.getByLabel("Find a supplier or article").fill("UI-ARTICLE");
+  await starter
+    .getByRole("button")
+    .filter({ hasText: "Fictional UI Supplier" })
+    .click();
+  await expect(
+    page.getByRole("button", {
+      name: "Prepare request for review",
+      exact: true,
+    }),
+  ).toBeDisabled();
+  await page.getByLabel("Process recipient").fill("supplier@example.com");
   await page
-    .getByRole("button", { name: "Create email draft", exact: true })
+    .getByRole("button", { name: "Approve supplier contact", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Prepare request for review", exact: true })
     .click();
   await expect(
     page
@@ -91,11 +112,33 @@ test("email approval and data approval remain separate across reloads", async ({
     .getByRole("button", { name: "Save email edits", exact: true })
     .click();
   await expect(page.getByText(/Version 2 ·/)).toBeVisible();
+  await page.getByRole("button", { name: "Close review", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Start process", exact: true })
+    .click();
+  await page
+    .getByRole("dialog", { name: "Start a supplier process", exact: true })
+    .getByRole("button")
+    .filter({ hasText: "Fictional UI Supplier" })
+    .click();
+  await page
+    .getByRole("button", { name: "Review existing email", exact: true })
+    .click();
+  await expect(page.getByText(/Version 2 ·/)).toBeVisible();
   const apiHeaders = { Authorization: "Bearer ui-review-secret" };
   const cases = await (
     await request.get("/api/cases", { headers: apiHeaders })
   ).json();
   const caseId = cases[0].id;
+  expect(
+    (
+      await (
+        await request.get(`/api/drafts?case_id=${caseId}`, {
+          headers: apiHeaders,
+        })
+      ).json()
+    ).length,
+  ).toBe(1);
   expect(
     (
       await (

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
-  Activity,
+  MessageSquarePlus,
   AlertCircle,
   ArrowRight,
   Bell,
@@ -30,6 +30,7 @@ import { allCases, api, dateLabel, setSession, statusMeta } from "./api";
 import { Notice, StatusBadge } from "./components";
 import CaseDrawer from "./CaseDrawer";
 import ImportDialog from "./ImportDialog";
+import ProcessStarter from "./ProcessStarter";
 import "./styles.css";
 
 function Login({ onLogin }) {
@@ -159,6 +160,9 @@ function Dashboard({ session, onLogout }) {
   const [updated, setUpdated] = useState(null);
   const [selected, setSelected] = useState(null);
   const [importing, setImporting] = useState(false);
+  const [starting, setStarting] = useState(false);
+  const [startAfterImport, setStartAfterImport] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(undefined);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("ALL");
   const [supplier, setSupplier] = useState("ALL");
@@ -376,11 +380,18 @@ function Dashboard({ session, onLogout }) {
                   <Mail size={16} /> Sync inbox
                 </button>
                 <button
-                  className="primary-btn"
+                  className="secondary-btn"
                   disabled={busy}
                   onClick={() => action(runCheck)}
                 >
-                  <Zap size={16} /> {busy ? "Working…" : "Run agent"}
+                  <Zap size={16} /> {busy ? "Working…" : "Check due cases"}
+                </button>
+                <button
+                  className="primary-btn"
+                  disabled={busy}
+                  onClick={() => setStarting(true)}
+                >
+                  <MessageSquarePlus size={16} /> Start process
                 </button>
               </div>
             </section>
@@ -496,7 +507,10 @@ function Dashboard({ session, onLogout }) {
                   <button
                     className="table-row"
                     key={c.id}
-                    onClick={() => setSelected(c.id)}
+                    onClick={() => {
+                      setSelectedTab(undefined);
+                      setSelected(c.id);
+                    }}
                   >
                     <div className="request-cell">
                       <span className="request-id">{c.nart}</span>
@@ -568,7 +582,10 @@ function Dashboard({ session, onLogout }) {
                   </div>
                   <button
                     className="secondary-btn"
-                    onClick={() => setSelected(c.id)}
+                    onClick={() => {
+                      setSelectedTab(undefined);
+                      setSelected(c.id);
+                    }}
                   >
                     Review
                   </button>
@@ -629,12 +646,40 @@ function Dashboard({ session, onLogout }) {
           key={selected}
           caseId={selected}
           config={data.config}
+          initialTab={selectedTab}
           onClose={() => setSelected(null)}
           onChanged={refresh}
         />
       )}
+      {starting && data && (
+        <ProcessStarter
+          cases={cases}
+          config={data.config}
+          onClose={() => setStarting(false)}
+          onChanged={refresh}
+          onImport={() => {
+            setStarting(false);
+            setStartAfterImport(true);
+            setImporting(true);
+          }}
+          onOpenReview={(id, tab) => {
+            setStarting(false);
+            setSelectedTab(tab);
+            setSelected(id);
+          }}
+        />
+      )}
       {importing && (
-        <ImportDialog onClose={() => setImporting(false)} onChanged={refresh} />
+        <ImportDialog
+          onClose={() => {
+            setImporting(false);
+            setStartAfterImport(false);
+          }}
+          onChanged={async () => {
+            await refresh();
+            if (startAfterImport) setStarting(true);
+          }}
+        />
       )}
     </div>
   );

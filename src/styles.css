@@ -163,3 +163,15 @@ blockquote { margin:14px 0; padding:12px; border-left:3px solid var(--blue); bac
 .dark-mode .notice { background:#153f60; color:#d0e7fa; border-color:#326386; }
 .dark-mode .notice.error { background:#542c39; color:#ffe0e6; border-color:#874153; }
 @media(max-width:720px) { .hero-actions { width:100%; } .top-actions .agent-online { display:none; } .value-comparison { grid-template-columns:1fr; } .review-tabs { gap:0; } .review-tabs button { font-size:12px; padding:8px; } }
+
+.starter-message { display:flex; gap:12px; align-items:flex-start; background:#edf6fd; border-radius:12px; padding:14px; margin:16px 0; color:#214d74; font-size:14px; line-height:1.6; }
+.starter-message svg { flex-shrink:0; margin-top:2px; }
+.starter-message p { margin:0; }
+.starter-message.user { background:#004b9b; color:white; margin-left:45px; }
+.starter-options { display:grid; gap:9px; max-height:420px; overflow:auto; margin:12px 0 20px; }
+.starter-option { display:flex; justify-content:space-between; gap:12px; align-items:center; text-align:left; padding:15px; border:1px solid var(--line); border-radius:9px; color:inherit; background:white; }
+.starter-option:hover { border-color:var(--blue); background:#f2f8fe; }
+.starter-option small { display:block; margin-top:5px; color:var(--muted); }
+.dark-mode .starter-message,.dark-mode .starter-option { background:#123b5f; color:#e6f1ff; }
+.dark-mode .starter-message.user { background:#1c5889; }
+@media(max-width:520px) { .starter-option { align-items:flex-start; flex-direction:column; } }
