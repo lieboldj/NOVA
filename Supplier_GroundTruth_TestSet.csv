@@ -1,0 +1,417 @@
+Row ID,Issue shape,Expected value (ground truth),Supplier persona
+R00002,stale,Monomer,cooperative
+R00003,vague-freetext,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00006,placeholder,All substances manufactured/sourced from within the EU,cooperative
+R00007,vague-freetext,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00008,wrong-option,Laboratory analysis,cooperative
+R00011,stale,Material declaration,cooperative
+R00014,wrong-format,Material declaration and laboratory ananlysis,cooperative
+R00016,stale,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00021,vague-freetext,Not Compliant,cooperative
+R00022,stale,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00023,vague-freetext,Supplier declaration and laboratory analysis,cooperative
+R00025,wrong-format,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00027,blank,Exempt,cooperative
+R00028,blank,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00029,stale,Material declaration and laboratory ananlysis,cooperative
+R00033,placeholder,Not Compliant,cooperative
+R00036,placeholder,No,cooperative
+R00043,placeholder,Complaint,cooperative
+R00048,stale,Supplier declaration and material declaration,cooperative
+R00051,stale,Laboratory analysis,cooperative
+R00052,placeholder,No,cooperative
+R00056,wrong-option,"Confirmed per supplier declaration for please list all included silicone compounds with their cas numbers and concentrations:, evidence on file.",cooperative
+R00058,vague-freetext,Not Affected,cooperative
+R00060,placeholder,Laboratory analysis,cooperative
+R00064,blank,Yes,cooperative
+R00066,vague-freetext,Supplier declaration and material declaration,cooperative
+R00076,wrong-option,Supplier declaration,cooperative
+R00078,blank,This product does contain GADSL listet substances,cooperative
+R00080,wrong-option,Presumption (without evidence),cooperative
+R00085,wrong-format,"Confirmed per supplier declaration for please list all included food allergens with their cas numbers and concentrations:, evidence on file.",cooperative
+R00088,placeholder,"Confirmed per supplier declaration for please state eu foodlaw status of your product incl. the relevant paragpraph, evidence on file.",cooperative
+R00090,wrong-format,Exempt,cooperative
+R00092,wrong-option,Supplier declaration,cooperative
+R00093,blank,Listed,cooperative
+R00095,wrong-option,Laboratory analysis,cooperative
+R00098,stale,Supplier declaration and material declaration,cooperative
+R00100,placeholder,"Confirmed per supplier declaration for please state foodlaw status of your product incl. the relevant us fda paragpraph, evidence on file.",cooperative
+R00104,stale,Supplier declaration and material declaration,cooperative
+R00109,wrong-option,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R00110,placeholder,Supplier declaration and laboratory analysis,cooperative
+R00112,wrong-option,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R00113,vague-freetext,Supplier declaration and laboratory analysis,cooperative
+R00115,wrong-format,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R00116,placeholder,Presumption (without evidence),cooperative
+R00120,stale,Not Compliant,cooperative
+R00122,stale,Supplier declaration,cooperative
+R00128,vague-freetext,Laboratory analysis,cooperative
+R00130,vague-freetext,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R00132,wrong-format,Exempt,cooperative
+R00133,placeholder,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R00134,stale,Supplier declaration and laboratory analysis,cooperative
+R00141,wrong-option,"Confirmed per supplier declaration for substance name, evidence on file.",cooperative
+R00142,stale,"Confirmed per supplier declaration for cas no. , evidence on file.",cooperative
+R00144,wrong-option,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",cooperative
+R00145,vague-freetext,"Confirmed per supplier declaration for substance name, evidence on file.",cooperative
+R00146,wrong-option,"Confirmed per supplier declaration for cas no. , evidence on file.",cooperative
+R00152,vague-freetext,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",cooperative
+R00158,placeholder,"Confirmed per supplier declaration for cas no. , evidence on file.",cooperative
+R00165,placeholder,"Confirmed per supplier declaration for substance name, evidence on file.",cooperative
+R00167,placeholder,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",cooperative
+R00169,vague-freetext,"Confirmed per supplier declaration for substance name, evidence on file.",cooperative
+R00171,vague-freetext,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",cooperative
+R00174,vague-freetext,"Confirmed per supplier declaration for cas no. , evidence on file.",cooperative
+R00176,blank,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",cooperative
+R00188,blank,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",cooperative
+R00190,stale,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",cooperative
+R00192,wrong-format,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",cooperative
+R00202,wrong-format,See attached documentation,cooperative
+R00208,vague-freetext,procurement context,cooperative
+R00209,wrong-format,NDA-restricted,cooperative
+R00211,wrong-format,"Confirmed per supplier declaration for site name, evidence on file.",cooperative
+R00212,wrong-format,ISO country list,cooperative
+R00214,wrong-format,"ISO 14001 - Environmental Management / ISO 45001 - Occupational, Health & Safety",cooperative
+R00215,wrong-format,"Confirmed per supplier declaration for certificate for supplier entity, evidence on file.",cooperative
+R00217,blank,See attached documentation,cooperative
+R00219,wrong-option,other,slow-partial
+R00224,vague-freetext,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",slow-partial
+R00233,stale,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",slow-partial
+R00235,wrong-format,Complaint,slow-partial
+R00236,vague-freetext,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",slow-partial
+R00240,placeholder,Supplier declaration and laboratory analysis,slow-partial
+R00242,placeholder,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",slow-partial
+R00243,wrong-format,Laboratory analysis,slow-partial
+R00245,stale,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",slow-partial
+R00246,stale,Laboratory analysis,slow-partial
+R00249,vague-freetext,Supplier declaration,slow-partial
+R00253,vague-freetext,No,slow-partial
+R00254,wrong-option,"Confirmed per supplier declaration for if yes, please list all inlcuded halogens with their cas numbers and concentrations:, evidence on file.",slow-partial
+R00257,vague-freetext,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",slow-partial
+R00258,placeholder,Material declaration,slow-partial
+R00259,wrong-option,No,slow-partial
+R00260,wrong-format,Complaint,slow-partial
+R00262,blank,Supplier declaration and material declaration,slow-partial
+R00263,stale,Yes,slow-partial
+R00264,vague-freetext,"Confirmed per supplier declaration for please list all included phthalates except those which are mentioned in annex xvii reach (entry 51) with their cas numbers and concentrations:, evidence on file.",slow-partial
+R00265,blank,Supplier declaration,slow-partial
+R00270,blank,"Confirmed per supplier declaration for please list all included antimony compounds with their cas numbers and concentrations:, evidence on file.",slow-partial
+R00276,placeholder,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",slow-partial
+R00279,wrong-option,"Confirmed per supplier declaration for if yes, which particle size?
+please list the particle size of the nano substance:, evidence on file.",slow-partial
+R00283,placeholder,Supplier declaration and laboratory analysis,slow-partial
+R00284,wrong-format,Complaint,slow-partial
+R00286,stale,Material declaration,slow-partial
+R00288,placeholder,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",slow-partial
+R00289,placeholder,Laboratory analysis,slow-partial
+R00290,placeholder,Complaint,slow-partial
+R00294,blank,Intentionally added,slow-partial
+R00296,placeholder,"Confirmed per supplier declaration for please list all gadsl listet substances including the cas numbers and concentrations:, evidence on file.",slow-partial
+R00297,placeholder,Supplier declaration and material declaration,slow-partial
+R00301,blank,No,slow-partial
+R00305,blank,"Confirmed per supplier declaration for please state eu foodlaw status of your product incl. the relevant paragpraph, evidence on file.",slow-partial
+R00306,blank,Material declaration,slow-partial
+R00312,placeholder,Supplier declaration,slow-partial
+R00313,vague-freetext,No,slow-partial
+R00315,wrong-format,Supplier declaration and material declaration,slow-partial
+R00319,vague-freetext,Not Compliant,slow-partial
+R00321,wrong-option,Laboratory analysis,slow-partial
+R00322,wrong-option,Complaint,slow-partial
+R00324,wrong-format,Material declaration and laboratory ananlysis,slow-partial
+R00325,blank,Not Compliant,slow-partial
+R00326,stale,"Confirmed per supplier declaration for substance, evidence on file.",slow-partial
+R00329,wrong-option,"Confirmed per supplier declaration for substance, evidence on file.",slow-partial
+R00348,vague-freetext,Supplier declaration and material declaration,slow-partial
+R00351,stale,Laboratory analysis,slow-partial
+R00352,blank,Exempt,slow-partial
+R00353,stale,"Confirmed per supplier declaration for substance, evidence on file.",slow-partial
+R00354,wrong-format,Supplier declaration,slow-partial
+R00356,wrong-option,"Confirmed per supplier declaration for substance, evidence on file.",slow-partial
+R00359,vague-freetext,"Confirmed per supplier declaration for cas no. , evidence on file.",slow-partial
+R00363,wrong-format,"Confirmed per supplier declaration for cas no. , evidence on file.",slow-partial
+R00369,wrong-format,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",slow-partial
+R00372,vague-freetext,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",slow-partial
+R00373,wrong-option,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",slow-partial
+R00378,placeholder,"Confirmed per supplier declaration for substance name, evidence on file.",slow-partial
+R00380,wrong-format,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",slow-partial
+R00382,stale,"Confirmed per supplier declaration for substance name, evidence on file.",slow-partial
+R00384,wrong-option,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",slow-partial
+R00396,wrong-option,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",slow-partial
+R00399,placeholder,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",slow-partial
+R00401,wrong-option,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",slow-partial
+R00405,blank,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",slow-partial
+R00406,wrong-format,"Confirmed per supplier declaration for substance concentration (in %), evidence on file.",slow-partial
+R00407,wrong-option,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",slow-partial
+R00415,stale,See attached documentation,slow-partial
+R00419,stale,See attached documentation,slow-partial
+R00421,placeholder,See attached documentation,slow-partial
+R00425,wrong-option,SAP master data,slow-partial
+R00426,placeholder,NDA-restricted,slow-partial
+R00428,placeholder,"Confirmed per supplier declaration for site name, evidence on file.",slow-partial
+R00432,blank,"Confirmed per supplier declaration for certificate for supplier entity, evidence on file.",slow-partial
+R00433,wrong-format,See attached documentation,slow-partial
+R00434,blank,See attached documentation,slow-partial
+R00441,wrong-format,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",non-responsive
+R00443,blank,Not Compliant,non-responsive
+R00444,placeholder,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",non-responsive
+R00453,wrong-format,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",non-responsive
+R00455,stale,Not Compliant,non-responsive
+R00457,blank,Presumption (without evidence),non-responsive
+R00461,blank,Exempt,non-responsive
+R00465,wrong-option,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",non-responsive
+R00469,wrong-format,Supplier declaration and material declaration,non-responsive
+R00471,stale,"Confirmed per supplier declaration for if yes, please list all inlcuded halogens with their cas numbers and concentrations:, evidence on file.",non-responsive
+R00472,stale,Material declaration and laboratory ananlysis,non-responsive
+R00473,placeholder,Complaint,non-responsive
+R00474,vague-freetext,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",non-responsive
+R00479,blank,Supplier declaration and material declaration,non-responsive
+R00480,wrong-option,Yes,non-responsive
+R00487,wrong-format,"Confirmed per supplier declaration for please list all included antimony compounds with their cas numbers and concentrations:, evidence on file.",non-responsive
+R00488,placeholder,Presumption (without evidence),non-responsive
+R00489,blank,No,non-responsive
+R00491,wrong-option,Supplier declaration,non-responsive
+R00493,vague-freetext,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",non-responsive
+R00494,blank,Laboratory analysis,non-responsive
+R00497,blank,Material declaration,non-responsive
+R00498,wrong-option,No,non-responsive
+R00503,stale,Material declaration and laboratory ananlysis,non-responsive
+R00508,stale,"Intentionally added Minerals, which are subject under the term ""responsible sourcing"", are only extracted from conformant smelters",non-responsive
+R00509,placeholder,See attached documentation,non-responsive
+R00513,blank,"Confirmed per supplier declaration for please list all gadsl listet substances including the cas numbers and concentrations:, evidence on file.",non-responsive
+R00516,wrong-format,"This product contains chemicals known to the State of California to cause cancer, birth defects or other reproductive harm",non-responsive
+R00517,stale,Presumption (without evidence),non-responsive
+R00533,wrong-option,Exempt,non-responsive
+R00534,vague-freetext,"Confirmed per supplier declaration for please state foodlaw status of your product incl. the relevant us fda paragpraph, evidence on file.",non-responsive
+R00535,vague-freetext,Material declaration,non-responsive
+R00536,vague-freetext,Complaint,non-responsive
+R00537,vague-freetext,"Confirmed per supplier declaration for substance, evidence on file.",non-responsive
+R00540,vague-freetext,"Confirmed per supplier declaration for substance, evidence on file.",non-responsive
+R00542,placeholder,Complaint,non-responsive
+R00543,placeholder,"Confirmed per supplier declaration for substance, evidence on file.",non-responsive
+R00546,stale,"Confirmed per supplier declaration for substance, evidence on file.",non-responsive
+R00548,vague-freetext,Exempt,non-responsive
+R00552,placeholder,"Confirmed per supplier declaration for substance, evidence on file.",non-responsive
+R00553,vague-freetext,Material declaration and laboratory ananlysis,non-responsive
+R00569,blank,Exempt,non-responsive
+R00571,blank,Material declaration and laboratory ananlysis,non-responsive
+R00576,placeholder,"Confirmed per supplier declaration for cas no. , evidence on file.",non-responsive
+R00579,blank,"Confirmed per supplier declaration for substance name, evidence on file.",non-responsive
+R00580,wrong-format,"Confirmed per supplier declaration for cas no. , evidence on file.",non-responsive
+R00581,wrong-format,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",non-responsive
+R00582,wrong-option,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",non-responsive
+R00583,placeholder,"Confirmed per supplier declaration for substance name, evidence on file.",non-responsive
+R00584,stale,"Confirmed per supplier declaration for cas no. , evidence on file.",non-responsive
+R00588,wrong-option,"Confirmed per supplier declaration for cas no. , evidence on file.",non-responsive
+R00593,blank,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",non-responsive
+R00595,vague-freetext,"Confirmed per supplier declaration for substance name, evidence on file.",non-responsive
+R00597,stale,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",non-responsive
+R00598,vague-freetext,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",non-responsive
+R00602,wrong-format,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",non-responsive
+R00603,blank,"Confirmed per supplier declaration for substance name, evidence on file.",non-responsive
+R00605,stale,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",non-responsive
+R00609,blank,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",non-responsive
+R00611,stale,"Confirmed per supplier declaration for substance name, evidence on file.",non-responsive
+R00614,placeholder,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",non-responsive
+R00616,blank,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",non-responsive
+R00620,stale,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",non-responsive
+R00621,wrong-format,"Confirmed per supplier declaration for substance concentration (in %), evidence on file.",non-responsive
+R00622,wrong-format,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",non-responsive
+R00625,blank,"Confirmed per supplier declaration for substance concentration (in %), evidence on file.",non-responsive
+R00626,vague-freetext,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",non-responsive
+R00631,blank,Last 6 years + current year,non-responsive
+R00632,vague-freetext,See attached documentation,non-responsive
+R00634,placeholder,See attached documentation,non-responsive
+R00644,wrong-option,See attached documentation,non-responsive
+R00646,blank,ISO country list,non-responsive
+R00654,placeholder,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00658,wrong-format,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00660,stale,Complaint,cooperative
+R00661,wrong-format,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00662,wrong-option,Material declaration,cooperative
+R00665,placeholder,Supplier declaration,cooperative
+R00668,wrong-option,Material declaration,cooperative
+R00670,vague-freetext,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00675,vague-freetext,Complaint,cooperative
+R00676,placeholder,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00683,vague-freetext,Supplier declaration and material declaration,cooperative
+R00686,placeholder,Supplier declaration and material declaration,cooperative
+R00688,stale,"Confirmed per supplier declaration for if yes, please list all inlcuded halogens with their cas numbers and concentrations:, evidence on file.",cooperative
+R00692,placeholder,Supplier declaration and laboratory analysis,cooperative
+R00694,wrong-format,Not Compliant,cooperative
+R00697,wrong-option,Yes,cooperative
+R00698,blank,"Confirmed per supplier declaration for please list all included phthalates except those which are mentioned in annex xvii reach (entry 51) with their cas numbers and concentrations:, evidence on file.",cooperative
+R00699,placeholder,Material declaration and laboratory ananlysis,cooperative
+R00701,wrong-option,"Confirmed per supplier declaration for please list all included mineral oils with their cas numbers and concentrations:, evidence on file.",cooperative
+R00704,wrong-option,"Confirmed per supplier declaration for please list all included antimony compounds with their cas numbers and concentrations:, evidence on file.",cooperative
+R00708,wrong-option,Material declaration and laboratory ananlysis,cooperative
+R00710,vague-freetext,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00713,wrong-option,"Confirmed per supplier declaration for if yes, which particle size?
+please list the particle size of the nano substance:, evidence on file.",cooperative
+R00718,blank,Not Compliant,cooperative
+R00726,vague-freetext,See attached documentation,cooperative
+R00727,stale,Supplier declaration,cooperative
+R00731,placeholder,Supplier declaration and laboratory analysis,cooperative
+R00732,placeholder,Not Compliant,cooperative
+R00737,placeholder,Material declaration and laboratory ananlysis,cooperative
+R00738,vague-freetext,Complaint,cooperative
+R00739,wrong-option,"Confirmed per supplier declaration for please state eu foodlaw status of your product incl. the relevant paragpraph, evidence on file.",cooperative
+R00742,stale,"Confirmed per supplier declaration for please state eu foodlaw status of your product incl. the relevant paragpraph, evidence on file.",cooperative
+R00743,wrong-format,Supplier declaration and laboratory analysis,cooperative
+R00744,wrong-option,Not Listed,cooperative
+R00746,vague-freetext,Supplier declaration,cooperative
+R00747,wrong-option,Yes,cooperative
+R00751,wrong-option,"Confirmed per supplier declaration for please state foodlaw status of your product incl. the relevant us fda paragpraph, evidence on file.",cooperative
+R00754,vague-freetext,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R00755,wrong-option,Material declaration and laboratory ananlysis,cooperative
+R00762,wrong-option,Exempt,cooperative
+R00767,blank,Material declaration,cooperative
+R00768,wrong-format,Complaint,cooperative
+R00770,stale,Supplier declaration and laboratory analysis,cooperative
+R00775,placeholder,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R00776,wrong-format,Supplier declaration,cooperative
+R00778,vague-freetext,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R00779,stale,Presumption (without evidence),cooperative
+R00780,blank,Exempt,cooperative
+R00783,stale,Not Compliant,cooperative
+R00792,wrong-option,"Confirmed per supplier declaration for substance name, evidence on file.",cooperative
+R00793,wrong-option,"Confirmed per supplier declaration for cas no. , evidence on file.",cooperative
+R00794,wrong-option,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",cooperative
+R00795,placeholder,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",cooperative
+R00798,wrong-format,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",cooperative
+R00802,blank,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",cooperative
+R00804,wrong-format,"Confirmed per supplier declaration for substance name, evidence on file.",cooperative
+R00808,wrong-format,"Confirmed per supplier declaration for substance name, evidence on file.",cooperative
+R00813,stale,"Confirmed per supplier declaration for cas no. , evidence on file.",cooperative
+R00814,wrong-option,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",cooperative
+R00822,vague-freetext,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",cooperative
+R00823,vague-freetext,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",cooperative
+R00825,blank,"Confirmed per supplier declaration for cas no. , evidence on file.",cooperative
+R00826,blank,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",cooperative
+R00828,blank,"Confirmed per supplier declaration for substance name, evidence on file.",cooperative
+R00831,stale,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",cooperative
+R00833,wrong-option,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",cooperative
+R00834,placeholder,"Confirmed per supplier declaration for substance concentration (in %), evidence on file.",cooperative
+R00835,blank,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",cooperative
+R00842,wrong-format,"Confirmed per supplier declaration for substance concentration (in %), evidence on file.",cooperative
+R00845,placeholder,See attached documentation,cooperative
+R00850,placeholder,See attached documentation,cooperative
+R00853,wrong-format,See attached documentation,cooperative
+R00857,placeholder,See attached documentation,cooperative
+R00865,wrong-option,"ISO 14001 - Environmental Management / ISO 45001 - Occupational, Health & Safety",cooperative
+R00872,wrong-option,Presumption (without evidence),cooperative
+R00874,wrong-format,All substances manufactured/sourced from within the EU,cooperative
+R00879,stale,Laboratory analysis,cooperative
+R00881,wrong-option,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00882,blank,Supplier declaration and material declaration,cooperative
+R00884,vague-freetext,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00887,vague-freetext,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00889,wrong-option,Not Compliant,cooperative
+R00892,blank,Complaint,cooperative
+R00895,wrong-format,Not Listed,cooperative
+R00901,blank,Not Compliant,cooperative
+R00905,vague-freetext,"Confirmed per supplier declaration for if yes, please list all inlcuded halogens with their cas numbers and concentrations:, evidence on file.",cooperative
+R00906,blank,Laboratory analysis,cooperative
+R00909,placeholder,Material declaration and laboratory ananlysis,cooperative
+R00910,wrong-option,Yes,cooperative
+R00912,vague-freetext,"Confirmed per supplier declaration for please list all included substances of animal origin or ethanol with their cas numbers and concentrations:, evidence on file.",cooperative
+R00914,wrong-format,No,cooperative
+R00917,stale,No,cooperative
+R00920,wrong-option,No,cooperative
+R00921,wrong-option,"Confirmed per supplier declaration for please list all included antimony compounds with their cas numbers and concentrations:, evidence on file.",cooperative
+R00922,blank,Material declaration and laboratory ananlysis,cooperative
+R00923,wrong-format,Yes,cooperative
+R00925,blank,Material declaration,cooperative
+R00927,blank,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00929,blank,No,cooperative
+R00932,wrong-format,No,cooperative
+R00935,stale,Not Compliant,cooperative
+R00936,placeholder,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",cooperative
+R00937,stale,Laboratory analysis,cooperative
+R00941,blank,Complaint,cooperative
+R00942,wrong-option,"Minerals, which are subject under the term ""responsible sourcing"", are not intentionally (e.g., impurities) added",cooperative
+R00944,vague-freetext,Laboratory analysis,cooperative
+R00945,vague-freetext,Intentionally added,cooperative
+R00946,wrong-format,This product does contain GADSL listet substances,cooperative
+R00947,vague-freetext,"Confirmed per supplier declaration for please list all gadsl listet substances including the cas numbers and concentrations:, evidence on file.",cooperative
+R00949,wrong-format,Not Compliant,cooperative
+R00958,wrong-option,Complaint,cooperative
+R00965,wrong-option,"Confirmed per supplier declaration for please state eu foodlaw status of your product incl. the relevant paragpraph, evidence on file.",cooperative
+R00968,blank,"Confirmed per supplier declaration for please state foodlaw status of your product incl. the relevant us fda paragpraph, evidence on file.",cooperative
+R00969,vague-freetext,Material declaration,cooperative
+R00971,stale,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R00973,blank,Exempt,cooperative
+R00977,stale,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R00978,wrong-format,Material declaration and laboratory ananlysis,cooperative
+R00979,vague-freetext,Complaint,cooperative
+R00980,stale,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R00984,placeholder,Supplier declaration and material declaration,cooperative
+R00988,wrong-option,Complaint,cooperative
+R00990,placeholder,Laboratory analysis,cooperative
+R00994,vague-freetext,Complaint,cooperative
+R00997,stale,Not Compliant,cooperative
+R01001,placeholder,"Confirmed per supplier declaration for substance, evidence on file.",cooperative
+R01008,stale,Material declaration,cooperative
+R01018,stale,"Confirmed per supplier declaration for cas no. , evidence on file.",cooperative
+R01028,vague-freetext,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",cooperative
+R01029,blank,"Confirmed per supplier declaration for substance name, evidence on file.",cooperative
+R01034,vague-freetext,"Confirmed per supplier declaration for cas no. , evidence on file.",cooperative
+R01036,placeholder,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",cooperative
+R01040,vague-freetext,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",cooperative
+R01041,stale,"Confirmed per supplier declaration for substance name, evidence on file.",cooperative
+R01043,wrong-format,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",cooperative
+R01046,vague-freetext,"Confirmed per supplier declaration for cas no. , evidence on file.",cooperative
+R01055,blank,"Confirmed per supplier declaration for substance concentration (in %), evidence on file.",cooperative
+R01063,stale,See attached documentation,cooperative
+R01067,vague-freetext,See attached documentation,cooperative
+R01068,placeholder,See attached documentation,cooperative
+R01070,vague-freetext,See attached documentation,cooperative
+R01072,stale,See attached documentation,cooperative
+R01075,vague-freetext,See attached documentation,cooperative
+R01082,stale,ISO 9001 - Quality Management,cooperative
+R01083,wrong-format,"Confirmed per supplier declaration for certificate for supplier entity, evidence on file.",cooperative

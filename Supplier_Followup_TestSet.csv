@@ -1,0 +1,439 @@
+Row ID,Supplier ID,Supplier Name,NART,Use case,Module (ID),Category,Section,Field (label),Field Type,Required @ go-live,Editable by supplier,Value submitted,Submission date,Status
+R00002,1000662,Kraton Chemical LLC,14129-90001-00,MDF,1,General information,Introduction,"Is this product a: Monomer, Polymer or no longer polymer or ""other""?",Dropdown,Yes,yes,Monomer,2025-04-05,Outdated
+R00003,1000662,Kraton Chemical LLC,14129-90001-00,MDF,1,General information,Introduction,Declaration of comformidity,Freetext,Yes,yes,"Yes, compliant.",2026-07-21,Flagged (needs supplier confirmation)
+R00006,1000662,Kraton Chemical LLC,14129-90001-00,MDF,2,REACH Registration Status,REACH Registration Status,Are all substances manufactures/sourced from within the EU?,Dropdown,Yes,yes,TBD,2025-11-28,Flagged (needs supplier confirmation)
+R00007,1000662,Kraton Chemical LLC,14129-90001-00,MDF,2,REACH,REACH Registration Status,Declaration of comformidity,Freetext,Yes,yes,"Yes, compliant.",2025-12-06,Flagged (needs supplier confirmation)
+R00008,1000662,Kraton Chemical LLC,14129-90001-00,MDF,2,REACH,REACH Registration Status,Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2026-04-22,Flagged (needs supplier confirmation)
+R00011,1000662,Kraton Chemical LLC,14129-90001-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Evaluation Procedures,Dropdown,Yes,yes,Material declaration,2025-06-17,Outdated
+R00014,1000662,Kraton Chemical LLC,14129-90001-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Evaluation Procedures,Dropdown,Yes,yes,"yes, see attachment",2025-12-11,Flagged (needs supplier confirmation)
+R00016,1000662,Kraton Chemical LLC,14129-90001-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Declaration of comformidity,Freetext,Yes,yes,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",2024-06-10,Outdated
+R00021,1000662,Kraton Chemical LLC,14129-90001-00,MDF,5,Legislations,POP regulation No 2019/1021/EC,Applies to all purchased products and packaging.,Dropdown,Yes,yes,"Yes, compliant.",2026-03-09,Flagged (needs supplier confirmation)
+R00022,1000662,Kraton Chemical LLC,14129-90001-00,MDF,5,Legislations,POP regulation No 2019/1021/EC,Declaration of comformidity,Freetext,Yes,yes,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",2025-04-23,Outdated
+R00023,1000662,Kraton Chemical LLC,14129-90001-00,MDF,5,Legislations,POP regulation No 2019/1021/EC,Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2026-08-06,Flagged (needs supplier confirmation)
+R00025,1000662,Kraton Chemical LLC,14129-90001-00,MDF,6,Legislations,PFOS/PFOA Directive 2006/122/EU,Declaration of comformidity,Freetext,Yes,yes,123,2026-04-26,Flagged (needs supplier confirmation)
+R00027,1000662,Kraton Chemical LLC,14129-90001-00,MDF,7,Legislations,Packaging directive 94/62/EC,Applies to all packaging materials for production and sales products.,Dropdown,Yes,yes,,,Missing
+R00028,1000662,Kraton Chemical LLC,14129-90001-00,MDF,7,Legislations,Packaging directive 94/62/EC,Declaration of comformidity,Freetext,Yes,yes,,,Missing
+R00029,1000662,Kraton Chemical LLC,14129-90001-00,MDF,7,Legislations,Packaging directive 94/62/EC,Evaluation Procedures,Dropdown,Yes,yes,Material declaration and laboratory ananlysis,2025-07-06,Outdated
+R00033,1000662,Kraton Chemical LLC,14129-90001-00,MDF,9,Legislations,ELV directive 2000/53/EC incl. amendments,Applies to all purchased products,Dropdown,Yes,yes,N/A,2025-11-28,Flagged (needs supplier confirmation)
+R00036,1000662,Kraton Chemical LLC,14129-90001-00,MDF,10,Legislations,International Electrotechnical Commission (IEC) 61249-2- 21 standard (Halogens),"International Electrotechnical Commission (IEC) 61249-2- 21 standard (Halogens).
+Does this product contain any Halogens above the limits emntioed in the standard",Dropdown,Yes,yes,pending,2026-07-27,Flagged (needs supplier confirmation)
+R00043,1000662,Kraton Chemical LLC,14129-90001-00,MDF,12,Requirements,Halal / Kosher requirements,Please confirm that the above-metioned product does not contain any substances of animal origin or ethanol,Dropdown,Yes,yes,pending,2026-09-10,Flagged (needs supplier confirmation)
+R00048,1000662,Kraton Chemical LLC,14129-90001-00,MDF,13,Requirements,Phthalates,Evaluation Procedures,Dropdown,Yes,yes,Supplier declaration and material declaration,2024-07-14,Outdated
+R00051,1000662,Kraton Chemical LLC,14129-90001-00,MDF,14,Requirements,Mineral Oil,Evaluation Procedures,Dropdown,Yes,yes,Laboratory analysis,2024-05-16,Outdated
+R00052,1000662,Kraton Chemical LLC,14129-90001-00,MDF,15,Requirements,Antimony,Does this product contain antimony or other antimony compounds?,Dropdown,Yes,yes,TBD,2026-07-30,Flagged (needs supplier confirmation)
+R00056,1000662,Kraton Chemical LLC,14129-90001-00,MDF,16,Requirements,Silicone,Please list all included silicone compounds with their CAS numbers and concentrations:,Freetext,Yes,yes,Unknown / not specified,2026-02-07,Flagged (needs supplier confirmation)
+R00058,1000662,Kraton Chemical LLC,14129-90001-00,MDF,17,Requirements,Microplastics / Synthetic polymer microparticles (SPM),Does your product contain any microplastics as mentioned in Commission Regulation (EU) 2023/2055?,Dropdown,Yes,yes,"Yes, compliant.",2026-03-04,Flagged (needs supplier confirmation)
+R00060,1000662,Kraton Chemical LLC,14129-90001-00,MDF,17,Requirements,Microplastics / Synthetic polymer microparticles (SPM),Evaluation Procedures,Dropdown,Yes,yes,TBD,2026-03-22,Flagged (needs supplier confirmation)
+R00064,1000662,Kraton Chemical LLC,14129-90001-00,MDF,19,Requirements,"Biocides Directive 98/8/EC, as amended by Ordinance EU 528/2012?",Does this product contain any biocidal substances as mentioned in Ordinance EU 528/2012? ,Dropdown,Yes,yes,,,Missing
+R00066,1000662,Kraton Chemical LLC,14129-90001-00,MDF,19,Requirements,"Biocides Directive 98/8/EC, as amended by Ordinance EU 528/2012?",Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2026-01-06,Flagged (needs supplier confirmation)
+R00076,1000662,Kraton Chemical LLC,14129-90001-00,MDF,22,Conflict Minerals,Responsible Minerals Sourcing (EU and US Legislative),Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2026-01-25,Flagged (needs supplier confirmation)
+R00078,1000662,Kraton Chemical LLC,14129-90001-00,MDF,24,Requirements,Global automotive declarable substance list (GADSL),"Global automotive declarable substance list (GADSL)
+https://www.gadsl.org/",Dropdown,Yes,yes,,,Missing
+R00080,1000662,Kraton Chemical LLC,14129-90001-00,MDF,24,Requirements,Global automotive declarable substance list (GADSL),Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2026-09-04,Flagged (needs supplier confirmation)
+R00085,1000662,Kraton Chemical LLC,14129-90001-00,MDF,26,Requirements,"Food allergen(s) EU 1169/2011, Annex II",Please list all included food allergens with their CAS numbers and concentrations:,Freetext,Yes,yes,123,2026-04-18,Flagged (needs supplier confirmation)
+R00088,1000662,Kraton Chemical LLC,14129-90001-00,MDF,27,Requirements,EU Food contact status,Please state EU foodlaw status of your product incl. the relevant paragpraph,Freetext,Yes,yes,TBD,2025-11-19,Flagged (needs supplier confirmation)
+R00090,1000662,Kraton Chemical LLC,14129-90001-00,MDF,27,Requirements,EU Food contact status,"Lebensmittel-, Bedarfsgegenstände, - und Futtermittelgesetzbuches (Lebensmittel- und Futtermittelgesetzbuch– LFGB) of the Food, Consumer Goods, and Feed Code (Food and Feed Code – LFGB) in the version published on 15 September 2021 (Federal Law Gazette I p. 4253), last amended by Article 7 of the Act of 27 September 2021 (Federal Law Gazette I p. 4530), §§ 30 and 31",Dropdown,Yes,yes,"yes, see attachment",2025-12-28,Flagged (needs supplier confirmation)
+R00092,1000662,Kraton Chemical LLC,14129-90001-00,MDF,27,Requirements,EU Food contact status,Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2026-08-01,Flagged (needs supplier confirmation)
+R00093,1000662,Kraton Chemical LLC,14129-90001-00,MDF,27,Requirements,EU Food contact status,COMMISSION REGULATION (EU) No 10/2011,Dropdown,Yes,yes,,,Missing
+R00095,1000662,Kraton Chemical LLC,14129-90001-00,MDF,27,Requirements,EU Food contact status,Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2026-05-08,Flagged (needs supplier confirmation)
+R00098,1000662,Kraton Chemical LLC,14129-90001-00,MDF,27,Requirements,EU Food contact status,Evaluation Procedures,Dropdown,Yes,yes,Supplier declaration and material declaration,2025-04-26,Outdated
+R00100,1000662,Kraton Chemical LLC,14129-90001-00,MDF,28,Requirements,US FDA Status,Please state foodlaw status of your product incl. the relevant US FDA paragpraph,Freetext,Yes,yes,tbc,2026-01-20,Flagged (needs supplier confirmation)
+R00104,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for USA (TSCA),Evaluation Procedures,Dropdown,Yes,yes,Supplier declaration and material declaration,2025-06-02,Outdated
+R00109,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for Canada (NDSL),Substance,Freetext,Yes,yes,Unknown / not specified,2026-04-11,Flagged (needs supplier confirmation)
+R00110,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for Canada (NDSL),Evaluation Procedures,Dropdown,Yes,yes,tbc,2026-07-14,Flagged (needs supplier confirmation)
+R00112,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for China (IECSC) ,Substance,Freetext,Yes,yes,Unknown / not specified,2026-05-27,Flagged (needs supplier confirmation)
+R00113,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for China (IECSC) ,Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2026-04-29,Flagged (needs supplier confirmation)
+R00115,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for Korea (KECI),Substance,Freetext,Yes,yes,123,2026-04-23,Flagged (needs supplier confirmation)
+R00116,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for Korea (KECI),Evaluation Procedures,Dropdown,Yes,yes,tbc,2026-06-21,Flagged (needs supplier confirmation)
+R00120,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for Philippines (PICCS),Philippines (PICCS),Dropdown,Yes,yes,Not Compliant,2024-10-14,Outdated
+R00122,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for Philippines (PICCS),Evaluation Procedures,Dropdown,Yes,yes,Supplier declaration,2024-05-05,Outdated
+R00128,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for Taiwan (TSCI),Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2026-03-25,Flagged (needs supplier confirmation)
+R00130,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for Mexico (INSQ),Substance,Freetext,Yes,yes,"Yes, compliant.",2026-07-18,Flagged (needs supplier confirmation)
+R00132,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for Malaysia (EMS),Malaysia (EMS),Dropdown,Yes,yes,"yes, see attachment",2026-03-16,Flagged (needs supplier confirmation)
+R00133,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for Malaysia (EMS),Substance,Freetext,Yes,yes,N/A,2026-08-30,Flagged (needs supplier confirmation)
+R00134,1000662,Kraton Chemical LLC,14129-90001-00,MDF,29,Requirements,Global Inventory Status for Malaysia (EMS),Evaluation Procedures,Dropdown,Yes,yes,Supplier declaration and laboratory analysis,2025-03-19,Outdated
+R00141,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 1,Substance Name,Freetext,Yes,yes,Unknown / not specified,2026-02-01,Flagged (needs supplier confirmation)
+R00142,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 1,CAS No. ,Freetext,Yes,yes,"Confirmed per supplier declaration for cas no. , evidence on file.",2024-12-28,Outdated
+R00144,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 1,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,Unknown / not specified,2026-06-06,Flagged (needs supplier confirmation)
+R00145,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 2,Substance Name,Freetext,Yes,yes,"Yes, compliant.",2026-01-31,Flagged (needs supplier confirmation)
+R00146,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 2,CAS No. ,Freetext,Yes,yes,Unknown / not specified,2026-06-03,Flagged (needs supplier confirmation)
+R00152,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 3,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,"Yes, compliant.",2026-04-13,Flagged (needs supplier confirmation)
+R00158,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 5,CAS No. ,Freetext,Yes,yes,pending,2025-11-19,Flagged (needs supplier confirmation)
+R00165,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 7,Substance Name,Freetext,Yes,yes,tbc,2026-05-19,Flagged (needs supplier confirmation)
+R00167,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 7,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,pending,2026-08-05,Flagged (needs supplier confirmation)
+R00169,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 8,Substance Name,Freetext,Yes,yes,"Yes, compliant.",2026-02-27,Flagged (needs supplier confirmation)
+R00171,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 8,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,"Yes, compliant.",2026-09-09,Flagged (needs supplier confirmation)
+R00174,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 9,CAS No. ,Freetext,Yes,yes,"Yes, compliant.",2025-12-20,Flagged (needs supplier confirmation)
+R00176,1000662,Kraton Chemical LLC,14129-90001-00,MDF,30,Full Material Declaration,Material 9,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,,,Missing
+R00188,1000662,Kraton Chemical LLC,14129-90001-00,MDF,31,Sustainability data (currently optional),Share of recycled material,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,,,Missing
+R00190,1000662,Kraton Chemical LLC,14129-90001-00,MDF,31,Sustainability data (currently optional),Share of bio-based from agricultural waste/residue,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",2024-05-08,Outdated
+R00192,1000662,Kraton Chemical LLC,14129-90001-00,MDF,31,Sustainability data (currently optional),Share of other circular material feedstock,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,123,2026-06-25,Flagged (needs supplier confirmation)
+R00202,1000662,Kraton Chemical LLC,,PCF,2,GHG & Energy,GHG / Energy Evidence Upload – Submission,Document file(s),File upload,Yes,yes,123,2026-02-09,Flagged (needs supplier confirmation)
+R00208,1000662,Kraton Chemical LLC,,PCF,3,PCF,PCF Upload – Submission,Applies to purchased NART(s),Multi-select dropdown,Yes,yes,"Yes, compliant.",2026-02-16,Flagged (needs supplier confirmation)
+R00209,1000662,Kraton Chemical LLC,,PCF,3,PCF,PCF Upload – Submission,Confidentiality level,Dropdown,Yes,yes,"yes, see attachment",2026-07-08,Flagged (needs supplier confirmation)
+R00211,1000662,Kraton Chemical LLC,,PCF,3,PCF,PCF Upload – Submission,Site name,Freetext,Yes,yes,123,2025-11-27,Flagged (needs supplier confirmation)
+R00212,1000662,Kraton Chemical LLC,,PCF,3,PCF,PCF Upload – Submission,Country,Dropdown,Yes,yes,"yes, see attachment",2026-07-04,Flagged (needs supplier confirmation)
+R00214,1000662,Kraton Chemical LLC,,Certificates,1,Certificates,Certificates,Certificate selection,Dropdown,Yes,yes,"yes, see attachment",2026-03-28,Flagged (needs supplier confirmation)
+R00215,1000662,Kraton Chemical LLC,,Certificates,1,Certificates,Certificates,Certificate for supplier entity,Freetext,Yes,yes,123,2026-04-22,Flagged (needs supplier confirmation)
+R00217,1000662,Kraton Chemical LLC,,Certificates,1,Certificates,Certificates,Certificate file Upload or LINK to online file,Docuement upload or Lin to automatic download from internet,Yes,yes,,,Missing
+R00219,1000666,BASF Corporation,14151-90000-00,MDF,1,General information,Introduction,"Is this product a: Monomer, Polymer or no longer polymer or ""other""?",Dropdown,Yes,yes,Unknown / not specified,2026-08-16,Flagged (needs supplier confirmation)
+R00224,1000666,BASF Corporation,14151-90000-00,MDF,2,REACH,REACH Registration Status,Declaration of comformidity,Freetext,Yes,yes,"Yes, compliant.",2026-07-15,Flagged (needs supplier confirmation)
+R00233,1000666,BASF Corporation,14151-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Declaration of comformidity,Freetext,Yes,yes,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",2024-05-30,Outdated
+R00235,1000666,BASF Corporation,14151-90000-00,MDF,4,Legislations,Chemicals prohibition ordinance ChemVerbotsV,Applies to all purchased products and packaging.,Dropdown,Yes,yes,"yes, see attachment",2026-03-06,Flagged (needs supplier confirmation)
+R00236,1000666,BASF Corporation,14151-90000-00,MDF,4,Legislations,Chemicals prohibition ordinance ChemVerbotsV,Declaration of comformidity,Freetext,Yes,yes,"Yes, compliant.",2026-03-21,Flagged (needs supplier confirmation)
+R00240,1000666,BASF Corporation,14151-90000-00,MDF,5,Legislations,POP regulation No 2019/1021/EC,Evaluation Procedures,Dropdown,Yes,yes,tbc,2025-12-10,Flagged (needs supplier confirmation)
+R00242,1000666,BASF Corporation,14151-90000-00,MDF,6,Legislations,PFOS/PFOA Directive 2006/122/EU,Declaration of comformidity,Freetext,Yes,yes,TBD,2026-04-22,Flagged (needs supplier confirmation)
+R00243,1000666,BASF Corporation,14151-90000-00,MDF,6,Legislations,PFOS/PFOA Directive 2006/122/EU,Evaluation Procedures,Dropdown,Yes,yes,"yes, see attachment",2025-11-24,Flagged (needs supplier confirmation)
+R00245,1000666,BASF Corporation,14151-90000-00,MDF,7,Legislations,Packaging directive 94/62/EC,Declaration of comformidity,Freetext,Yes,yes,"Confirmed per supplier declaration for declaration of comformidity, evidence on file.",2025-05-07,Outdated
+R00246,1000666,BASF Corporation,14151-90000-00,MDF,7,Legislations,Packaging directive 94/62/EC,Evaluation Procedures,Dropdown,Yes,yes,Laboratory analysis,2025-02-15,Outdated
+R00249,1000666,BASF Corporation,14151-90000-00,MDF,8,Legislations,RoHS directive 2011/65/EC incl. amendments,Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2026-02-15,Flagged (needs supplier confirmation)
+R00253,1000666,BASF Corporation,14151-90000-00,MDF,10,Legislations,International Electrotechnical Commission (IEC) 61249-2- 21 standard (Halogens),"International Electrotechnical Commission (IEC) 61249-2- 21 standard (Halogens).
+Does this product contain any Halogens above the limits emntioed in the standard",Dropdown,Yes,yes,"Yes, compliant.",2026-05-10,Flagged (needs supplier confirmation)
+R00254,1000666,BASF Corporation,14151-90000-00,MDF,10,Legislations,International Electrotechnical Commission (IEC) 61249-2- 21 standard (Halogens),"if yes, Please list all inlcuded Halogens with their CAS numbers and concentrations:",Freetext,Yes,yes,Unknown / not specified,2026-03-07,Flagged (needs supplier confirmation)
+R00257,1000666,BASF Corporation,14151-90000-00,MDF,11,Legislations,Deforestation Regulation (EU) 2023/1115 (EUDR) repealing EU Timber Regulation (EU) No 995/2010 (EUTR),Declaration of comformidity,Freetext,Yes,yes,"Yes, compliant.",2026-01-22,Flagged (needs supplier confirmation)
+R00258,1000666,BASF Corporation,14151-90000-00,MDF,11,Legislations,Deforestation Regulation (EU) 2023/1115 (EUDR) repealing EU Timber Regulation (EU) No 995/2010 (EUTR),Evaluation Procedures,Dropdown,Yes,yes,TBD,2026-06-05,Flagged (needs supplier confirmation)
+R00259,1000666,BASF Corporation,14151-90000-00,MDF,12,Requirements,Halal / Kosher requirements,"Is the product conform with Halal / Kosher requirements, certified by a recognized Kosher and Halal certification body?",Dropdown,Yes,yes,Unknown / not specified,2026-06-09,Flagged (needs supplier confirmation)
+R00260,1000666,BASF Corporation,14151-90000-00,MDF,12,Requirements,Halal / Kosher requirements,Please confirm that the above-metioned product does not contain any substances of animal origin or ethanol,Dropdown,Yes,yes,"yes, see attachment",2026-04-23,Flagged (needs supplier confirmation)
+R00262,1000666,BASF Corporation,14151-90000-00,MDF,12,Requirements,Halal / Kosher requirements,Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00263,1000666,BASF Corporation,14151-90000-00,MDF,13,Requirements,Phthalates,Does this product contain phthalates not listed under ANNEX XVII REACH (entry 51)?,Dropdown,Yes,yes,Yes,2025-05-09,Outdated
+R00264,1000666,BASF Corporation,14151-90000-00,MDF,13,Requirements,Phthalates,Please list all included phthalates except those which are mentioned in ANNEX XVII REACH (entry 51) with their CAS numbers and concentrations:,Freetext,Yes,yes,"Yes, compliant.",2025-12-12,Flagged (needs supplier confirmation)
+R00265,1000666,BASF Corporation,14151-90000-00,MDF,13,Requirements,Phthalates,Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00270,1000666,BASF Corporation,14151-90000-00,MDF,15,Requirements,Antimony,Please list all included antimony compounds with their CAS numbers and concentrations:,Freetext,Yes,yes,,,Missing
+R00276,1000666,BASF Corporation,14151-90000-00,MDF,17,Requirements,Microplastics / Synthetic polymer microparticles (SPM),Declaration of comformidity,Freetext,Yes,yes,TBD,2025-11-30,Flagged (needs supplier confirmation)
+R00279,1000666,BASF Corporation,14151-90000-00,MDF,18,Requirements,Nanomaterial,"If yes, which particle size?
+Please list the particle size of the nano substance:",Freetext,Yes,yes,Unknown / not specified,2026-02-04,Flagged (needs supplier confirmation)
+R00283,1000666,BASF Corporation,14151-90000-00,MDF,19,Requirements,"Biocides Directive 98/8/EC, as amended by Ordinance EU 528/2012?",Evaluation Procedures,Dropdown,Yes,yes,N/A,2025-12-03,Flagged (needs supplier confirmation)
+R00284,1000666,BASF Corporation,14151-90000-00,MDF,20,Requirements,Ozone Depleting Substances (ODS) Regulation (EC) No 1005/2009,Does this product contain Ozone depleting substances as per Regulation (EC) No 1005/2009 ,Dropdown,Yes,yes,"yes, see attachment",2026-01-24,Flagged (needs supplier confirmation)
+R00286,1000666,BASF Corporation,14151-90000-00,MDF,20,Requirements,Ozone Depleting Substances (ODS) Regulation (EC) No 1005/2009,Evaluation Procedures,Dropdown,Yes,yes,Material declaration,2024-08-12,Outdated
+R00288,1000666,BASF Corporation,14151-90000-00,MDF,21,Requirements,Dual Use Substances,Declaration of comformidity,Freetext,Yes,yes,tbc,2026-06-02,Flagged (needs supplier confirmation)
+R00289,1000666,BASF Corporation,14151-90000-00,MDF,21,Requirements,Dual Use Substances,Evaluation Procedures,Dropdown,Yes,yes,N/A,2026-04-28,Flagged (needs supplier confirmation)
+R00290,1000666,BASF Corporation,14151-90000-00,MDF,22,Conflict Minerals,Responsible Minerals Sourcing (EU and US Legislative),"Applies to all purchased products
+Please fill in the additional templates for CMRT & EMRT
+https://www.responsiblemineralsinitiative.org/reporting-templates/cmrt/
+https://www.responsiblemineralsinitiative.org/reporting-templates/emrt/",Dropdown,Yes,yes,tbc,2025-11-24,Flagged (needs supplier confirmation)
+R00294,1000666,BASF Corporation,14151-90000-00,MDF,23,Forever Chemicals,PFAS,"Please refer to PFAS OECD list 2024
+Applies to all purchased products",Dropdown,Yes,yes,,,Missing
+R00296,1000666,BASF Corporation,14151-90000-00,MDF,24,Requirements,Global automotive declarable substance list (GADSL),Please list all GADSL listet substances including the CAS numbers and concentrations:,Freetext,Yes,yes,TBD,2026-04-27,Flagged (needs supplier confirmation)
+R00297,1000666,BASF Corporation,14151-90000-00,MDF,24,Requirements,Global automotive declarable substance list (GADSL),Evaluation Procedures,Dropdown,Yes,yes,pending,2025-12-20,Flagged (needs supplier confirmation)
+R00301,1000666,BASF Corporation,14151-90000-00,MDF,26,Requirements,"Food allergen(s) EU 1169/2011, Annex II","Does the product contain food allergen(s) mentioned in the Regulation (EU) 1169/2011, Annex II?",Dropdown,Yes,yes,,,Missing
+R00305,1000666,BASF Corporation,14151-90000-00,MDF,27,Requirements,EU Food contact status,Please state EU foodlaw status of your product incl. the relevant paragpraph,Freetext,Yes,yes,,,Missing
+R00306,1000666,BASF Corporation,14151-90000-00,MDF,27,Requirements,EU Food contact status,Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00312,1000666,BASF Corporation,14151-90000-00,MDF,27,Requirements,EU Food contact status,Evaluation Procedures,Dropdown,Yes,yes,tbc,2026-01-30,Flagged (needs supplier confirmation)
+R00313,1000666,BASF Corporation,14151-90000-00,MDF,27,Requirements,EU Food contact status,"Has this product been manufactured as per the principles and guidelines of good manufacturing practise (GMP))
+https://health.ec.europa.eu/medicinal-products/eudralex/eudralex-volume-4_en",Dropdown,Yes,yes,"Yes, compliant.",2026-05-12,Flagged (needs supplier confirmation)
+R00315,1000666,BASF Corporation,14151-90000-00,MDF,27,Requirements,EU Food contact status,Evaluation Procedures,Dropdown,Yes,yes,"yes, see attachment",2026-07-26,Flagged (needs supplier confirmation)
+R00319,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for USA (TSCA),Global Inventory Status,Dropdown,Yes,yes,"Yes, compliant.",2026-04-25,Flagged (needs supplier confirmation)
+R00321,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for USA (TSCA),Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2026-06-29,Flagged (needs supplier confirmation)
+R00322,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for Canada (DSL),Canada (DSL),Dropdown,Yes,yes,Unknown / not specified,2025-12-25,Flagged (needs supplier confirmation)
+R00324,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for Canada (DSL),Evaluation Procedures,Dropdown,Yes,yes,"yes, see attachment",2026-03-21,Flagged (needs supplier confirmation)
+R00325,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for Canada (NDSL),Canada (NDSL),Dropdown,Yes,yes,,,Missing
+R00326,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for Canada (NDSL),Substance,Freetext,Yes,yes,"Confirmed per supplier declaration for substance, evidence on file.",2024-06-06,Outdated
+R00329,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for China (IECSC) ,Substance,Freetext,Yes,yes,Unknown / not specified,2025-12-07,Flagged (needs supplier confirmation)
+R00348,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for Mexico (INSQ),Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2026-04-17,Flagged (needs supplier confirmation)
+R00351,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for Malaysia (EMS),Evaluation Procedures,Dropdown,Yes,yes,Laboratory analysis,2024-05-03,Outdated
+R00352,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for Malaysia (EHSNR),Malaysia (EHSNR),Dropdown,Yes,yes,,,Missing
+R00353,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for Malaysia (EHSNR),Substance,Freetext,Yes,yes,"Confirmed per supplier declaration for substance, evidence on file.",2024-12-31,Outdated
+R00354,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for Malaysia (EHSNR),Evaluation Procedures,Dropdown,Yes,yes,"yes, see attachment",2025-11-26,Flagged (needs supplier confirmation)
+R00356,1000666,BASF Corporation,14151-90000-00,MDF,29,Requirements,Global Inventory Status for Australia (AICS),Substance,Freetext,Yes,yes,Unknown / not specified,2026-02-28,Flagged (needs supplier confirmation)
+R00359,1000666,BASF Corporation,14151-90000-00,MDF,30,Full Material Declaration,Material 1,CAS No. ,Freetext,Yes,yes,"Yes, compliant.",2026-05-04,Flagged (needs supplier confirmation)
+R00363,1000666,BASF Corporation,14151-90000-00,MDF,30,Full Material Declaration,Material 2,CAS No. ,Freetext,Yes,yes,123,2026-03-19,Flagged (needs supplier confirmation)
+R00369,1000666,BASF Corporation,14151-90000-00,MDF,30,Full Material Declaration,Material 3,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,123,2025-11-23,Flagged (needs supplier confirmation)
+R00372,1000666,BASF Corporation,14151-90000-00,MDF,30,Full Material Declaration,Material 4,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,"Yes, compliant.",2026-02-21,Flagged (needs supplier confirmation)
+R00373,1000666,BASF Corporation,14151-90000-00,MDF,30,Full Material Declaration,Material 4,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,Unknown / not specified,2026-08-17,Flagged (needs supplier confirmation)
+R00378,1000666,BASF Corporation,14151-90000-00,MDF,30,Full Material Declaration,Material 6,Substance Name,Freetext,Yes,yes,tbc,2026-07-03,Flagged (needs supplier confirmation)
+R00380,1000666,BASF Corporation,14151-90000-00,MDF,30,Full Material Declaration,Material 6,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,123,2026-08-25,Flagged (needs supplier confirmation)
+R00382,1000666,BASF Corporation,14151-90000-00,MDF,30,Full Material Declaration,Material 7,Substance Name,Freetext,Yes,yes,"Confirmed per supplier declaration for substance name, evidence on file.",2025-02-22,Outdated
+R00384,1000666,BASF Corporation,14151-90000-00,MDF,30,Full Material Declaration,Material 7,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,Unknown / not specified,2026-03-08,Flagged (needs supplier confirmation)
+R00396,1000666,BASF Corporation,14151-90000-00,MDF,30,Full Material Declaration,Material 10,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,Unknown / not specified,2026-07-10,Flagged (needs supplier confirmation)
+R00399,1000666,BASF Corporation,14151-90000-00,MDF,31,Sustainability data (currently optional),Share of virgin fossil material,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,pending,2026-08-30,Flagged (needs supplier confirmation)
+R00401,1000666,BASF Corporation,14151-90000-00,MDF,31,Sustainability data (currently optional),Share of virgin bio-based material,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,Unknown / not specified,2026-05-21,Flagged (needs supplier confirmation)
+R00405,1000666,BASF Corporation,14151-90000-00,MDF,31,Sustainability data (currently optional),Share of recycled material,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,,,Missing
+R00406,1000666,BASF Corporation,14151-90000-00,MDF,31,Sustainability data (currently optional),Share of bio-based from agricultural waste/residue,Substance concentration (in %),Freetext,Yes,yes,123,2026-07-14,Flagged (needs supplier confirmation)
+R00407,1000666,BASF Corporation,14151-90000-00,MDF,31,Sustainability data (currently optional),Share of bio-based from agricultural waste/residue,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,Unknown / not specified,2026-07-04,Flagged (needs supplier confirmation)
+R00415,1000666,BASF Corporation,,PCF,1,Corporate report,Sustainability / ESG Report Upload – Submission,Document file(s),File upload,Yes,yes,See attached documentation,2025-04-19,Outdated
+R00419,1000666,BASF Corporation,,PCF,2,GHG & Energy,GHG / Energy Evidence Upload – Submission,Document file(s),File upload,Yes,yes,See attached documentation,2025-05-03,Outdated
+R00421,1000666,BASF Corporation,,PCF,3,PCF,PCF Upload – Submission,Information from supplier avaliable?,Check box,Yes,yes,TBD,2026-08-17,Flagged (needs supplier confirmation)
+R00425,1000666,BASF Corporation,,PCF,3,PCF,PCF Upload – Submission,Applies to purchased NART(s),Multi-select dropdown,Yes,yes,Unknown / not specified,2026-05-28,Flagged (needs supplier confirmation)
+R00426,1000666,BASF Corporation,,PCF,3,PCF,PCF Upload – Submission,Confidentiality level,Dropdown,Yes,yes,tbc,2026-06-28,Flagged (needs supplier confirmation)
+R00428,1000666,BASF Corporation,,PCF,3,PCF,PCF Upload – Submission,Site name,Freetext,Yes,yes,N/A,2025-12-09,Flagged (needs supplier confirmation)
+R00432,1000666,BASF Corporation,,Certificates,1,Certificates,Certificates,Certificate for supplier entity,Freetext,Yes,yes,,,Missing
+R00433,1000666,BASF Corporation,,Certificates,1,Certificates,Certificates,Certificate valid until,Date,Yes,yes,123,2025-12-16,Flagged (needs supplier confirmation)
+R00434,1000666,BASF Corporation,,Certificates,1,Certificates,Certificates,Certificate file Upload or LINK to online file,Docuement upload or Lin to automatic download from internet,Yes,yes,,,Missing
+R00441,105613,CARL MEYER GMBH,32551-90000-00,MDF,2,REACH,REACH Registration Status,Declaration of comformidity,Freetext,Yes,yes,123,2026-02-18,Flagged (needs supplier confirmation)
+R00443,105613,CARL MEYER GMBH,32551-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,"SVHC candidate list (current revision)
+Applies to all purchased products and packaging.",Dropdown,Yes,yes,,,Missing
+R00444,105613,CARL MEYER GMBH,32551-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Declaration of comformidity,Freetext,Yes,yes,TBD,2026-07-09,Flagged (needs supplier confirmation)
+R00453,105613,CARL MEYER GMBH,32551-90000-00,MDF,4,Legislations,Chemicals prohibition ordinance ChemVerbotsV,Declaration of comformidity,Freetext,Yes,yes,123,2026-02-19,Flagged (needs supplier confirmation)
+R00455,105613,CARL MEYER GMBH,32551-90000-00,MDF,5,Legislations,POP regulation No 2019/1021/EC,Applies to all purchased products and packaging.,Dropdown,Yes,yes,Not Compliant,2025-01-29,Outdated
+R00457,105613,CARL MEYER GMBH,32551-90000-00,MDF,5,Legislations,POP regulation No 2019/1021/EC,Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00461,105613,CARL MEYER GMBH,32551-90000-00,MDF,7,Legislations,Packaging directive 94/62/EC,Applies to all packaging materials for production and sales products.,Dropdown,Yes,yes,,,Missing
+R00465,105613,CARL MEYER GMBH,32551-90000-00,MDF,8,Legislations,RoHS directive 2011/65/EC incl. amendments,Declaration of comformidity,Freetext,Yes,yes,Unknown / not specified,2026-05-26,Flagged (needs supplier confirmation)
+R00469,105613,CARL MEYER GMBH,32551-90000-00,MDF,9,Legislations,ELV directive 2000/53/EC incl. amendments,Evaluation Procedures,Dropdown,Yes,yes,"yes, see attachment",2025-11-28,Flagged (needs supplier confirmation)
+R00471,105613,CARL MEYER GMBH,32551-90000-00,MDF,10,Legislations,International Electrotechnical Commission (IEC) 61249-2- 21 standard (Halogens),"if yes, Please list all inlcuded Halogens with their CAS numbers and concentrations:",Freetext,Yes,yes,"Confirmed per supplier declaration for if yes, please list all inlcuded halogens with their cas numbers and concentrations:, evidence on file.",2024-08-14,Outdated
+R00472,105613,CARL MEYER GMBH,32551-90000-00,MDF,10,Legislations,International Electrotechnical Commission (IEC) 61249-2- 21 standard (Halogens),Evaluation Procedures,Dropdown,Yes,yes,Material declaration and laboratory ananlysis,2025-02-10,Outdated
+R00473,105613,CARL MEYER GMBH,32551-90000-00,MDF,11,Legislations,Deforestation Regulation (EU) 2023/1115 (EUDR) repealing EU Timber Regulation (EU) No 995/2010 (EUTR),Applies to all purchased products,Dropdown,Yes,yes,pending,2026-08-07,Flagged (needs supplier confirmation)
+R00474,105613,CARL MEYER GMBH,32551-90000-00,MDF,11,Legislations,Deforestation Regulation (EU) 2023/1115 (EUDR) repealing EU Timber Regulation (EU) No 995/2010 (EUTR),Declaration of comformidity,Freetext,Yes,yes,"Yes, compliant.",2026-08-27,Flagged (needs supplier confirmation)
+R00479,105613,CARL MEYER GMBH,32551-90000-00,MDF,12,Requirements,Halal / Kosher requirements,Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00480,105613,CARL MEYER GMBH,32551-90000-00,MDF,13,Requirements,Phthalates,Does this product contain phthalates not listed under ANNEX XVII REACH (entry 51)?,Dropdown,Yes,yes,Unknown / not specified,2026-08-17,Flagged (needs supplier confirmation)
+R00487,105613,CARL MEYER GMBH,32551-90000-00,MDF,15,Requirements,Antimony,Please list all included antimony compounds with their CAS numbers and concentrations:,Freetext,Yes,yes,123,2026-08-14,Flagged (needs supplier confirmation)
+R00488,105613,CARL MEYER GMBH,32551-90000-00,MDF,15,Requirements,Antimony,Evaluation Procedures,Dropdown,Yes,yes,N/A,2026-05-04,Flagged (needs supplier confirmation)
+R00489,105613,CARL MEYER GMBH,32551-90000-00,MDF,16,Requirements,Silicone,Does this product contain silicone or other silicone compounds?,Dropdown,Yes,yes,,,Missing
+R00491,105613,CARL MEYER GMBH,32551-90000-00,MDF,16,Requirements,Silicone,Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2026-05-17,Flagged (needs supplier confirmation)
+R00493,105613,CARL MEYER GMBH,32551-90000-00,MDF,17,Requirements,Microplastics / Synthetic polymer microparticles (SPM),Declaration of comformidity,Freetext,Yes,yes,"Yes, compliant.",2026-08-21,Flagged (needs supplier confirmation)
+R00494,105613,CARL MEYER GMBH,32551-90000-00,MDF,17,Requirements,Microplastics / Synthetic polymer microparticles (SPM),Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00497,105613,CARL MEYER GMBH,32551-90000-00,MDF,18,Requirements,Nanomaterial,Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00498,105613,CARL MEYER GMBH,32551-90000-00,MDF,19,Requirements,"Biocides Directive 98/8/EC, as amended by Ordinance EU 528/2012?",Does this product contain any biocidal substances as mentioned in Ordinance EU 528/2012? ,Dropdown,Yes,yes,Unknown / not specified,2026-01-19,Flagged (needs supplier confirmation)
+R00503,105613,CARL MEYER GMBH,32551-90000-00,MDF,20,Requirements,Ozone Depleting Substances (ODS) Regulation (EC) No 1005/2009,Evaluation Procedures,Dropdown,Yes,yes,Material declaration and laboratory ananlysis,2025-04-17,Outdated
+R00508,105613,CARL MEYER GMBH,32551-90000-00,MDF,22,Conflict Minerals,Responsible Minerals Sourcing (EU and US Legislative),Declaration of comformidity,Dropdown,Yes,yes,"Intentionally added Minerals, which are subject under the term ""responsible sourcing"", are only extracted from conformant smelters",2025-04-29,Outdated
+R00509,105613,CARL MEYER GMBH,32551-90000-00,MDF,22,Conflict Minerals,Responsible Minerals Sourcing (EU and US Legislative),"in case CMRT & EMRT are required, please upload the document",File upload,Yes,yes,TBD,2026-06-13,Flagged (needs supplier confirmation)
+R00513,105613,CARL MEYER GMBH,32551-90000-00,MDF,24,Requirements,Global automotive declarable substance list (GADSL),Please list all GADSL listet substances including the CAS numbers and concentrations:,Freetext,Yes,yes,,,Missing
+R00516,105613,CARL MEYER GMBH,32551-90000-00,MDF,25,Requirements,California Proposition 65,Declaration of comformidity,Dropdown,Yes,yes,"yes, see attachment",2026-01-23,Flagged (needs supplier confirmation)
+R00517,105613,CARL MEYER GMBH,32551-90000-00,MDF,25,Requirements,California Proposition 65,Evaluation Procedures,Dropdown,Yes,yes,Presumption (without evidence),2025-06-30,Outdated
+R00533,105613,CARL MEYER GMBH,32551-90000-00,MDF,28,Requirements,US FDA Status,Is your product compliant with USA FDA regulations for food contact? Please state the US FDA paragraph,Dropdown,Yes,yes,Unknown / not specified,2026-02-26,Flagged (needs supplier confirmation)
+R00534,105613,CARL MEYER GMBH,32551-90000-00,MDF,28,Requirements,US FDA Status,Please state foodlaw status of your product incl. the relevant US FDA paragpraph,Freetext,Yes,yes,"Yes, compliant.",2026-06-27,Flagged (needs supplier confirmation)
+R00535,105613,CARL MEYER GMBH,32551-90000-00,MDF,28,Requirements,US FDA Status,Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2026-07-01,Flagged (needs supplier confirmation)
+R00536,105613,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for USA (TSCA),Global Inventory Status,Dropdown,Yes,yes,"Yes, compliant.",2026-02-23,Flagged (needs supplier confirmation)
+R00537,105613,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for USA (TSCA),Substance,Freetext,Yes,yes,"Yes, compliant.",2026-07-30,Flagged (needs supplier confirmation)
+R00540,105613,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Canada (DSL),Substance,Freetext,Yes,yes,"Yes, compliant.",2026-02-07,Flagged (needs supplier confirmation)
+R00542,105613,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Canada (NDSL),Canada (NDSL),Dropdown,Yes,yes,tbc,2026-01-06,Flagged (needs supplier confirmation)
+R00543,105613,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Canada (NDSL),Substance,Freetext,Yes,yes,N/A,2026-08-03,Flagged (needs supplier confirmation)
+R00546,105613,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for China (IECSC) ,Substance,Freetext,Yes,yes,"Confirmed per supplier declaration for substance, evidence on file.",2024-05-17,Outdated
+R00548,105613,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Korea (KECI),Korea (KECI),Dropdown,Yes,yes,"Yes, compliant.",2026-06-19,Flagged (needs supplier confirmation)
+R00552,105613,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for New Zealand (NZIOC),Substance,Freetext,Yes,yes,tbc,2026-01-14,Flagged (needs supplier confirmation)
+R00553,105613,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for New Zealand (NZIOC),Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2025-11-23,Flagged (needs supplier confirmation)
+R00569,105613,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Malaysia (EHSNR),Malaysia (EHSNR),Dropdown,Yes,yes,,,Missing
+R00571,105613,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Malaysia (EHSNR),Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00576,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 1,CAS No. ,Freetext,Yes,yes,N/A,2025-12-05,Flagged (needs supplier confirmation)
+R00579,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 2,Substance Name,Freetext,Yes,yes,,,Missing
+R00580,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 2,CAS No. ,Freetext,Yes,yes,123,2026-01-20,Flagged (needs supplier confirmation)
+R00581,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 2,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,123,2025-12-11,Flagged (needs supplier confirmation)
+R00582,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 2,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,Unknown / not specified,2025-11-21,Flagged (needs supplier confirmation)
+R00583,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 3,Substance Name,Freetext,Yes,yes,tbc,2026-02-04,Flagged (needs supplier confirmation)
+R00584,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 3,CAS No. ,Freetext,Yes,yes,"Confirmed per supplier declaration for cas no. , evidence on file.",2025-04-07,Outdated
+R00588,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 4,CAS No. ,Freetext,Yes,yes,Unknown / not specified,2025-12-07,Flagged (needs supplier confirmation)
+R00593,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 5,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,,,Missing
+R00595,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 6,Substance Name,Freetext,Yes,yes,"Yes, compliant.",2026-07-20,Flagged (needs supplier confirmation)
+R00597,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 6,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",2024-11-02,Outdated
+R00598,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 6,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,"Yes, compliant.",2026-06-14,Flagged (needs supplier confirmation)
+R00602,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 7,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,123,2026-08-24,Flagged (needs supplier confirmation)
+R00603,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 8,Substance Name,Freetext,Yes,yes,,,Missing
+R00605,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 8,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,"Confirmed per supplier declaration for substance concentration (in %)
+the concentration of the substance as a percentage of the homogeneous mass of the material., evidence on file.",2024-11-18,Outdated
+R00609,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 9,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,,,Missing
+R00611,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 10,Substance Name,Freetext,Yes,yes,"Confirmed per supplier declaration for substance name, evidence on file.",2024-12-28,Outdated
+R00614,105613,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 10,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,pending,2025-12-31,Flagged (needs supplier confirmation)
+R00616,105613,CARL MEYER GMBH,32551-90000-00,MDF,31,Sustainability data (currently optional),Share of virgin fossil material,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,,,Missing
+R00620,105613,CARL MEYER GMBH,32551-90000-00,MDF,31,Sustainability data (currently optional),Share of virgin other material,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,"Confirmed per supplier declaration for additional information
+source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., iscc, mass balanced), measuring method, etc., evidence on file.",2024-09-04,Outdated
+R00621,105613,CARL MEYER GMBH,32551-90000-00,MDF,31,Sustainability data (currently optional),Share of recycled material,Substance concentration (in %),Freetext,Yes,yes,123,2026-02-05,Flagged (needs supplier confirmation)
+R00622,105613,CARL MEYER GMBH,32551-90000-00,MDF,31,Sustainability data (currently optional),Share of recycled material,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,123,2026-03-16,Flagged (needs supplier confirmation)
+R00625,105613,CARL MEYER GMBH,32551-90000-00,MDF,31,Sustainability data (currently optional),Share of other circular material feedstock,Substance concentration (in %),Freetext,Yes,yes,,,Missing
+R00626,105613,CARL MEYER GMBH,32551-90000-00,MDF,31,Sustainability data (currently optional),Share of other circular material feedstock,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,"Yes, compliant.",2026-02-16,Flagged (needs supplier confirmation)
+R00631,105613,CARL MEYER GMBH,,PCF,1,Corporate report,Sustainability / ESG Report Upload – Submission,Reporting year,Dropdown,Yes,yes,,,Missing
+R00632,105613,CARL MEYER GMBH,,PCF,1,Corporate report,Sustainability / ESG Report Upload – Submission,Document file(s),File upload,Yes,yes,"Yes, compliant.",2026-03-08,Flagged (needs supplier confirmation)
+R00634,105613,CARL MEYER GMBH,,PCF,2,GHG & Energy,GHG / Energy Evidence Upload – Submission,Information from supplier avaliable?,Check box,Yes,yes,pending,2026-03-06,Flagged (needs supplier confirmation)
+R00644,105613,CARL MEYER GMBH,,PCF,3,PCF,PCF Upload – Submission,Supplier comment (optional),Short text,Yes,yes,Unknown / not specified,2026-04-18,Flagged (needs supplier confirmation)
+R00646,105613,CARL MEYER GMBH,,PCF,3,PCF,PCF Upload – Submission,Country,Dropdown,Yes,yes,,,Missing
+R00654,11000690,DOW CORNING GMBH,00052-90000-00,MDF,1,General information,Introduction,Declaration of comformidity,Freetext,Yes,yes,N/A,2026-05-13,Flagged (needs supplier confirmation)
+R00658,11000690,DOW CORNING GMBH,00052-90000-00,MDF,2,REACH,REACH Registration Status,Declaration of comformidity,Freetext,Yes,yes,123,2026-01-09,Flagged (needs supplier confirmation)
+R00660,11000690,DOW CORNING GMBH,00052-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,"SVHC candidate list (current revision)
+Applies to all purchased products and packaging.",Dropdown,Yes,yes,Complaint,2024-09-14,Outdated
+R00661,11000690,DOW CORNING GMBH,00052-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Declaration of comformidity,Freetext,Yes,yes,123,2025-12-21,Flagged (needs supplier confirmation)
+R00662,11000690,DOW CORNING GMBH,00052-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2026-06-10,Flagged (needs supplier confirmation)
+R00665,11000690,DOW CORNING GMBH,00052-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Evaluation Procedures,Dropdown,Yes,yes,tbc,2026-05-19,Flagged (needs supplier confirmation)
+R00668,11000690,DOW CORNING GMBH,00052-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2026-04-24,Flagged (needs supplier confirmation)
+R00670,11000690,DOW CORNING GMBH,00052-90000-00,MDF,4,Legislations,Chemicals prohibition ordinance ChemVerbotsV,Declaration of comformidity,Freetext,Yes,yes,"Yes, compliant.",2026-06-17,Flagged (needs supplier confirmation)
+R00675,11000690,DOW CORNING GMBH,00052-90000-00,MDF,6,Legislations,PFOS/PFOA Directive 2006/122/EU,Applies to all purchased products,Dropdown,Yes,yes,"Yes, compliant.",2025-11-20,Flagged (needs supplier confirmation)
+R00676,11000690,DOW CORNING GMBH,00052-90000-00,MDF,6,Legislations,PFOS/PFOA Directive 2006/122/EU,Declaration of comformidity,Freetext,Yes,yes,pending,2026-08-27,Flagged (needs supplier confirmation)
+R00683,11000690,DOW CORNING GMBH,00052-90000-00,MDF,8,Legislations,RoHS directive 2011/65/EC incl. amendments,Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2026-04-01,Flagged (needs supplier confirmation)
+R00686,11000690,DOW CORNING GMBH,00052-90000-00,MDF,9,Legislations,ELV directive 2000/53/EC incl. amendments,Evaluation Procedures,Dropdown,Yes,yes,pending,2026-07-11,Flagged (needs supplier confirmation)
+R00688,11000690,DOW CORNING GMBH,00052-90000-00,MDF,10,Legislations,International Electrotechnical Commission (IEC) 61249-2- 21 standard (Halogens),"if yes, Please list all inlcuded Halogens with their CAS numbers and concentrations:",Freetext,Yes,yes,"Confirmed per supplier declaration for if yes, please list all inlcuded halogens with their cas numbers and concentrations:, evidence on file.",2024-04-11,Outdated
+R00692,11000690,DOW CORNING GMBH,00052-90000-00,MDF,11,Legislations,Deforestation Regulation (EU) 2023/1115 (EUDR) repealing EU Timber Regulation (EU) No 995/2010 (EUTR),Evaluation Procedures,Dropdown,Yes,yes,pending,2025-12-22,Flagged (needs supplier confirmation)
+R00694,11000690,DOW CORNING GMBH,00052-90000-00,MDF,12,Requirements,Halal / Kosher requirements,Please confirm that the above-metioned product does not contain any substances of animal origin or ethanol,Dropdown,Yes,yes,"yes, see attachment",2025-12-27,Flagged (needs supplier confirmation)
+R00697,11000690,DOW CORNING GMBH,00052-90000-00,MDF,13,Requirements,Phthalates,Does this product contain phthalates not listed under ANNEX XVII REACH (entry 51)?,Dropdown,Yes,yes,Unknown / not specified,2026-01-14,Flagged (needs supplier confirmation)
+R00698,11000690,DOW CORNING GMBH,00052-90000-00,MDF,13,Requirements,Phthalates,Please list all included phthalates except those which are mentioned in ANNEX XVII REACH (entry 51) with their CAS numbers and concentrations:,Freetext,Yes,yes,,,Missing
+R00699,11000690,DOW CORNING GMBH,00052-90000-00,MDF,13,Requirements,Phthalates,Evaluation Procedures,Dropdown,Yes,yes,tbc,2026-03-08,Flagged (needs supplier confirmation)
+R00701,11000690,DOW CORNING GMBH,00052-90000-00,MDF,14,Requirements,Mineral Oil,Please list all included mineral oils with their CAS numbers and concentrations:,Freetext,Yes,yes,Unknown / not specified,2026-06-04,Flagged (needs supplier confirmation)
+R00704,11000690,DOW CORNING GMBH,00052-90000-00,MDF,15,Requirements,Antimony,Please list all included antimony compounds with their CAS numbers and concentrations:,Freetext,Yes,yes,Unknown / not specified,2026-07-13,Flagged (needs supplier confirmation)
+R00708,11000690,DOW CORNING GMBH,00052-90000-00,MDF,16,Requirements,Silicone,Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2025-12-25,Flagged (needs supplier confirmation)
+R00710,11000690,DOW CORNING GMBH,00052-90000-00,MDF,17,Requirements,Microplastics / Synthetic polymer microparticles (SPM),Declaration of comformidity,Freetext,Yes,yes,"Yes, compliant.",2026-03-25,Flagged (needs supplier confirmation)
+R00713,11000690,DOW CORNING GMBH,00052-90000-00,MDF,18,Requirements,Nanomaterial,"If yes, which particle size?
+Please list the particle size of the nano substance:",Freetext,Yes,yes,Unknown / not specified,2026-04-01,Flagged (needs supplier confirmation)
+R00718,11000690,DOW CORNING GMBH,00052-90000-00,MDF,20,Requirements,Ozone Depleting Substances (ODS) Regulation (EC) No 1005/2009,Does this product contain Ozone depleting substances as per Regulation (EC) No 1005/2009 ,Dropdown,Yes,yes,,,Missing
+R00726,11000690,DOW CORNING GMBH,00052-90000-00,MDF,22,Conflict Minerals,Responsible Minerals Sourcing (EU and US Legislative),"in case CMRT & EMRT are required, please upload the document",File upload,Yes,yes,"Yes, compliant.",2026-07-17,Flagged (needs supplier confirmation)
+R00727,11000690,DOW CORNING GMBH,00052-90000-00,MDF,22,Conflict Minerals,Responsible Minerals Sourcing (EU and US Legislative),Evaluation Procedures,Dropdown,Yes,yes,Supplier declaration,2025-01-06,Outdated
+R00731,11000690,DOW CORNING GMBH,00052-90000-00,MDF,24,Requirements,Global automotive declarable substance list (GADSL),Evaluation Procedures,Dropdown,Yes,yes,tbc,2026-01-10,Flagged (needs supplier confirmation)
+R00732,11000690,DOW CORNING GMBH,00052-90000-00,MDF,25,Requirements,California Proposition 65,Applies to all purchased products,Dropdown,Yes,yes,pending,2025-12-13,Flagged (needs supplier confirmation)
+R00737,11000690,DOW CORNING GMBH,00052-90000-00,MDF,26,Requirements,"Food allergen(s) EU 1169/2011, Annex II",Evaluation Procedures,Dropdown,Yes,yes,pending,2026-04-02,Flagged (needs supplier confirmation)
+R00738,11000690,DOW CORNING GMBH,00052-90000-00,MDF,27,Requirements,EU Food contact status,"Regulation (EC) No 1935/2004 of the European Parliament and of the Council of 27 October 2004 on materials and articles intended to come into contact with foodstuffs and repealing Regulation (EC) No 1935/2004 of the European Parliament and of the Council of 27 October 2004 on materials and articles intended to come into contact with foodstuffs
+Directives 80/590/EEC and 89/109/EEC, Official Journal of the European Union L 338/4 of 13 November 2004, as last amended by Article 5 of Regulation (EU) 2019/1381 of 20 June 2019, Official Journal of the European Union L 231/1 of 6 September, Article 3(1)(a) and (b) ",Dropdown,Yes,yes,"Yes, compliant.",2026-04-24,Flagged (needs supplier confirmation)
+R00739,11000690,DOW CORNING GMBH,00052-90000-00,MDF,27,Requirements,EU Food contact status,Please state EU foodlaw status of your product incl. the relevant paragpraph,Freetext,Yes,yes,Unknown / not specified,2025-12-07,Flagged (needs supplier confirmation)
+R00742,11000690,DOW CORNING GMBH,00052-90000-00,MDF,27,Requirements,EU Food contact status,Please state EU foodlaw status of your product incl. the relevant paragpraph,Freetext,Yes,yes,"Confirmed per supplier declaration for please state eu foodlaw status of your product incl. the relevant paragpraph, evidence on file.",2024-04-06,Outdated
+R00743,11000690,DOW CORNING GMBH,00052-90000-00,MDF,27,Requirements,EU Food contact status,Evaluation Procedures,Dropdown,Yes,yes,"yes, see attachment",2026-05-03,Flagged (needs supplier confirmation)
+R00744,11000690,DOW CORNING GMBH,00052-90000-00,MDF,27,Requirements,EU Food contact status,COMMISSION REGULATION (EU) No 10/2011,Dropdown,Yes,yes,Unknown / not specified,2026-04-26,Flagged (needs supplier confirmation)
+R00746,11000690,DOW CORNING GMBH,00052-90000-00,MDF,27,Requirements,EU Food contact status,Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2026-05-12,Flagged (needs supplier confirmation)
+R00747,11000690,DOW CORNING GMBH,00052-90000-00,MDF,27,Requirements,EU Food contact status,"Has this product been manufactured as per the principles and guidelines of good manufacturing practise (GMP))
+https://health.ec.europa.eu/medicinal-products/eudralex/eudralex-volume-4_en",Dropdown,Yes,yes,Unknown / not specified,2026-05-19,Flagged (needs supplier confirmation)
+R00751,11000690,DOW CORNING GMBH,00052-90000-00,MDF,28,Requirements,US FDA Status,Please state foodlaw status of your product incl. the relevant US FDA paragpraph,Freetext,Yes,yes,Unknown / not specified,2026-06-23,Flagged (needs supplier confirmation)
+R00754,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,Global Inventory Status for USA (TSCA),Substance,Freetext,Yes,yes,"Yes, compliant.",2026-08-12,Flagged (needs supplier confirmation)
+R00755,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,Global Inventory Status for USA (TSCA),Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2026-05-16,Flagged (needs supplier confirmation)
+R00762,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,Global Inventory Status for China (IECSC) ,China (IECSC) ,Dropdown,Yes,yes,Unknown / not specified,2026-07-19,Flagged (needs supplier confirmation)
+R00767,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,Global Inventory Status for Korea (KECI),Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00768,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,Global Inventory Status for New Zealand (NZIOC),New Zealand (NZIOC),Dropdown,Yes,yes,"yes, see attachment",2026-05-03,Flagged (needs supplier confirmation)
+R00770,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,Global Inventory Status for New Zealand (NZIOC),Evaluation Procedures,Dropdown,Yes,yes,Supplier declaration and laboratory analysis,2024-10-22,Outdated
+R00775,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,"Global Inventory Status for Japan (ENCS), (ISHL)",Substance,Freetext,Yes,yes,pending,2026-03-30,Flagged (needs supplier confirmation)
+R00776,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,"Global Inventory Status for Japan (ENCS), (ISHL)",Evaluation Procedures,Dropdown,Yes,yes,"yes, see attachment",2026-05-14,Flagged (needs supplier confirmation)
+R00778,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,Global Inventory Status for Taiwan (TSCI),Substance,Freetext,Yes,yes,"Yes, compliant.",2025-11-22,Flagged (needs supplier confirmation)
+R00779,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,Global Inventory Status for Taiwan (TSCI),Evaluation Procedures,Dropdown,Yes,yes,Presumption (without evidence),2024-08-19,Outdated
+R00780,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,Global Inventory Status for Mexico (INSQ),Mexico (INSQ),Dropdown,Yes,yes,,,Missing
+R00783,11000690,DOW CORNING GMBH,00052-90000-00,MDF,29,Requirements,Global Inventory Status for Malaysia (EMS),Malaysia (EMS),Dropdown,Yes,yes,Not Compliant,2025-02-01,Outdated
+R00792,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 1,Substance Name,Freetext,Yes,yes,Unknown / not specified,2025-12-27,Flagged (needs supplier confirmation)
+R00793,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 1,CAS No. ,Freetext,Yes,yes,Unknown / not specified,2026-06-27,Flagged (needs supplier confirmation)
+R00794,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 1,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,Unknown / not specified,2026-01-28,Flagged (needs supplier confirmation)
+R00795,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 1,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,pending,2026-07-27,Flagged (needs supplier confirmation)
+R00798,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 2,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,123,2026-01-21,Flagged (needs supplier confirmation)
+R00802,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 3,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,,,Missing
+R00804,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 4,Substance Name,Freetext,Yes,yes,123,2026-03-19,Flagged (needs supplier confirmation)
+R00808,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 5,Substance Name,Freetext,Yes,yes,123,2026-06-11,Flagged (needs supplier confirmation)
+R00813,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 6,CAS No. ,Freetext,Yes,yes,"Confirmed per supplier declaration for cas no. , evidence on file.",2025-06-09,Outdated
+R00814,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 6,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,Unknown / not specified,2026-02-22,Flagged (needs supplier confirmation)
+R00822,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 8,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,"Yes, compliant.",2026-07-16,Flagged (needs supplier confirmation)
+R00823,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 8,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,"Yes, compliant.",2026-02-09,Flagged (needs supplier confirmation)
+R00825,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 9,CAS No. ,Freetext,Yes,yes,,,Missing
+R00826,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 9,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,,,Missing
+R00828,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 10,Substance Name,Freetext,Yes,yes,,,Missing
+R00831,11000690,DOW CORNING GMBH,00052-90000-00,MDF,30,Full Material Declaration,Material 10,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,"Confirmed per supplier declaration for additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method., evidence on file.",2025-04-11,Outdated
+R00833,11000690,DOW CORNING GMBH,00052-90000-00,MDF,31,Sustainability data (currently optional),Share of virgin fossil material,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,Unknown / not specified,2026-03-31,Flagged (needs supplier confirmation)
+R00834,11000690,DOW CORNING GMBH,00052-90000-00,MDF,31,Sustainability data (currently optional),Share of virgin bio-based material,Substance concentration (in %),Freetext,Yes,yes,N/A,2026-02-12,Flagged (needs supplier confirmation)
+R00835,11000690,DOW CORNING GMBH,00052-90000-00,MDF,31,Sustainability data (currently optional),Share of virgin bio-based material,"Additional information
+Source of the recycled material (e.g., post-industrial vs. post consumer), type of recycling (e.g., mechanical), type of certification (e.g., ISCC, mass balanced), measuring method, etc.",Freetext,Yes,yes,,,Missing
+R00842,11000690,DOW CORNING GMBH,00052-90000-00,MDF,31,Sustainability data (currently optional),Share of other circular material feedstock,Substance concentration (in %),Freetext,Yes,yes,123,2026-06-09,Flagged (needs supplier confirmation)
+R00845,11000690,DOW CORNING GMBH,00052-90000-00,SDS,1,SDS ,SDS,SDS file Upload or LINK to online file,Docuement upload or Lin to automatic download from internet,Yes,yes,tbc,2026-06-30,Flagged (needs supplier confirmation)
+R00850,11000690,DOW CORNING GMBH,,PCF,1,Corporate report,Sustainability / ESG Report Upload – Submission,Supplier comment (optional),Short text,Yes,yes,tbc,2026-08-02,Flagged (needs supplier confirmation)
+R00853,11000690,DOW CORNING GMBH,,PCF,2,GHG & Energy,GHG / Energy Evidence Upload – Submission,Document file(s),File upload,Yes,yes,123,2026-08-22,Flagged (needs supplier confirmation)
+R00857,11000690,DOW CORNING GMBH,,PCF,3,PCF,PCF Upload – Submission,Submission ID / Workflow number,System-generated,Yes,yes,tbc,2026-04-09,Flagged (needs supplier confirmation)
+R00865,11000690,DOW CORNING GMBH,,Certificates,1,Certificates,Certificates,Certificate selection,Dropdown,Yes,yes,Unknown / not specified,2025-12-31,Flagged (needs supplier confirmation)
+R00872,11000707,CARL MEYER GMBH,32551-90000-00,MDF,1,General information,Introduction,Evaluation Procedures,Dropdown,Yes,yes,Unknown / not specified,2025-11-19,Flagged (needs supplier confirmation)
+R00874,11000707,CARL MEYER GMBH,32551-90000-00,MDF,2,REACH Registration Status,REACH Registration Status,Are all substances manufactures/sourced from within the EU?,Dropdown,Yes,yes,"yes, see attachment",2025-11-24,Flagged (needs supplier confirmation)
+R00879,11000707,CARL MEYER GMBH,32551-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Evaluation Procedures,Dropdown,Yes,yes,Laboratory analysis,2025-05-14,Outdated
+R00881,11000707,CARL MEYER GMBH,32551-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Declaration of comformidity,Freetext,Yes,yes,Unknown / not specified,2026-08-12,Flagged (needs supplier confirmation)
+R00882,11000707,CARL MEYER GMBH,32551-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00884,11000707,CARL MEYER GMBH,32551-90000-00,MDF,3,REACH,REACh regulation No 1907/2006/EC,Declaration of comformidity,Freetext,Yes,yes,"Yes, compliant.",2026-05-16,Flagged (needs supplier confirmation)
+R00887,11000707,CARL MEYER GMBH,32551-90000-00,MDF,4,Legislations,Chemicals prohibition ordinance ChemVerbotsV,Declaration of comformidity,Freetext,Yes,yes,"Yes, compliant.",2026-01-07,Flagged (needs supplier confirmation)
+R00889,11000707,CARL MEYER GMBH,32551-90000-00,MDF,5,Legislations,POP regulation No 2019/1021/EC,Applies to all purchased products and packaging.,Dropdown,Yes,yes,Unknown / not specified,2026-04-24,Flagged (needs supplier confirmation)
+R00892,11000707,CARL MEYER GMBH,32551-90000-00,MDF,6,Legislations,PFOS/PFOA Directive 2006/122/EU,Applies to all purchased products,Dropdown,Yes,yes,,,Missing
+R00895,11000707,CARL MEYER GMBH,32551-90000-00,MDF,7,Legislations,Packaging directive 94/62/EC,Applies to all packaging materials for production and sales products.,Dropdown,Yes,yes,"yes, see attachment",2026-08-02,Flagged (needs supplier confirmation)
+R00901,11000707,CARL MEYER GMBH,32551-90000-00,MDF,9,Legislations,ELV directive 2000/53/EC incl. amendments,Applies to all purchased products,Dropdown,Yes,yes,,,Missing
+R00905,11000707,CARL MEYER GMBH,32551-90000-00,MDF,10,Legislations,International Electrotechnical Commission (IEC) 61249-2- 21 standard (Halogens),"if yes, Please list all inlcuded Halogens with their CAS numbers and concentrations:",Freetext,Yes,yes,"Yes, compliant.",2025-11-25,Flagged (needs supplier confirmation)
+R00906,11000707,CARL MEYER GMBH,32551-90000-00,MDF,10,Legislations,International Electrotechnical Commission (IEC) 61249-2- 21 standard (Halogens),Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00909,11000707,CARL MEYER GMBH,32551-90000-00,MDF,11,Legislations,Deforestation Regulation (EU) 2023/1115 (EUDR) repealing EU Timber Regulation (EU) No 995/2010 (EUTR),Evaluation Procedures,Dropdown,Yes,yes,N/A,2026-02-20,Flagged (needs supplier confirmation)
+R00910,11000707,CARL MEYER GMBH,32551-90000-00,MDF,12,Requirements,Halal / Kosher requirements,"Is the product conform with Halal / Kosher requirements, certified by a recognized Kosher and Halal certification body?",Dropdown,Yes,yes,Unknown / not specified,2026-05-11,Flagged (needs supplier confirmation)
+R00912,11000707,CARL MEYER GMBH,32551-90000-00,MDF,12,Requirements,Halal / Kosher requirements,Please list all included substances of animal origin or ethanol with their CAS numbers and concentrations:,Freetext,Yes,yes,"Yes, compliant.",2026-07-02,Flagged (needs supplier confirmation)
+R00914,11000707,CARL MEYER GMBH,32551-90000-00,MDF,13,Requirements,Phthalates,Does this product contain phthalates not listed under ANNEX XVII REACH (entry 51)?,Dropdown,Yes,yes,"yes, see attachment",2026-05-16,Flagged (needs supplier confirmation)
+R00917,11000707,CARL MEYER GMBH,32551-90000-00,MDF,14,Requirements,Mineral Oil,Does this product contain mineral oils (MOSH/MOAH)?,Dropdown,Yes,yes,No,2024-07-03,Outdated
+R00920,11000707,CARL MEYER GMBH,32551-90000-00,MDF,15,Requirements,Antimony,Does this product contain antimony or other antimony compounds?,Dropdown,Yes,yes,Unknown / not specified,2026-03-01,Flagged (needs supplier confirmation)
+R00921,11000707,CARL MEYER GMBH,32551-90000-00,MDF,15,Requirements,Antimony,Please list all included antimony compounds with their CAS numbers and concentrations:,Freetext,Yes,yes,Unknown / not specified,2026-04-13,Flagged (needs supplier confirmation)
+R00922,11000707,CARL MEYER GMBH,32551-90000-00,MDF,15,Requirements,Antimony,Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00923,11000707,CARL MEYER GMBH,32551-90000-00,MDF,16,Requirements,Silicone,Does this product contain silicone or other silicone compounds?,Dropdown,Yes,yes,"yes, see attachment",2026-06-25,Flagged (needs supplier confirmation)
+R00925,11000707,CARL MEYER GMBH,32551-90000-00,MDF,16,Requirements,Silicone,Evaluation Procedures,Dropdown,Yes,yes,,,Missing
+R00927,11000707,CARL MEYER GMBH,32551-90000-00,MDF,17,Requirements,Microplastics / Synthetic polymer microparticles (SPM),Declaration of comformidity,Freetext,Yes,yes,,,Missing
+R00929,11000707,CARL MEYER GMBH,32551-90000-00,MDF,18,Requirements,Nanomaterial,Does the product contain any substances classed as a nanomaterial as per Commission Recommendation of 18 October 2011?,Dropdown,Yes,yes,,,Missing
+R00932,11000707,CARL MEYER GMBH,32551-90000-00,MDF,19,Requirements,"Biocides Directive 98/8/EC, as amended by Ordinance EU 528/2012?",Does this product contain any biocidal substances as mentioned in Ordinance EU 528/2012? ,Dropdown,Yes,yes,"yes, see attachment",2026-02-25,Flagged (needs supplier confirmation)
+R00935,11000707,CARL MEYER GMBH,32551-90000-00,MDF,20,Requirements,Ozone Depleting Substances (ODS) Regulation (EC) No 1005/2009,Does this product contain Ozone depleting substances as per Regulation (EC) No 1005/2009 ,Dropdown,Yes,yes,Not Compliant,2025-03-07,Outdated
+R00936,11000707,CARL MEYER GMBH,32551-90000-00,MDF,20,Requirements,Ozone Depleting Substances (ODS) Regulation (EC) No 1005/2009,Declaration of comformidity,Freetext,Yes,yes,TBD,2026-06-18,Flagged (needs supplier confirmation)
+R00937,11000707,CARL MEYER GMBH,32551-90000-00,MDF,20,Requirements,Ozone Depleting Substances (ODS) Regulation (EC) No 1005/2009,Evaluation Procedures,Dropdown,Yes,yes,Laboratory analysis,2024-12-04,Outdated
+R00941,11000707,CARL MEYER GMBH,32551-90000-00,MDF,22,Conflict Minerals,Responsible Minerals Sourcing (EU and US Legislative),"Applies to all purchased products
+Please fill in the additional templates for CMRT & EMRT
+https://www.responsiblemineralsinitiative.org/reporting-templates/cmrt/
+https://www.responsiblemineralsinitiative.org/reporting-templates/emrt/",Dropdown,Yes,yes,,,Missing
+R00942,11000707,CARL MEYER GMBH,32551-90000-00,MDF,22,Conflict Minerals,Responsible Minerals Sourcing (EU and US Legislative),Declaration of comformidity,Dropdown,Yes,yes,Unknown / not specified,2026-03-01,Flagged (needs supplier confirmation)
+R00944,11000707,CARL MEYER GMBH,32551-90000-00,MDF,22,Conflict Minerals,Responsible Minerals Sourcing (EU and US Legislative),Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2026-07-04,Flagged (needs supplier confirmation)
+R00945,11000707,CARL MEYER GMBH,32551-90000-00,MDF,23,Forever Chemicals,PFAS,"Please refer to PFAS OECD list 2024
+Applies to all purchased products",Dropdown,Yes,yes,"Yes, compliant.",2026-06-01,Flagged (needs supplier confirmation)
+R00946,11000707,CARL MEYER GMBH,32551-90000-00,MDF,24,Requirements,Global automotive declarable substance list (GADSL),"Global automotive declarable substance list (GADSL)
+https://www.gadsl.org/",Dropdown,Yes,yes,"yes, see attachment",2026-04-01,Flagged (needs supplier confirmation)
+R00947,11000707,CARL MEYER GMBH,32551-90000-00,MDF,24,Requirements,Global automotive declarable substance list (GADSL),Please list all GADSL listet substances including the CAS numbers and concentrations:,Freetext,Yes,yes,"Yes, compliant.",2026-01-03,Flagged (needs supplier confirmation)
+R00949,11000707,CARL MEYER GMBH,32551-90000-00,MDF,25,Requirements,California Proposition 65,Applies to all purchased products,Dropdown,Yes,yes,"yes, see attachment",2026-03-09,Flagged (needs supplier confirmation)
+R00958,11000707,CARL MEYER GMBH,32551-90000-00,MDF,27,Requirements,EU Food contact status,"Lebensmittel-, Bedarfsgegenstände, - und Futtermittelgesetzbuches (Lebensmittel- und Futtermittelgesetzbuch– LFGB) of the Food, Consumer Goods, and Feed Code (Food and Feed Code – LFGB) in the version published on 15 September 2021 (Federal Law Gazette I p. 4253), last amended by Article 7 of the Act of 27 September 2021 (Federal Law Gazette I p. 4530), §§ 30 and 31",Dropdown,Yes,yes,Unknown / not specified,2026-01-09,Flagged (needs supplier confirmation)
+R00965,11000707,CARL MEYER GMBH,32551-90000-00,MDF,27,Requirements,EU Food contact status,Please state EU foodlaw status of your product incl. the relevant paragpraph,Freetext,Yes,yes,Unknown / not specified,2026-08-20,Flagged (needs supplier confirmation)
+R00968,11000707,CARL MEYER GMBH,32551-90000-00,MDF,28,Requirements,US FDA Status,Please state foodlaw status of your product incl. the relevant US FDA paragpraph,Freetext,Yes,yes,,,Missing
+R00969,11000707,CARL MEYER GMBH,32551-90000-00,MDF,28,Requirements,US FDA Status,Evaluation Procedures,Dropdown,Yes,yes,"Yes, compliant.",2025-12-20,Flagged (needs supplier confirmation)
+R00971,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for USA (TSCA),Substance,Freetext,Yes,yes,"Confirmed per supplier declaration for substance, evidence on file.",2025-01-20,Outdated
+R00973,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Canada (DSL),Canada (DSL),Dropdown,Yes,yes,,,Missing
+R00977,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Canada (NDSL),Substance,Freetext,Yes,yes,"Confirmed per supplier declaration for substance, evidence on file.",2024-12-18,Outdated
+R00978,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Canada (NDSL),Evaluation Procedures,Dropdown,Yes,yes,"yes, see attachment",2026-03-17,Flagged (needs supplier confirmation)
+R00979,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for China (IECSC) ,China (IECSC) ,Dropdown,Yes,yes,"Yes, compliant.",2026-01-23,Flagged (needs supplier confirmation)
+R00980,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for China (IECSC) ,Substance,Freetext,Yes,yes,"Confirmed per supplier declaration for substance, evidence on file.",2025-07-17,Outdated
+R00984,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Korea (KECI),Evaluation Procedures,Dropdown,Yes,yes,tbc,2025-11-29,Flagged (needs supplier confirmation)
+R00988,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Philippines (PICCS),Philippines (PICCS),Dropdown,Yes,yes,Unknown / not specified,2026-06-02,Flagged (needs supplier confirmation)
+R00990,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Philippines (PICCS),Evaluation Procedures,Dropdown,Yes,yes,N/A,2026-04-22,Flagged (needs supplier confirmation)
+R00994,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Taiwan (TSCI),Taiwan (TSCI),Dropdown,Yes,yes,"Yes, compliant.",2026-01-04,Flagged (needs supplier confirmation)
+R00997,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Mexico (INSQ),Mexico (INSQ),Dropdown,Yes,yes,Not Compliant,2024-06-02,Outdated
+R01001,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Malaysia (EMS),Substance,Freetext,Yes,yes,tbc,2026-07-14,Flagged (needs supplier confirmation)
+R01008,11000707,CARL MEYER GMBH,32551-90000-00,MDF,29,Requirements,Global Inventory Status for Australia (AICS),Evaluation Procedures,Dropdown,Yes,yes,Material declaration,2024-06-03,Outdated
+R01018,11000707,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 3,CAS No. ,Freetext,Yes,yes,"Confirmed per supplier declaration for cas no. , evidence on file.",2025-04-15,Outdated
+R01028,11000707,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 5,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,"Yes, compliant.",2026-05-08,Flagged (needs supplier confirmation)
+R01029,11000707,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 6,Substance Name,Freetext,Yes,yes,,,Missing
+R01034,11000707,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 7,CAS No. ,Freetext,Yes,yes,"Yes, compliant.",2026-03-16,Flagged (needs supplier confirmation)
+R01036,11000707,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 7,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,N/A,2026-05-29,Flagged (needs supplier confirmation)
+R01040,11000707,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 8,"Additional information
+e.g. name of the product part where the substance is located, use of an applicable exception incl. number, measuring method.",Freetext,Yes,yes,"Yes, compliant.",2026-04-15,Flagged (needs supplier confirmation)
+R01041,11000707,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 9,Substance Name,Freetext,Yes,yes,"Confirmed per supplier declaration for substance name, evidence on file.",2024-04-08,Outdated
+R01043,11000707,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 9,"Substance concentration (in %)
+The concentration of the substance as a percentage of the homogeneous mass of the material.",Freetext,Yes,yes,123,2026-08-12,Flagged (needs supplier confirmation)
+R01046,11000707,CARL MEYER GMBH,32551-90000-00,MDF,30,Full Material Declaration,Material 10,CAS No. ,Freetext,Yes,yes,"Yes, compliant.",2026-03-31,Flagged (needs supplier confirmation)
+R01055,11000707,CARL MEYER GMBH,32551-90000-00,MDF,31,Sustainability data (currently optional),Share of recycled material,Substance concentration (in %),Freetext,Yes,yes,,,Missing
+R01063,11000707,CARL MEYER GMBH,,PCF,1,Corporate report,Sustainability / ESG Report Upload – Submission,Information from supplier avaliable?,Check box,Yes,yes,See attached documentation,2025-02-17,Outdated
+R01067,11000707,CARL MEYER GMBH,,PCF,1,Corporate report,Sustainability / ESG Report Upload – Submission,Supplier comment (optional),Short text,Yes,yes,"Yes, compliant.",2026-01-19,Flagged (needs supplier confirmation)
+R01068,11000707,CARL MEYER GMBH,,PCF,2,GHG & Energy,GHG / Energy Evidence Upload – Submission,Information from supplier avaliable?,Check box,Yes,yes,pending,2026-01-21,Flagged (needs supplier confirmation)
+R01070,11000707,CARL MEYER GMBH,,PCF,2,GHG & Energy,GHG / Energy Evidence Upload – Submission,Document file(s),File upload,Yes,yes,"Yes, compliant.",2026-07-06,Flagged (needs supplier confirmation)
+R01072,11000707,CARL MEYER GMBH,,PCF,3,PCF,PCF Upload – Submission,Information from supplier avaliable?,Check box,Yes,yes,See attached documentation,2025-06-22,Outdated
+R01075,11000707,CARL MEYER GMBH,,PCF,3,PCF,PCF Upload – Submission,Document file(s),File upload,Yes,yes,"Yes, compliant.",2026-06-19,Flagged (needs supplier confirmation)
+R01082,11000707,CARL MEYER GMBH,,Certificates,1,Certificates,Certificates,Certificate selection,Dropdown,Yes,yes,ISO 9001 - Quality Management,2024-06-16,Outdated
+R01083,11000707,CARL MEYER GMBH,,Certificates,1,Certificates,Certificates,Certificate for supplier entity,Freetext,Yes,yes,123,2026-07-06,Flagged (needs supplier confirmation)
