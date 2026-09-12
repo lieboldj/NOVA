@@ -143,16 +143,32 @@ def database():
 def build():
     revision = command(["git", "rev-parse", "--short=12", "HEAD"]).stdout.strip()
     image = f"{REGISTRY}/{PROJECT}/nova/app:{revision}"
-    token = gc("auth", "print-access-token").stdout.strip()
-    docker = ["docker", "--config", str(ROOT / "docker")]
-    command([*docker, "login", REGISTRY, "-u", "oauth2accesstoken", "--password-stdin"], data=token)
-    print("Building NOVA image:", image, flush=True)
-    command([*docker, "build", "-t", image, "."])
-    command([*docker, "push", image])
     n8n = f"{REGISTRY}/{PROJECT}/nova/n8n:{N8N_VERSION}"
-    command([*docker, "pull", f"docker.n8n.io/n8nio/n8n:{N8N_VERSION}"])
-    command([*docker, "tag", f"docker.n8n.io/n8nio/n8n:{N8N_VERSION}", n8n])
-    command([*docker, "push", n8n])
+    config = {
+        "steps": [
+            {"name": "gcr.io/cloud-builders/docker", "args": ["build", "-t", image, "."]},
+            {"name": "gcr.io/cloud-builders/docker", "args": ["push", image]},
+            {
+                "name": "gcr.io/go-containerregistry/crane:debug",
+                "args": ["copy", "--platform=linux/amd64", f"ghcr.io/n8n-io/n8n:{N8N_VERSION}", n8n],
+            },
+        ],
+        "images": [image],
+        "options": {"logging": "CLOUD_LOGGING_ONLY"},
+        "timeout": "1200s",
+    }
+    save(ROOT / "build.json", config)
+    print("Building and uploading images inside Google Cloud.", flush=True)
+    gc(
+        "builds",
+        "submit",
+        ".",
+        f"--region={REGION}",
+        f"--config={ROOT / 'build.json'}",
+        "--ignore-file=.dockerignore",
+        f"--service-account=projects/{PROJECT}/serviceAccounts/{RUNTIME_ACCOUNT}",
+        "--default-buckets-behavior=regional-user-owned-bucket",
+    )
     save(ROOT / "images.json", {"nova": image, "n8n": n8n})
     print("NOVA and pinned n8n images pushed.", flush=True)
 
@@ -233,6 +249,11 @@ def deploy():
             ]
         gc(*args)
         print("Service deployed:", name, flush=True)
+    deploy_n8n()
+
+
+def deploy_n8n():
+    images = json.loads((ROOT / "images.json").read_text())
     api_url = gc(
         "run", "services", "describe", "nova", f"--region={REGION}", "--format=value(status.url)"
     ).stdout.strip()
@@ -253,7 +274,7 @@ def deploy():
         "N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS": "true",
         "N8N_DEFAULT_BINARY_DATA_MODE": "database",
         "EXECUTIONS_DATA_MAX_AGE": "168",
-        "EXECUTIONS_DATA_SAVE_ON_SUCCESS": "none",
+        "EXECUTIONS_DATA_SAVE_ON_SUCCESS": "all",
         "EXECUTIONS_DATA_SAVE_ON_ERROR": "all",
     }
     save(ROOT / "n8n-env.json", n8n_env)
@@ -297,6 +318,6 @@ if __name__ == "__main__":
     os.umask(0o077)
     ROOT.mkdir(parents=True, exist_ok=True)
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("phase", choices=["identities", "database", "build", "deploy"])
+    parser.add_argument("phase", choices=["identities", "database", "build", "deploy", "deploy_n8n"])
     args = parser.parse_args()
     globals()[args.phase]()

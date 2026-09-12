@@ -1,0 +1,4 @@
+Row ID,Supplier ID,Supplier Name,NART,Use case,Module (ID),Category,Section,Field (label),Field Type,Required @ go-live,Editable by supplier,Value submitted,Submission date,Status
+CLOUD-DEMO-F1,CLOUD-DEMO-SUPPLIER,Fictional Cloud Demo Ltd,CLOUD-DEMO-ARTICLE,MDF,1,,Demo evidence,Material composition,Freetext,Yes,yes,80% recycled aluminium,,Complete
+CLOUD-DEMO-F2,CLOUD-DEMO-SUPPLIER,Fictional Cloud Demo Ltd,CLOUD-DEMO-ARTICLE,MDF,1,,Demo evidence,Certificate valid until,Date,Yes,yes,,,Missing
+CLOUD-DEMO-F3,CLOUD-DEMO-SUPPLIER,Fictional Cloud Demo Ltd,CLOUD-DEMO-ARTICLE,MDF,1,,Demo evidence,Energy statement,Freetext,Yes,yes,Previous energy mix,,Outdated

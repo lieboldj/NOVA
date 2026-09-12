@@ -1,10 +1,11 @@
-> Gmail update: test mailboxes are selected and the backend Gmail send/read/sync transport is implemented.
-> See [Gmail setup](gmail-setup.md). Local OAuth authorization is still required; the provider-selection
-> and mailbox-adapter tasks below are now superseded for the demo. Cloud deployment work remains planned.
+> Superseded for the demo by [the deployed Google Cloud setup](cloud-deployment.md).
+> Live Gmail, Anymize, Gemini, cloud storage and n8n executions are now verified. The deployed worker
+> runs continuously with allocated CPU; the task-driven architecture below remains a future alternative.
 
 # NOVA integration and deployment plan
 
-Status: planned work, not a completed cloud deployment. The two approval gates are mandatory throughout.
+Historical planning document. Refer to the deployment guide for current status and remaining limitations.
+The approval gates are mandatory throughout.
 
 ## Verified starting point
 

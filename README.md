@@ -10,6 +10,14 @@ labelled as new, changed, or unchanged confirmations. Additional information wit
 remains visible. After deciding a reply's proposals, the reviewer completes that reply's review explicitly;
 case closure and follow-up drafting wait until every received reply has been reviewed.
 
+## Google Cloud demo
+
+NOVA is deployed at **https://nova-bnw6dmyvva-ey.a.run.app** with a clean database.
+n8n runs at **https://nova-n8n-bnw6dmyvva-ey.a.run.app**. Login details are kept privately in the
+operator's `.data/cloud/access.txt`. See [deployment, verification, test data and operations](docs/cloud-deployment.md).
+The cloud demo uses `devstar4415@gcplab.me` for both sides of a test email exchange; NOVA excludes its
+own outgoing requests from reply ingestion. The supplier test address remains configurable.
+
 ## Run locally
 
 Requires Python 3.12+ and `uv`. PostgreSQL via Docker Compose is recommended for multiple processes.
@@ -181,7 +189,7 @@ A reviewer must reconcile the outcome. Confirming `not_sent` requires a fresh ap
 
 For SMTP delivery, configure `MAIL_MODE=smtp`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_SENDER`, and optionally
 `SMTP_USERNAME` / `SMTP_PASSWORD`. STARTTLS is enabled by default. The default simulation path and its
-approval gates are tested; no live supplier email has been sent.
+approval gates are tested. Live fictional Gmail tests are documented in the cloud deployment guide.
 
 ## Verification
 
@@ -199,11 +207,10 @@ approval, and worker regression test; SQLite skips that test.
 
 ## Deployment boundary
 
-This delivery runs locally and in Docker Compose. Cloud deployment is not provisioned yet. The backend can
-be packaged for Google Cloud, but the current worker is a long-running process and document storage is a
-shared filesystem. For separate Cloud Run services, add Cloud Tasks dispatch and a Cloud Storage adapter;
-do not rely on container-local files or background threads after an HTTP response. Use Secret Manager for
-deployment credentials, an authenticated review frontend, and private automation endpoints.
+The Google Cloud demo uses Cloud SQL, private Cloud Storage and Secret Manager. The worker and n8n run
+continuously on Cloud Run with minimum instances and always-allocated CPU; the public API can scale to zero.
+The local Compose workflow remains supported. See the deployment guide for verified behavior, runtime IAM
+limitations, costs and shutdown. A future task-driven worker is an alternative to the continuous deployment.
 
 The final presentation is three minutes and the frontend is owned separately. Backend acceptance focuses
 on a repeatable request → approval → reply/PDF → proposal → approval → CSV flow, plus partial replies and
