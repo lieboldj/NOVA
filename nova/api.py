@@ -11,6 +11,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import inspect, select
 from sqlalchemy.exc import IntegrityError
 
+from nova.browser import browser_actor, install_browser
 from nova.config import get_settings
 from nova.db import initialize, make_engine, sessions
 from nova.gmail import Gmail, install_gmail_routes
@@ -64,7 +65,7 @@ def record(obj):
 
 def authorize(request: Request, credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer)]):
     if not credentials:
-        fail("Bearer token required", 401)
+        return browser_actor(request)
     settings = request.app.state.settings
     for role, token in [
         ("reviewer", settings.nova_reviewer_token),
@@ -245,6 +246,35 @@ def create_app(settings=None, engine=None):
                 )
             ]
         }
+
+    @app.get("/cases/{case_id}/messages", tags=["Replies"])
+    def case_messages(case_id: str, db: DB, actor: Reviewer):
+        locked(db, Case, case_id)
+        messages = db.scalars(
+            select(Message).where(Message.case_id == case_id).order_by(Message.created_at.desc())
+        ).all()
+        return [
+            record(m)
+            | {
+                "documents": [
+                    record(d) for d in db.scalars(select(Document).where(Document.message_id == m.id))
+                ]
+            }
+            for m in messages
+        ]
+
+    @app.get("/cases/{case_id}/activity", tags=["Cases"])
+    def case_activity(case_id: str, db: DB, actor: Reviewer):
+        locked(db, Case, case_id)
+        entities = [case_id]
+        for model in [Draft, Message, Proposal]:
+            entities.extend(db.scalars(select(model.id).where(model.case_id == case_id)))
+        return [
+            record(a)
+            for a in db.scalars(
+                select(Audit).where(Audit.entity_id.in_(entities)).order_by(Audit.at.desc()).limit(200)
+            )
+        ]
 
     @app.post("/cases/{case_id}/contact/approve", tags=["Cases"])
     def contact(case_id: str, body: ContactApproval, db: DB, actor: Reviewer):
@@ -500,8 +530,13 @@ def create_app(settings=None, engine=None):
         )
 
     @app.get("/jobs", tags=["Operations"])
-    def jobs(db: DB, actor: Reviewer):
-        return [record(j) for j in db.scalars(select(Job).order_by(Job.available_at.desc()).limit(500))]
+    def jobs(db: DB, actor: Reviewer, case_id: str | None = None):
+        query = select(Job)
+        if case_id:
+            targets = list(db.scalars(select(Draft.id).where(Draft.case_id == case_id)))
+            targets.extend(db.scalars(select(Message.id).where(Message.case_id == case_id)))
+            query = query.where(Job.target_id.in_(targets))
+        return [record(j) for j in db.scalars(query.order_by(Job.available_at.desc()).limit(500))]
 
     @app.post("/jobs/{job_id}/retry", tags=["Operations"])
     def retry_job(job_id: str, db: DB, actor: Reviewer):
@@ -533,6 +568,7 @@ def create_app(settings=None, engine=None):
         return [record(a) for a in db.scalars(select(Audit).order_by(Audit.at.desc()).limit(500))]
 
     install_gmail_routes(app, settings, Reviewer, Operator)
+    install_browser(app, settings, Reviewer)
     return app
 
 
