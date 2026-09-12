@@ -98,6 +98,8 @@ no email addresses, so NOVA does not guess recipients. Once contacts are approve
 | View audit history | `GET /audit` | Reviewer |
 
 See [frontend and integration handoff](docs/backend-api.md) for request shapes and state transitions.
+See [the integration and Google Cloud deployment plan](docs/integration-deployment-plan.md) for remaining
+work and required account access, and [the n8n workflow AI prompt](docs/n8n-workflow-ai-prompt.md) for workflow generation.
 
 ## n8n
 
