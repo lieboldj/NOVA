@@ -1,8 +1,9 @@
-# NOVA backend
+# NOVA supplier portal
 
 NOVA requests missing supplier information by email, evaluates replies and PDF attachments, and proposes
 updates to supplier records. **A reviewer must approve each email before sending and each data change
-before it becomes accepted supplier data.** The frontend will consume this API; it is not implemented here.
+before it becomes accepted supplier data.** The React control center is connected to the backend for
+case review, versioned email and data approvals, replies, attachments, and operations.
 
 ## Run locally
 
@@ -14,7 +15,10 @@ uv run python scripts/init_local.py
 docker compose up -d --build api worker
 ```
 
-Open **http://localhost:8000/docs** for interactive API documentation. The API listens on localhost only.
+Open **http://localhost:8000/** for the portal and **http://localhost:8000/docs** for API documentation.
+Sign in with the local `NOVA_REVIEWER_TOKEN` access key from `.env`. Browser sign-in creates an HttpOnly
+session; no credentials are embedded in the frontend build. See [frontend setup and workflow](docs/frontend-integration.md)
+for development on port 5173, browser tests, and the approval contract. The API listens on localhost only.
 `init_local.py` adds missing reviewer and automation credentials to the existing `.env` without displaying
 or replacing existing credentials. `.env` is excluded from Git and Docker builds. `config/example.env`
 documents supported settings and contains no credentials.

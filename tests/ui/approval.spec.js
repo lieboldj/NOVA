@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
 
 async function login(page) {
   await page.goto("/");
@@ -53,13 +54,11 @@ test("email approval and data approval remain separate across reloads", async ({
   page.on("pageerror", (e) => errors.push(e.message));
   await login(page);
   await page.getByRole("button", { name: "Import CSV", exact: true }).click();
-  await page
-    .getByLabel("Supplier CSV", { exact: true })
-    .setInputFiles({
-      name: "supplier.csv",
-      mimeType: "text/csv",
-      buffer: Buffer.from(columns.join(",") + "\n" + row.join(",") + "\n"),
-    });
+  await page.getByLabel("Supplier CSV", { exact: true }).setInputFiles({
+    name: "supplier.csv",
+    mimeType: "text/csv",
+    buffer: Buffer.from(columns.join(",") + "\n" + row.join(",") + "\n"),
+  });
   await page
     .getByRole("button", { name: "Preview import", exact: true })
     .click();
@@ -120,7 +119,14 @@ test("email approval and data approval remain separate across reloads", async ({
     multipart: {
       external_id: "ui-reply-1",
       sender: "supplier@example.com",
-      body: "UI-F1=Verified recycled content",
+      body: "See attached material statement.",
+      attachments: {
+        name: "supplier-evidence.pdf",
+        mimeType: "application/pdf",
+        buffer: readFileSync(
+          new URL("../fixtures/supplier-evidence.pdf", import.meta.url),
+        ),
+      },
     },
   });
   expect(reply.status()).toBe(201);
@@ -150,11 +156,14 @@ test("email approval and data approval remain separate across reloads", async ({
   await page.screenshot({
     path: ".data/screenshots/data-review.png",
     fullPage: true,
+    animations: "disabled",
   });
   await page
     .getByRole("button", { name: "Approve data change", exact: true })
     .click();
-  await expect(page.getByText("Approved value written to the database.", {exact:true})).toBeVisible();
+  await expect(
+    page.getByText("Approved value written to the database.", { exact: true }),
+  ).toBeVisible();
   detail = await (
     await request.get(`/api/cases/${caseId}`, { headers: apiHeaders })
   ).json();
@@ -163,8 +172,18 @@ test("email approval and data approval remain separate across reloads", async ({
   );
   await page.getByRole("tab", { name: "Replies", exact: true }).click();
   await expect(
-    page.getByText("UI-F1=Verified recycled content", { exact: true }),
+    page.getByText("See attached material statement.", { exact: true }),
   ).toBeVisible();
+  const attachment = page.getByRole("link", {
+    name: "supplier-evidence.pdf",
+    exact: true,
+  });
+  await expect(attachment).toBeVisible();
+  const download = await page.request.get(
+    await attachment.getAttribute("href"),
+  );
+  expect(download.ok()).toBe(true);
+  expect((await download.body()).subarray(0, 5).toString()).toBe("%PDF-");
   await page.getByRole("tab", { name: "Activity", exact: true }).click();
   await expect(
     page.getByText("change · approved", { exact: false }),
@@ -184,10 +203,13 @@ test("mobile layout, filters and real empty operation state", async ({
   await login(page);
   await page.getByRole("button", { name: "Filters", exact: false }).click();
   await page.getByLabel("Search requests").fill("nonexistent-supplier");
-  await expect(page.getByText(/No requests match your filters|No supplier cases yet/)).toBeVisible();
+  await expect(
+    page.getByText(/No requests match your filters|No supplier cases yet/),
+  ).toBeVisible();
   await page.screenshot({
     path: ".data/screenshots/mobile-overview.png",
     fullPage: true,
+    animations: "disabled",
   });
   expect(
     await page.evaluate(
