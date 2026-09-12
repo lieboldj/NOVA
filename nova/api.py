@@ -8,7 +8,7 @@ from typing import Annotated
 from fastapi import Depends, FastAPI, File, Form, Request, UploadFile
 from fastapi.responses import FileResponse, Response
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from sqlalchemy import inspect, select
+from sqlalchemy import func, inspect, select
 from sqlalchemy.exc import IntegrityError
 
 from nova.browser import browser_actor, install_browser
@@ -38,6 +38,7 @@ from nova.schemas import (
 )
 from nova.workflow import (
     CSV_COLUMNS,
+    OUTSTANDING,
     V2_COLUMNS,
     audit,
     blocking_message,
@@ -91,7 +92,7 @@ def database(request: Request):
             fail("Conflicting or duplicate record; reload and retry", 409)
 
 
-DB = Annotated[object, Depends(database)]
+DB = Annotated[object, Depends(database, scope="function")]
 Reviewer = Annotated[str, Depends(reviewer)]
 Operator = Annotated[str, Depends(authorize)]
 
@@ -230,10 +231,19 @@ def create_app(settings=None, engine=None):
     def cases(db: DB, actor: Reviewer, offset: int = 0, limit: int = 100):
         if offset < 0 or not 1 <= limit <= 500:
             fail("Invalid pagination", 422)
-        return [
-            record(c) | {"outstanding_count": len(outstanding(db, c.id))}
-            for c in db.scalars(select(Case).order_by(Case.id).offset(offset).limit(limit))
-        ]
+        page = db.scalars(select(Case).order_by(Case.id).offset(offset).limit(limit)).all()
+        counts = dict(
+            db.execute(
+                select(SupplierField.case_id, func.count(SupplierField.id))
+                .where(
+                    SupplierField.case_id.in_([c.id for c in page]),
+                    SupplierField.data["Status"].as_string().in_(OUTSTANDING),
+                    func.lower(SupplierField.data["Editable by supplier"].as_string()) == "yes",
+                )
+                .group_by(SupplierField.case_id)
+            ).all()
+        )
+        return [record(c) | {"outstanding_count": counts.get(c.id, 0)} for c in page]
 
     @app.get("/cases/{case_id}", tags=["Cases"])
     def case_detail(case_id: str, db: DB, actor: Reviewer):
