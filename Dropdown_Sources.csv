@@ -1,0 +1,7 @@
+List name,Values,Source
+Confidentiality level,Public; tesa-only; NDA-restricted,Portal fixed list
+Reporting year,Current year and previous 6 years (auto-generated),Portal generated
+Evidence type (GHG & Energy),GHG inventory/report; Assurance statement; Energy consumption report; Renewable electricity contract/PPA; EAC/GoO/REC certificate; Energy audit; Decarbonization roadmap/transition plan; Other supporting evidence,Portal fixed list
+Country,ISO country list,Portal master list
+Produces tesa-relevant goods?,Yes; No,Portal fixed list
+Output share bands (optional),0–25%; 25–50%; 50–75%; 75–100%,Portal fixed list

@@ -1,0 +1,6 @@
+Step,Actor,UI / Action,Logic / Notes
+1,Supplier,Log in to Supplier Portal,Supplier identity resolved via SAP SupplierID; show only supplier-relevant areas.
+2,Supplier,Upload PCF document(s),Mandatory at go-live. Supplier selects NART(s) and confidentiality; optional material reference.
+3,Supplier,Upload corporate sustainability report,"Mandatory annual upload; minimal metadata (year, assurance)."
+4,Supplier,Upload GHG/Energy evidence (as available),Mandatory evidence-type classification; reporting year conditional.
+5,Supplier,Complete Form 1 – Site / Production Map,One-time setup; Captures site→NART anchor for allocation.

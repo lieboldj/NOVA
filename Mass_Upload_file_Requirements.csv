@@ -1,0 +1,37 @@
+,,,,,,
+,Import template and example,,,,,
+,,,,,,
+,"Information: Report expectation based in current information, furthermore this could still be minorly changed based in inputs from stakeholders. ",,,,,
+,,,,,,
+,General comments,The below template is used to enable tesa users to define mulitple supplier and NART combination to trigger a mass communication to the supplier. There should be no limits to the size of this table,,,,
+,Comments,"Not visible to supplier, but needed in upload template to have the correct supplier chosen for the workflow",Match based on supplier ID via data in MDG-BP,Visible to supplier and entered manually by tesa user. No logic or connection to SAP,"Visible to Supplier, this helps the supplier ensure, that he understands the article","Escalation contact, needed for escalation email after 2nd"
+,Report fields,Supplier ID,Supplier Name,NART,NART Descr.,Procurement Manager
+,Restrictions,ID,Name,ID,String,Name
+,,,,,,
+,example,1000662,Kraton Chemical LLC,14129-90001-00,RES  SYLVALITE RE 100L (Bags),Hunter Skarzynski
+,,1000662,Kraton Chemical LLC,14129-90000-00,RES  SYLVALITE RE 100L (Supersack),Hunter Skarzynski
+,,1000662,Kraton Chemical LLC,14383-90000-00,SYLVARES TR 1115 T,Hunter Skarzynski
+,,1000666,BASF Corporation,14151-90000-00,ADH AC3633 WB SOLID CONTENT 60,Hunter Skarzynski
+,,1000666,BASF Corporation,10234-90000-00,DISP. AS 1187,Hunter Skarzynski
+,,105613,CARL MEYER GMBH,32551-90000-00,FASS.BL.213L.UN-NR.,Julia Zhang
+,,11000690,DOW CORNING GMBH,00052-90000-00,SILIKONHARZ DC280.55,Lina Lee
+,,11000690,DOW CORNING GMBH,01368-90000-00,SILIKONHARZ DC282.55,Lina Lee
+,,11000690,DOW CORNING GMBH,00256-90000-00,AC.ESTER,Lina Lee
+,,11000690,DOW CORNING GMBH,13592-90000-00,ADH SILICON 7735 D.56,Lina Lee
+,,11000690,DOW CORNING GMBH,13961-90000-00,ADH. DC 7657,Lina Lee
+,,11000690,DOW CORNING GMBH,13963-90000-00,CAT. ORG-PT 4000,Lina Lee
+,,11000690,DOW CORNING GMBH,13074-90000-00,PRIMER 7499 PSA,Lina Lee
+,,11000690,DOW CORNING GMBH,13076-90000-00,HARDENER 7682-000,Lina Lee
+,,11000707,CARL MEYER GMBH,32551-90000-00,FASS.BL.213L.UN-NR.,Julia Zhang
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-60001-09,51008PV09CL04_66M_1220MM,Nadine Long
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-00001-03,51008 BK 66M X 58MM MTO INDENT DROP SHIP,Nadine Long
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-00014-03,51008PV03CL04_66M_48MM,Nadine Long
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-00049-03,51008PV03CL08_100M_48MM PE FILM WHITE,Nadine Long
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-00000-03,51008 BK 66M X 96MM MTO INDENT DROP SHIP,Nadine Long
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-00033-09,51008PV09CL04_66M_36MM,Nadine Long
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-60007-09,51008 WH 100M X 1220MM,Nadine Long
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-00002-03,51008 BK 66M X 48MM MTO INDENT DROP SHIP,Nadine Long
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-00038-03,51008PV03CL04_66M_96MM,Nadine Long
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-60001-03,BM 51008PV03CL04_66M_1220MM,Nadine Long
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-00046-03,51008PV03CL04_66M_24MM,Nadine Long
+,,11001094,Nanjing Jongshiue Adhesive Tape MFG,51008-00051-03,51008PV03CL08_100M_96MM,Not defined

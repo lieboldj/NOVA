@@ -1,0 +1,26 @@
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,"Information: Report expectation based in current information, furthermore this could still be minorly changed based in inputs from stakeholders. ",,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,Reporting functionality in Supplier Portal ,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,
+,Comments,Corresponds to the 4 use cases in the portal,Subcategory is defined by the workflow in portal.,Supplier ID from MDG-BP. Connection between Report and MDG-BP,Supplier name coming from supplier ID in MDG-BP,"NARTs are uploaded manually when triggering a workflow, there is no logic or connection to SAP","Validy date of the certificate is an information provided by the supplier in the supplier portal, this must be part of the report. ",,,"Open  = workflow sent but not answered by supplier
+in approval = workflow answers received, awaiting approval from RCA/sustainability/other
+1. Reminder = reminder sent to supplier, awaiting feedback
+2. Reminder = reminder sent to supplier, awaiting feedback
+Escalation = escalation sent to supplier, awaiting feedback
+closed = workflow including positive approval finalized and documents archived","Date, whne workflow was successfully closed",Name defined during upload of template when starting a workflow in portal,,,,,,,,,,,,
+,Report fields,Category,Subcategory,Supplier ID,Supplier Name,Listed NARTS if avaliable,Validy of certificate,Workflow Nr. ,Workflow date creation,Status,Worflow date closed (if applicable),If Escalation - Responsible Buyer,Link to Archiving folder ,,,,,,,,,,,
+,Restrictions,MDF / SDS / PCF / Certificates,MDF / Corporate report / GHG & Energy / PCF / SDS / ISO 9001 – Quality Management / ISO 14001 – Environmental Management / ISO 45001 – Occupational Health & Safety / ISO 50001 – Energy Management / IATF 16949 – Automotive Quality Management Standard,ID,name,number,,ID,DDMMYYYY,Open / 1. Reminder / 2. Reminder / Escalation / Closed,DDMMYYYY,Name,LINK1,,,,,,,,,,,
+,example,,,,,,,,,,,,LINK2,,,,,,,,,,,
+,,MDF,MDF,4072398,Mondi,1234,NULL,898989,2025-01-01 00:00:00,closed,2025-02-19 00:00:00,Paulo,LINK3,,,,,,,,,,,
+,,MDF,MDF,4072398,Mondi,567,NULL,89890,2025-01-01 00:00:00,closed,2025-02-19 00:00:00,Paulo,LINK3,,,,,,,,,,,
+,,PCF,Corporate report,4072398,Mondi,NULL,NULL,ndfghdfghe,2025-01-01 00:00:00,closed,2025-02-19 00:00:00,Paulo,LINK4,,,,,,,,,,,
+,,PCF,GHG & Energy,4072398,Mondi,NULL,NULL,898989,2025-01-01 00:00:00,closed,2025-02-19 00:00:00,Paulo,LINK5,,,,,,,,,,,
+,,PCF,PCF,4072398,Mondi,567,NULL,5345,2025-01-01 00:00:00,closed,2025-02-19 00:00:00,Paulo,LINK6,,,,,,,,,,,
+,,SDS,SDS,4072398,Mondi,1234,NULL,756745,2025-01-01 00:00:00,1. reminder,NULL,Philipp,LINK7,,,,,,,,,,,
+,,Certificate,ISO 9001 - Quality Management  ,407233453,Shell,NULL,2026-02-01 00:00:00,356345626,2025-01-01 00:00:00,2. reminder,NULL,Paulo,LINK8,,,,,,,,,,,
+,,Certificate,ISO 14001 - Environmental Management ,407233453,Shell,NULL,2028-12-31 00:00:00,67466,2025-01-01 00:00:00,closed,2025-02-19 00:00:00,christina,LINK9,,,,,,,,,,,
+,,Certificate,"ISO 45001 - Occupational, Health & Safety ",407233453,Shell,NULL,2028-12-31 00:00:00,6767865,2025-01-01 00:00:00,closed,2025-02-19 00:00:00,Paulo,LINK10,,,,,,,,,,,
+,,Certificate, ISO 50001 - Energy Management ,4072398,Mondi,NULL,2028-12-31 00:00:00,2452345,2025-01-01 00:00:00,in approval,NULL,Paulo,LINK11,,,,,,,,,,,
+,,Certificate,IATF 16949 - Automotive Quality Management Standard ,4072398,Mondi,NULL,2028-12-31 00:00:00,785678,2025-01-01 00:00:00,closed,2025-02-19 00:00:00,Paulo,LINK12,,,,,,,,,,,
