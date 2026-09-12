@@ -1,0 +1,531 @@
+{
+  "name": "NOVA - Check pending cases",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "f2ad3da2-6828-4815-943d-c2ca10658457",
+      "name": "Every 15 min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -736,
+        -96
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "base_url",
+              "name": "base_url",
+              "type": "string",
+              "value": "<__PLACEHOLDER_VALUE__NOVA base URL, e.g. https://nova.internal (no trailing slash)__>"
+            },
+            {
+              "id": "max_attempts",
+              "name": "max_attempts",
+              "type": "number",
+              "value": 3
+            },
+            {
+              "id": "attempt",
+              "name": "attempt",
+              "type": "number",
+              "value": 0
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e91f4887-9722-459b-a92c-72a94ba9aa9a",
+      "name": "Init config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -512,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "188660d0-bd4f-45d5-b527-db9ca9060876",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -736,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nreturn [{ json: {\n  base_url: j.base_url,\n  max_attempts: j.max_attempts != null ? j.max_attempts : 3,\n  attempt: (j.attempt != null ? j.attempt : 0) + 1,\n} }];"
+      },
+      "id": "e6d8f96c-35a8-4a78-b524-91f9b543c6b1",
+      "name": "Increment attempt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.base_url }}/automation/tick",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "a1b9ee66-631e-46dd-ab58-c9bf164a4eb8",
+      "name": "Call NOVA /automation/tick",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -16,
+        176
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst status = (item && item.statusCode != null) ? item.statusCode : 0;\nconst cfg = $(\"Increment attempt\").first().json;\nconst attempt = cfg.attempt;\nconst max = cfg.max_attempts != null ? cfg.max_attempts : 3;\nconst body = item ? item.body : undefined;\nlet decision;\nif (status >= 200 && status < 300) decision = \"success\";\nelse if (status === 401 || status === 403) decision = \"credential\";\nelse if (status === 429 || status >= 500 || status === 0) decision = (attempt < max) ? \"retry\" : \"exhausted\";\nelse if (status >= 400) decision = \"client_error\";\nelse decision = (attempt < max) ? \"retry\" : \"exhausted\";\nreturn [{ json: { decision, status, attempt, max_attempts: max, base_url: cfg.base_url, body } }];"
+      },
+      "id": "29031c72-4914-45f9-9fe7-b040c565e27d",
+      "name": "Classify outcome",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        176
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "statusCode",
+              "name": "statusCode",
+              "type": "number",
+              "value": 0
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7de62cae-1672-40db-aa9d-0763407cef72",
+      "name": "Mark network error",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0",
+                    "leftValue": "={{ $json.decision }}",
+                    "rightValue": "success",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c1",
+                    "leftValue": "={{ $json.decision }}",
+                    "rightValue": "retry",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "retry"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c2",
+                    "leftValue": "={{ $json.decision }}",
+                    "rightValue": "exhausted",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "exhausted"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c3",
+                    "leftValue": "={{ $json.decision }}",
+                    "rightValue": "credential",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "credential"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c4",
+                    "leftValue": "={{ $json.decision }}",
+                    "rightValue": "client_error",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "client_error"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fca9eeea-1ae7-4a6c-84ba-6619e4afc39b",
+      "name": "Route outcome",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        656,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.first().json;\nconst b = j.body || {};\nreturn [{ json: {\n  status: \"ok\",\n  drafted: b.drafted != null ? b.drafted : null,\n  closed: b.closed != null ? b.closed : null,\n  escalated: b.escalated != null ? b.escalated : null,\n  skipped: b.skipped != null ? b.skipped : null,\n  raw: b,\n} }];"
+      },
+      "id": "fb329ab3-81da-40fa-8f1b-b7b19332412b",
+      "name": "Build result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        -288
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "b2c62261-c6de-4222-af65-9df04757f214",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -288
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "c3bb3e7c-689a-4191-8421-72798b2a1f53",
+      "name": "Backoff wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        176
+      ],
+      "webhookId": "2f9378b5-b2d9-4690-bd09-ab19c6188215"
+    },
+    {
+      "parameters": {
+        "errorMessage": "=NOVA /automation/tick failed after {{ $json.attempt }} attempt(s); last status {{ $json.status }} (connection/429/5xx transient failure)."
+      },
+      "id": "4dd82489-161e-4802-9ac6-f8c2b63359b0",
+      "name": "Fail: retries exhausted",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        240,
+        -96
+      ]
+    },
+    {
+      "parameters": {
+        "errorMessage": "=NOVA credential/authorization failure (status {{ $json.status }}). Check the NOVA Automation token."
+      },
+      "id": "e88ac725-c1f4-4ad4-b15d-7a5b36a33211",
+      "name": "Fail: credential",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        240,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "errorMessage": "=NOVA returned client error {{ $json.status }}; manual inspection required (not retried)."
+      },
+      "id": "0610de9c-2a0c-442a-8d8a-0ff8e683b549",
+      "name": "Fail: manual inspection",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        240,
+        288
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Every 15 min": {
+      "main": [
+        [
+          {
+            "node": "Init config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Init config": {
+      "main": [
+        [
+          {
+            "node": "Increment attempt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "Init config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Increment attempt": {
+      "main": [
+        [
+          {
+            "node": "Call NOVA /automation/tick",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call NOVA /automation/tick": {
+      "main": [
+        [
+          {
+            "node": "Classify outcome",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark network error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Classify outcome": {
+      "main": [
+        [
+          {
+            "node": "Route outcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark network error": {
+      "main": [
+        [
+          {
+            "node": "Classify outcome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route outcome": {
+      "main": [
+        [
+          {
+            "node": "Build result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Backoff wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fail: retries exhausted",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fail: credential",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fail: manual inspection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build result": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Backoff wait": {
+      "main": [
+        [
+          {
+            "node": "Increment attempt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3c4215f7-4f18-40c0-a6cc-ab0f9839f224",
+  "meta": {
+    "instanceId": "67627e9e0245d5fe467483ce8a96bace507f770e214be27efdb936668586f5d7"
+  },
+  "nodeGroups": [
+    {
+      "id": "dd8b7b2f-1e1d-4ca4-b1ac-3ec11fbf023e",
+      "name": "Retry loop",
+      "nodeIds": [
+        "e6d8f96c-35a8-4a78-b524-91f9b543c6b1",
+        "a1b9ee66-631e-46dd-ab58-c9bf164a4eb8",
+        "7de62cae-1672-40db-aa9d-0763407cef72",
+        "29031c72-4914-45f9-9fe7-b040c565e27d",
+        "fca9eeea-1ae7-4a6c-84ba-6619e4afc39b",
+        "c3bb3e7c-689a-4191-8421-72798b2a1f53"
+      ],
+      "description": "Calls NOVA /automation/tick with status-selective bounded retry (max 3 attempts on connection/429/5xx)."
+    }
+  ],
+  "id": "1STak9wTWglcgG6f",
+  "tags": []
+}
