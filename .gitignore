@@ -17,6 +17,8 @@ Thumbs.db
 # Local runtime, documents, and Python tooling
 .data/
 .venv/
+node_modules/
+dist/
 __pycache__/
 *.py[cod]
 .pytest_cache/
