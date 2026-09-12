@@ -1,0 +1,101 @@
+Supplier ID,Supplier Name,Country,Procurement Manager,NART count,Persona
+1000662,Kraton Chemical LLC,Poland,Hunter Skarzynski,3,over-verbose
+1000666,BASF Corporation,Belgium,Hunter Skarzynski,2,non-responsive
+105613,CARL MEYER GMBH,China,Julia Zhang,1,incorrect
+11000690,DOW CORNING GMBH,France,Lina Lee,5,cooperative
+11000707,CARL MEYER GMBH,USA,Julia Zhang,1,over-verbose
+11001094,Nanjing Jongshiue Adhesive Tape MFG,India,Nadine Long,5,cooperative
+15550734,Terra Industries GmbH,Netherlands,Julia Chen,2,incorrect
+10717675,Pacific Specialty Chemicals LLC,Sweden,Julia Rossi,2,slow-partial
+18841570,Terra Coatings S.p.A.,United Kingdom,Fatima Costa,2,cooperative
+3456213,Continental Chemical LLC,Malaysia,Karim Haddad,1,cooperative
+12750036,Nord Compounds Inc.,Japan,Anna Long,3,slow-partial
+8321837,Meridian Polymers Corp.,Italy,Aiko Tanaka,4,cooperative
+7118411,Orion Elastomers Inc.,Italy,Diego Zhang,1,slow-partial
+19766045,Atlas Polymers Inc.,Turkey,Julia Long,2,cooperative
+6075608,Silverline Compounds LLC,France,Yara Costa,2,slow-partial
+11464027,Solvex Chemical S.A.,Taiwan,Tom Silva,1,non-responsive
+1907395,Silverline Chemical GmbH,Brazil,Yara Sharma,4,cooperative
+12552150,Delta Compounds Pte Ltd,Turkey,Hunter Kim,2,over-verbose
+12542956,Orion Elastomers AG,Mexico,Paulo Chen,4,slow-partial
+1717953,Baltic Adhesives S.A.,Germany,Priya Rossi,1,cooperative
+9071162,Nord Materials Corp.,Italy,Yara Long,4,slow-partial
+11938145,Falcon Polymers AG,Poland,Anna Fischer,3,slow-partial
+7690861,Union Resins LLC,Netherlands,Ines Lee,3,cooperative
+11159613,Ironbridge Polymers Inc.,Germany,Fatima Chen,4,slow-partial
+1606730,Alpha Materials Ltd.,Italy,Ines Sharma,2,slow-partial
+19005270,Orion Materials GmbH,Taiwan,Aiko Long,5,over-verbose
+9787747,Cascade Compounds S.p.A.,Japan,Priya Novak,1,incorrect
+9403665,Ferro Adhesives AG,France,Ines Kim,1,slow-partial
+14189779,Delta Resins Corp.,Germany,Fatima Kruger,8,cooperative
+10359299,Alpha Industries GmbH,South Korea,Erik Tanaka,2,cooperative
+18756654,Amber Films S.A.,China,Hunter Zhang,4,cooperative
+13103334,Orion Elastomers Corp.,Germany,Yara Zhang,8,slow-partial
+4339305,Cascade Compounds LLC,Taiwan,Noah Sharma,3,cooperative
+8070214,Meridian Elastomers S.p.A.,Brazil,Nadine Novak,1,cooperative
+17312173,Ironbridge Polymers Inc.,Germany,Fatima Haddad,2,incorrect
+5027919,Amber Industries GmbH,Belgium,Mei Chen,5,cooperative
+3703712,Ferro Chemical S.p.A.,Italy,Christina Kim,1,slow-partial
+10453828,Ferro Specialty Chemicals Co.,France,Christina Weber,1,cooperative
+17797509,Blue Horizon Industries S.p.A.,India,Sven Sharma,5,cooperative
+3082371,Blue Horizon Industries AG,Switzerland,Erik Skarzynski,2,cooperative
+15267340,Granite Polymers AG,China,Mei Zhang,3,cooperative
+5216173,Helix Industries LLC,France,Lina Johansson,1,slow-partial
+7432443,Ferro Specialty Chemicals S.A.,Malaysia,Aiko Skarzynski,2,over-verbose
+11314559,Vertex Films Co.,Mexico,Aiko Kim,1,cooperative
+12343128,Vertex Coatings Ltd.,France,Anna Kim,3,slow-partial
+8493514,Alpha Chemical Corp.,Belgium,Noah Haddad,2,non-responsive
+3662919,Crestview Industries LLC,USA,Yara Rossi,5,cooperative
+15976936,Amber Films Co.,USA,Sven Zhang,1,slow-partial
+3080505,Summit Resins Pte Ltd,USA,Priya Haddad,1,over-verbose
+10979285,Pacific Compounds AG,Belgium,Priya Andersen,1,incorrect
+5452917,Ironbridge Materials Co.,France,Lina Sharma,5,slow-partial
+7990765,Continental Compounds Pte Ltd,Netherlands,Mei Long,1,non-responsive
+10862433,Delta Compounds S.A.,Japan,Aiko Tanaka,1,cooperative
+7316626,Nord Compounds S.A.,Spain,Tom Zhang,2,incorrect
+8814581,Silverline Specialty Chemicals Corp.,Spain,Anna Sharma,1,non-responsive
+1212719,Ironbridge Materials GmbH,India,Priya Zhang,1,slow-partial
+7826373,Helix Materials Co.,Brazil,Ines Johansson,4,non-responsive
+15020564,Ferro Adhesives Ltd.,Italy,Julia Kim,8,cooperative
+14015602,Baltic Adhesives AG,Japan,Karim Rossi,1,cooperative
+18377589,Alpha Specialty Chemicals GmbH,Poland,Nadine Kruger,1,slow-partial
+19456676,Amber Compounds Co.,France,Lina Silva,4,cooperative
+13258518,Helix Materials LLC,Poland,Diego Lee,1,cooperative
+17908885,Meadow Compounds S.A.,Sweden,Priya Fischer,5,cooperative
+13491206,Sierra Industries Corp.,Brazil,Nadine Fischer,1,cooperative
+13072184,Vertex Elastomers GmbH,Germany,Julia Skarzynski,8,slow-partial
+11191782,Cascade Elastomers Corp.,India,Tom Kim,1,cooperative
+1473520,Novachem Chemical Co.,Japan,Aiko Weber,5,cooperative
+4520458,Solvex Elastomers S.p.A.,Switzerland,Anna Weber,1,slow-partial
+3139671,Vertex Polymers Ltd.,Netherlands,Julia Long,2,cooperative
+9834832,Highland Resins S.A.,Belgium,Fatima Tanaka,3,cooperative
+18997118,Terra Polymers Pte Ltd,Japan,Paulo Zhang,2,cooperative
+4579532,Sierra Films LLC,Belgium,Nadine Tanaka,3,cooperative
+4757080,Meridian Polymers S.A.,South Korea,Fatima Haddad,1,slow-partial
+1701907,Nord Industries S.p.A.,France,Tom Kim,2,non-responsive
+19048276,Pacific Compounds Corp.,United Kingdom,Karim Novak,3,over-verbose
+18285239,Atlas Polymers LLC,United Kingdom,Mei Long,1,slow-partial
+12932528,Delta Coatings Ltd.,Switzerland,Mei Fischer,1,cooperative
+8837495,Summit Coatings Pte Ltd,Italy,Paulo Tanaka,5,non-responsive
+18521411,Meridian Coatings Ltd.,Switzerland,Priya Rossi,2,cooperative
+4585952,Baltic Industries S.A.,Taiwan,Erik Costa,1,cooperative
+9630654,Summit Films LLC,Switzerland,Aiko Kruger,3,non-responsive
+6249872,Baltic Industries S.p.A.,Japan,Fatima Skarzynski,1,cooperative
+17436308,Solvex Polymers Pte Ltd,Mexico,Julia Sharma,5,cooperative
+14411175,Summit Polymers S.A.,South Korea,Sven Fischer,1,over-verbose
+14152087,Granite Films Co.,Spain,Erik Chen,2,slow-partial
+16750504,Silverline Adhesives Ltd.,Poland,Yara Kim,2,slow-partial
+3866270,Rhein Films Ltd.,Brazil,Anna Long,3,slow-partial
+8839705,Amber Specialty Chemicals Corp.,Turkey,Anna Lee,1,non-responsive
+19404639,Sierra Materials AG,Netherlands,Yara Weber,4,slow-partial
+1221686,Crestview Compounds Inc.,Switzerland,Ines Lee,1,cooperative
+13092186,Pacific Films Inc.,Poland,Yara Fischer,3,slow-partial
+8070767,Crestview Coatings Ltd.,Mexico,Yara Kruger,1,cooperative
+10116670,Crestview Compounds Pte Ltd,USA,Diego Chen,5,slow-partial
+5934234,Baltic Materials Ltd.,Malaysia,Priya Johansson,3,cooperative
+2148931,Terra Industries AG,China,Hunter Kruger,2,slow-partial
+6210868,Nord Films LLC,China,Marco Long,2,cooperative
+1596499,Silverline Materials LLC,South Korea,Mei Kim,1,slow-partial
+9524522,Helix Materials Co.,United Kingdom,Sven Costa,5,over-verbose
+12203339,Orion Coatings Pte Ltd,Switzerland,Aiko Kruger,1,cooperative
+13623173,Baltic Specialty Chemicals AG,Mexico,Mei Lee,3,slow-partial
