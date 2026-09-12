@@ -1,0 +1,197 @@
+import { test, expect } from "@playwright/test";
+
+async function login(page) {
+  await page.goto("/");
+  await page.getByLabel("Reviewer access key").fill("ui-review-secret");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Request operations" }),
+  ).toBeVisible();
+}
+
+const columns = [
+  "Row ID",
+  "Supplier ID",
+  "Supplier Name",
+  "NART",
+  "Use case",
+  "Module (ID)",
+  "Category",
+  "Section",
+  "Field (label)",
+  "Field Type",
+  "Required @ go-live",
+  "Editable by supplier",
+  "Value submitted",
+  "Submission date",
+  "Status",
+];
+const row = [
+  "UI-F1",
+  "UI-SUPPLIER",
+  "Fictional UI Supplier",
+  "UI-ARTICLE",
+  "MDF",
+  "1",
+  "",
+  "Demo",
+  "Material statement",
+  "Freetext",
+  "Yes",
+  "yes",
+  "",
+  "",
+  "Missing",
+];
+
+// Actual browser -> session -> API -> durable worker -> proposal approval, using isolated fixtures.
+test("email approval and data approval remain separate across reloads", async ({
+  page,
+  request,
+}) => {
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await login(page);
+  await page.getByRole("button", { name: "Import CSV", exact: true }).click();
+  await page
+    .getByLabel("Supplier CSV", { exact: true })
+    .setInputFiles({
+      name: "supplier.csv",
+      mimeType: "text/csv",
+      buffer: Buffer.from(columns.join(",") + "\n" + row.join(",") + "\n"),
+    });
+  await page
+    .getByRole("button", { name: "Preview import", exact: true })
+    .click();
+  await expect(page.getByText("1 fields · 1 suppliers")).toBeVisible();
+  await page
+    .getByText("Optional supplier contacts (1)", { exact: true })
+    .click();
+  await page
+    .getByLabel("UI-SUPPLIER", { exact: true })
+    .fill("supplier@example.com");
+  await page
+    .getByRole("button", { name: "Approve import into database", exact: true })
+    .click();
+  await page.getByRole("button").filter({ hasText: "UI-ARTICLE" }).click();
+  await page
+    .getByRole("button", { name: "Create email draft", exact: true })
+    .click();
+  await expect(
+    page
+      .getByTestId("email-review")
+      .getByText("Awaiting approval", { exact: true }),
+  ).toBeVisible();
+  await page
+    .getByLabel("Email body")
+    .fill("Please confirm the material statement.");
+  await expect(
+    page.getByRole("button", { name: "Approve email & send", exact: true }),
+  ).toBeDisabled();
+  await page
+    .getByRole("button", { name: "Save email edits", exact: true })
+    .click();
+  await expect(page.getByText(/Version 2 ·/)).toBeVisible();
+  const apiHeaders = { Authorization: "Bearer ui-review-secret" };
+  const cases = await (
+    await request.get("/api/cases", { headers: apiHeaders })
+  ).json();
+  const caseId = cases[0].id;
+  expect(
+    (
+      await (
+        await request.get(`/api/jobs?case_id=${caseId}`, {
+          headers: apiHeaders,
+        })
+      ).json()
+    ).length,
+  ).toBe(0);
+  await page
+    .getByRole("button", { name: "Approve email & send", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Close review", exact: true }).click();
+  await page.reload();
+  await page.getByRole("button").filter({ hasText: "UI-ARTICLE" }).click();
+  await expect(
+    page.getByTestId("email-review").getByText("Simulated", { exact: true }),
+  ).toBeVisible();
+  const reply = await request.post(`/api/cases/${caseId}/messages`, {
+    headers: { Authorization: "Bearer ui-automation-secret" },
+    multipart: {
+      external_id: "ui-reply-1",
+      sender: "supplier@example.com",
+      body: "UI-F1=Verified recycled content",
+    },
+  });
+  expect(reply.status()).toBe(201);
+  await expect
+    .poll(
+      async () =>
+        (
+          await (
+            await request.get(`/api/proposals?case_id=${caseId}`, {
+              headers: apiHeaders,
+            })
+          ).json()
+        ).length,
+    )
+    .toBe(1);
+  await page.getByRole("button", { name: "Close review", exact: true }).click();
+  await page.reload();
+  await page.getByRole("button").filter({ hasText: "UI-ARTICLE" }).click();
+  const proposal = page.getByTestId("proposal-review");
+  await expect(proposal.getByLabel("Proposed value")).toHaveValue(
+    "Verified recycled content",
+  );
+  let detail = await (
+    await request.get(`/api/cases/${caseId}`, { headers: apiHeaders })
+  ).json();
+  expect(detail.fields[0].data["Value submitted"]).toBe("");
+  await page.screenshot({
+    path: ".data/screenshots/data-review.png",
+    fullPage: true,
+  });
+  await page
+    .getByRole("button", { name: "Approve data change", exact: true })
+    .click();
+  await expect(page.getByText("Approved value written to the database.", {exact:true})).toBeVisible();
+  detail = await (
+    await request.get(`/api/cases/${caseId}`, { headers: apiHeaders })
+  ).json();
+  expect(detail.fields[0].data["Value submitted"]).toBe(
+    "Verified recycled content",
+  );
+  await page.getByRole("tab", { name: "Replies", exact: true }).click();
+  await expect(
+    page.getByText("UI-F1=Verified recycled content", { exact: true }),
+  ).toBeVisible();
+  await page.getByRole("tab", { name: "Activity", exact: true }).click();
+  await expect(
+    page.getByText("change · approved", { exact: false }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Close review", exact: true }).click();
+  await page.getByRole("button", { name: "Sign out", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Sign in", exact: true }),
+  ).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("mobile layout, filters and real empty operation state", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await login(page);
+  await page.getByRole("button", { name: "Filters", exact: false }).click();
+  await page.getByLabel("Search requests").fill("nonexistent-supplier");
+  await expect(page.getByText(/No requests match your filters|No supplier cases yet/)).toBeVisible();
+  await page.screenshot({
+    path: ".data/screenshots/mobile-overview.png",
+    fullPage: true,
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+});
