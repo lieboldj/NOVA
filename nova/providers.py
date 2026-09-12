@@ -199,6 +199,11 @@ def providers(settings):
 
 
 def send_email(settings, draft):
+    if settings.mail_mode == "gmail":
+        from nova.gmail import Gmail
+
+        with Gmail(settings) as gmail:
+            return gmail.send(draft)
     provider_id = f"<{draft.id}@nova.local>"
     if settings.mail_mode == "simulation":
         return "simulated:" + draft.id

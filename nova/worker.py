@@ -9,6 +9,7 @@ from sqlalchemy import select
 
 from nova.config import get_settings
 from nova.db import make_engine, sessions
+from nova.gmail import GmailNotSent
 from nova.models import Case, Document, Draft, Job, Message, Proposal, SupplierField, now, uid
 from nova.providers import ProviderUnavailable, known_redaction, known_restore, providers, send_email
 from nova.workflow import audit, draft_digest, locked, locked_child, validate_value
@@ -76,6 +77,15 @@ def send_job(factory, settings, job_id, token, target_id):
     # Transmission is outside the DB transaction. "sending" is durable before the side effect.
     try:
         result = send_email(settings, draft)
+    except GmailNotSent:
+        with factory.begin() as db:
+            job = own_job(db, job_id, token)
+            locked(db, Case, draft.case_id)
+            current = db.get(Draft, target_id)
+            current.status = "approved"
+            job.status, job.error = "failed", "Gmail did not send; check configuration and retry."
+            audit(db, "worker", "email.send_blocked", target_id)
+        return
     except Exception:
         with factory.begin() as db:
             job = own_job(db, job_id, token)

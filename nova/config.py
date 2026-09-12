@@ -22,7 +22,12 @@ class Settings(BaseSettings):
     anymize_base_url: str = "https://app.anymize.ai/api"
     anymize_poll_seconds: float = 2
     anymize_timeout_seconds: float = 120
-    mail_mode: Literal["simulation", "smtp"] = "simulation"
+    mail_mode: Literal["simulation", "smtp", "gmail"] = "simulation"
+    gmail_mailbox: str = "devstar4415@gcplab.me"
+    gmail_supplier: str = "devstar4418@gcplab.me"
+    gmail_client_id: SecretStr = SecretStr("")
+    gmail_client_secret: SecretStr = SecretStr("")
+    gmail_refresh_token: SecretStr = SecretStr("")
     smtp_host: str = ""
     smtp_port: int = 587
     smtp_username: str = ""
