@@ -13,7 +13,10 @@ def test_interactive_demo_waits_for_both_approvals(env):
     supplier_reply(factory, settings, case_id)
     with factory() as db:
         assert not db.scalar(select(Message.id))
-    draft = client.get("/drafts", headers=REVIEW).json()[0]
+    with factory.begin() as db:
+        assert tick(db, settings)["drafted"] == 0
+        assert not db.scalar(select(Draft.id))
+    draft = client.post(f"/cases/{case_id}/draft", headers=REVIEW).json()
     approve_email(client, draft)
     run_once(factory, settings)
     supplier_reply(factory, settings, case_id)

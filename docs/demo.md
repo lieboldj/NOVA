@@ -10,14 +10,15 @@ npm run demo
 Open **http://localhost:8012/** and sign in with reviewer access key **`nova-demo`**.
 This key is public and only grants access to the local, disposable demo.
 
-The demo preloads one fictional supplier, two missing fields, and a pending email draft. It uses a
+The demo preloads one fictional supplier, two missing fields, and no email draft yet. It uses a
 separate temporary SQLite database, separate documents, and its own browser session cookie. It does
 not load `.env`, call live providers, send real mail, or modify the main portal database.
 
 ## Presentation sequence
 
-1. **0:00–0:40 — Email approval.** Open **Demo Circular Materials**. Review the recipient, subject, and
-   requested fields. Click **Approve email & send**. The status becomes **Simulated**.
+1. **0:00–0:40 — Start and approve.** Click **Start process**, select **Demo Circular Materials**, and
+   inspect the missing fields. Click **Prepare request for review**, review the email, and click
+   **Approve email & send**. The status becomes **Simulated**.
 2. **0:40–1:20 — PDF evidence and data approval.** Within about 10 seconds, a scripted supplier reply
    appears. Open **Data changes**: the PDF supplies “80% recycled aluminium.” Show the empty accepted
    value, source quote, and attachment. Click **Approve data change**.

@@ -16,7 +16,7 @@ from nova.db import initialize
 from nova.inbox import ingest_message
 from nova.models import Case, Draft, Message, SupplierField
 from nova.worker import run_once
-from nova.workflow import CSV_COLUMNS, audit, create_draft, tick
+from nova.workflow import CSV_COLUMNS, audit, tick
 
 REVIEW_KEY = "nova-demo"
 
@@ -55,7 +55,7 @@ def seed(factory):
             db.add(SupplierField(id=field_id, case_id=case.id, data=row, rules={}))
         db.flush()
         audit(db, "demo-setup", "case.fixture_loaded", case.id)
-        create_draft(db, case, "request")
+        case.next_action_at = None  # The reviewer initiates this demo through Start process.
         return case.id
 
 
@@ -144,7 +144,7 @@ def main():
             flush=True,
         )
         print(
-            "Approve the request, review its PDF proposal, then approve the follow-up and final value.",
+            "Use Start process to prepare a request; review its PDF proposal, follow-up and final value.",
             flush=True,
         )
         print("Restart this command to reset the disposable demo.\n", flush=True)
