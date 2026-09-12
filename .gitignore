@@ -9,3 +9,18 @@ Thumbs.db
 
 # Temporary Excel/Office lock files
 ~$*
+
+# Local credentials and environment files
+.env
+.env.*
+
+# Local runtime, documents, and Python tooling
+.data/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
