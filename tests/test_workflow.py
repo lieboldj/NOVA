@@ -103,6 +103,8 @@ def test_pdf_partial_reply_approval_followup_and_export(env):
         )
         response = client.post(f"/proposals/{proposal['id']}/approve", headers=REVIEW, json={"version": 1})
         assert response.status_code == 200, response.text
+    assert client.post("/automation/tick", headers=AUTOMATION).json()["drafted"] == 0
+    assert client.post(f"/messages/{message['id']}/review-complete", headers=REVIEW).status_code == 200
     assert client.post("/automation/tick", headers=AUTOMATION).json()["drafted"] == 1
     followup = client.get("/drafts", headers=REVIEW).json()[0]
     assert followup["kind"] == "followup" and followup["requested_fields"] == ["F3"]
@@ -111,7 +113,7 @@ def test_pdf_partial_reply_approval_followup_and_export(env):
     assert exported[0]["Value submitted"] == "Confirmed composition"
     assert exported[1]["Value submitted"] == "2028-12-31"
     assert exported[2]["Status"] == "Missing"
-    assert client.get(f"/messages/{message['id']}", headers=REVIEW).json()["status"] == "evaluated"
+    assert client.get(f"/messages/{message['id']}", headers=REVIEW).json()["status"] == "reviewed"
 
 
 def test_duplicate_reply_and_arrival_cancels_pending_reminder(env):
@@ -265,12 +267,14 @@ def test_full_reply_closes_only_after_approval_and_audits_changes(env):
     case_id = seed(client)
     approve_email(client, request_draft(client, case_id))
     run_once(factory, settings)
-    reply(client, case_id, "F1=Confirmed\nF2=2028-12-31\nF3=Renewable energy confirmed")
+    message = reply(client, case_id, "F1=Confirmed\nF2=2028-12-31\nF3=Renewable energy confirmed")
     run_once(factory, settings)
     assert client.get(f"/cases/{case_id}", headers=REVIEW).json()["status"] == "data_review"
     for proposal in client.get("/proposals", headers=REVIEW).json():
         response = client.post(f"/proposals/{proposal['id']}/approve", headers=REVIEW, json={"version": 1})
         assert response.status_code == 200
+    assert client.get(f"/cases/{case_id}", headers=REVIEW).json()["status"] == "data_review"
+    assert client.post(f"/messages/{message['id']}/review-complete", headers=REVIEW).status_code == 200
     assert client.get(f"/cases/{case_id}", headers=REVIEW).json()["status"] == "closed"
     events = client.get("/audit", headers=REVIEW).json()
     assert len([e for e in events if e["action"] == "change.approved"]) == 3
@@ -287,3 +291,61 @@ def test_unrelated_reply_needs_human_review_before_followup(env):
     assert client.post(f"/cases/{case_id}/draft", headers=REVIEW).status_code == 409
     assert client.post(f"/messages/{message['id']}/review-complete", headers=REVIEW).status_code == 200
     assert client.post("/automation/tick", headers=AUTOMATION).json()["drafted"] == 1
+
+
+def test_review_includes_unchanged_unsolicited_values_and_all_original_inputs(env):
+    client, factory, settings = env
+    case_id = seed(client)
+    with factory.begin() as db:
+        field = db.get(SupplierField, "F1")
+        field.data = {**field.data, "Value submitted": "Existing composition", "Status": "Complete"}
+    draft = request_draft(client, case_id)
+    assert "F1" not in draft["requested_fields"]
+    approve_email(client, draft)
+    run_once(factory, settings)
+    body = "F1=Existing composition\nF2=2028-12-31\nAdditional note: delivery is delayed."
+    first = reply(
+        client,
+        case_id,
+        body,
+        "all-inputs",
+        attachments=[
+            ("attachments", ("extra-notes.txt", b"Please call us about packaging.", "text/plain")),
+            ("attachments", ("energy.txt", b"F3=Renewable energy confirmed", "text/plain")),
+        ],
+    )
+    run_once(factory, settings)
+    proposals = client.get("/proposals", headers=REVIEW).json()
+    assert {p["field_id"] for p in proposals} == {"F1", "F2", "F3"}
+    unchanged = next(p for p in proposals if p["field_id"] == "F1")
+    assert unchanged["old_value"] == unchanged["value"] == "Existing composition"
+    assert unchanged["status"] == "pending"
+    assert client.post(f"/messages/{first['id']}/review-complete", headers=REVIEW).status_code == 409
+
+    # A second reply with no candidate is still an independent item in the same review.
+    second = reply(client, case_id, "We will send more details next week.", "additional-input")
+    run_once(factory, settings)
+    received = client.get(f"/cases/{case_id}/messages", headers=REVIEW).json()
+    assert len(received) == 2
+    original = next(m for m in received if m["id"] == first["id"])
+    assert original["body"] == body
+    assert {d["filename"] for d in original["documents"]} == {"extra-notes.txt", "energy.txt"}
+    notes = next(d for d in original["documents"] if d["filename"] == "extra-notes.txt")
+    assert (
+        client.get(f"/documents/{notes['id']}", headers=REVIEW).content == b"Please call us about packaging."
+    )
+    assert client.post(f"/messages/{second['id']}/review-complete", headers=AUTOMATION).status_code == 403
+    # Decisions are scoped to the reply; another reply's pending proposals do not prevent its review.
+    assert client.post(f"/messages/{second['id']}/review-complete", headers=REVIEW).status_code == 200
+    for proposal in proposals:
+        assert (
+            client.post(
+                f"/proposals/{proposal['id']}/approve", headers=REVIEW, json={"version": 1}
+            ).status_code
+            == 200
+        )
+    assert client.get(f"/cases/{case_id}", headers=REVIEW).json()["status"] == "data_review"
+    assert client.post(f"/cases/{case_id}/draft", headers=REVIEW).status_code == 409
+    assert client.post("/automation/tick", headers=AUTOMATION).json()["closed"] == 0
+    assert client.post(f"/messages/{first['id']}/review-complete", headers=REVIEW).status_code == 200
+    assert client.get(f"/cases/{case_id}", headers=REVIEW).json()["status"] == "closed"

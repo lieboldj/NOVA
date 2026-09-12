@@ -5,6 +5,11 @@ updates to supplier records. **A reviewer must approve each email before sending
 before it becomes accepted supplier data.** The React control center is connected to the backend for
 case review, versioned email and data approvals, replies, attachments, and operations.
 
+**Supplier review** includes every received email in full, all its attachments, and extracted values
+labelled as new, changed, or unchanged confirmations. Additional information without an extracted value
+remains visible. After deciding a reply's proposals, the reviewer completes that reply's review explicitly;
+case closure and follow-up drafting wait until every received reply has been reviewed.
+
 ## Run locally
 
 Requires Python 3.12+ and `uv`. PostgreSQL via Docker Compose is recommended for multiple processes.

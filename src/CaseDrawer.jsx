@@ -220,6 +220,7 @@ function ProposalReview({ proposal, field, busy, act }) {
   const [value, setValue] = useState(proposal.value);
   const dirty = value !== proposal.value;
   const pending = proposal.status === "pending";
+  const unchanged = proposal.value === proposal.old_value;
   return (
     <article
       className="review-card"
@@ -232,6 +233,13 @@ function ProposalReview({ proposal, field, busy, act }) {
       </div>
       <p className="muted">
         {proposal.field_id} · Version {proposal.version}
+      </p>
+      <p className="muted">
+        {unchanged
+          ? "Unchanged confirmation"
+          : proposal.old_value
+            ? "Changed value"
+            : "New value"}
       </p>
       <div className="value-comparison">
         <div>
@@ -295,11 +303,11 @@ function ProposalReview({ proposal, field, busy, act }) {
                     method: "POST",
                     body: { version: proposal.version },
                   }),
-                "Proposed change rejected.",
+                "Supplier value rejected.",
               )
             }
           >
-            Reject change
+            {unchanged ? "Reject confirmation" : "Reject change"}
           </button>
           <button
             className="primary-btn"
@@ -315,9 +323,88 @@ function ProposalReview({ proposal, field, busy, act }) {
               )
             }
           >
-            Approve data change
+            {unchanged ? "Approve confirmation" : "Approve data change"}
           </button>
         </div>
+      )}
+    </article>
+  );
+}
+
+function SupplierReplyReview({
+  message,
+  proposals,
+  fields,
+  busy,
+  act,
+  showProposals = true,
+}) {
+  const pending = proposals.some((p) => p.status === "pending");
+  return (
+    <article className="review-card" data-testid="supplier-reply-review">
+      <div className="review-heading">
+        <strong>{message.sender}</strong>
+        <StatusBadge status={message.status} />
+      </div>
+      <p className="muted">Received {dateLabel(message.created_at)}</p>
+      <h3>Complete supplier reply</h3>
+      <pre className="email-text">
+        {message.body || "(No email text; see attachments below.)"}
+      </pre>
+      <h3>All attachments ({message.documents.length})</h3>
+      {message.documents.length ? (
+        message.documents.map((d) => (
+          <p key={d.id}>
+            <a href={`/api/documents/${d.id}`}>{d.filename}</a>
+          </p>
+        ))
+      ) : (
+        <p className="muted">No attachments received.</p>
+      )}
+      {showProposals && (
+        <>
+          <h3>Extracted supplier values ({proposals.length})</h3>
+          {!proposals.length && (
+            <p className="muted">
+              No extracted values are available for this reply. Review the full
+              text and every attachment, including information that could not be
+              matched to a field.
+            </p>
+          )}
+          {proposals.map((p) => (
+            <ProposalReview
+              key={`${p.id}:${p.version}`}
+              proposal={p}
+              field={fields.find((f) => f.id === p.field_id)}
+              busy={busy}
+              act={act}
+            />
+          ))}
+        </>
+      )}
+      {["needs_review", "evaluated", "failed"].includes(message.status) && (
+        <>
+          <p className="muted">
+            Check the complete reply and every attachment, including unchanged
+            values and additional information. Decide all extracted values for
+            this reply before completing its review.
+          </p>
+          <button
+            className="secondary-btn"
+            disabled={busy || pending}
+            onClick={() =>
+              act(
+                () =>
+                  api(`/messages/${message.id}/review-complete`, {
+                    method: "POST",
+                  }),
+                "Reply review completed.",
+              )
+            }
+          >
+            Complete reply review
+          </button>
+        </>
       )}
     </article>
   );
@@ -354,7 +441,11 @@ export default function CaseDrawer({
     setData({ detail, drafts, proposals, messages, jobs, activity });
     if (first.current) {
       setRecipient(detail.recipient);
-      if (!initialTab && proposals.some((p) => p.status === "pending"))
+      if (
+        !initialTab &&
+        (proposals.some((p) => p.status === "pending") ||
+          messages.some((m) => m.status !== "reviewed"))
+      )
         setTab("data");
       first.current = false;
     }
@@ -398,7 +489,9 @@ export default function CaseDrawer({
   );
   const pendingProposals = data?.proposals.some((p) => p.status === "pending");
   const blockedReply = data?.messages.some((m) =>
-    ["queued", "processing", "failed", "needs_review"].includes(m.status),
+    ["queued", "processing", "failed", "needs_review", "evaluated"].includes(
+      m.status,
+    ),
   );
   return (
     <Modal
@@ -426,7 +519,7 @@ export default function CaseDrawer({
           >
             {[
               ["email", "Email"],
-              ["data", "Data changes"],
+              ["data", "Supplier review"],
               ["replies", "Replies"],
               ["activity", "Activity"],
             ].map(([id, label]) => (
@@ -438,7 +531,9 @@ export default function CaseDrawer({
                 className={tab === id ? "active" : ""}
               >
                 {label}
-                {id === "data" && pendingProposals ? " •" : ""}
+                {id === "data" && (pendingProposals || blockedReply)
+                  ? " •"
+                  : ""}
               </button>
             ))}
           </div>
@@ -528,20 +623,30 @@ export default function CaseDrawer({
           {tab === "data" && (
             <>
               <Notice>
-                Each approval writes only the reviewed field value. Email
-                sending is approved separately.
+                Review every supplier reply and attachment, including unchanged
+                confirmations and information without an extracted value.
+                Approve or reject extracted values, then complete each reply
+                review. Email sending is approved separately.
               </Notice>
-              {!data.proposals.length && (
+              {!config.anymize_configured && config.ai_mode !== "fixture" && (
+                <Notice>
+                  Extraction is waiting for Anymize setup. Complete supplier
+                  inputs remain available below.
+                </Notice>
+              )}
+              {!data.messages.length && (
                 <p className="empty">
-                  No proposed changes yet. Supplier replies must be evaluated
-                  first.
+                  No supplier replies received for this case yet.
                 </p>
               )}
-              {data.proposals.map((p) => (
-                <ProposalReview
-                  key={`${p.id}:${p.version}`}
-                  proposal={p}
-                  field={detail.fields.find((f) => f.id === p.field_id)}
+              {data.messages.map((m) => (
+                <SupplierReplyReview
+                  key={m.id}
+                  message={m}
+                  proposals={data.proposals.filter(
+                    (p) => p.message_id === m.id,
+                  )}
+                  fields={detail.fields}
                   busy={busy}
                   act={act}
                 />
@@ -576,45 +681,17 @@ export default function CaseDrawer({
                 </p>
               )}
               {data.messages.map((m) => (
-                <article className="review-card" key={m.id}>
-                  <div className="review-heading">
-                    <strong>{m.sender}</strong>
-                    <StatusBadge status={m.status} />
-                  </div>
-                  <p className="muted">{dateLabel(m.created_at)}</p>
-                  <pre className="email-text">{m.body}</pre>
-                  {m.documents.map((d) => (
-                    <p key={d.id}>
-                      <a href={`/api/documents/${d.id}`}>{d.filename}</a>
-                    </p>
-                  ))}
-                  {["needs_review", "evaluated", "failed"].includes(
-                    m.status,
-                  ) && (
-                    <>
-                      <p className="muted">
-                        Mark review complete only after checking this reply and
-                        deciding all proposed changes. This allows the next
-                        follow-up to be drafted.
-                      </p>
-                      <button
-                        className="secondary-btn"
-                        disabled={busy || pendingProposals}
-                        onClick={() =>
-                          act(
-                            () =>
-                              api(`/messages/${m.id}/review-complete`, {
-                                method: "POST",
-                              }),
-                            "Reply review completed.",
-                          )
-                        }
-                      >
-                        Complete reply review
-                      </button>
-                    </>
+                <SupplierReplyReview
+                  key={m.id}
+                  message={m}
+                  proposals={data.proposals.filter(
+                    (p) => p.message_id === m.id,
                   )}
-                </article>
+                  fields={detail.fields}
+                  busy={busy}
+                  act={act}
+                  showProposals={false}
+                />
               ))}
             </>
           )}

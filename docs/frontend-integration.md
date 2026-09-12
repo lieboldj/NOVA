@@ -64,10 +64,13 @@ to a model. **Check due cases** runs the separate scheduled-work check across ex
 5. **Sync inbox** ingests every page of supplier replies. It handles duplicate IDs and reports messages
    requiring manual routing in Alerts. Those routing results are displayed for the current browser session;
    the originals remain in Gmail. n8n can call the same endpoint on its schedule.
-6. In **Data changes**, inspect the accepted value, proposed value, rationale, and source quote. Edit/save
-   if needed, then approve or reject each field separately. Email approval cannot approve supplier data.
-7. **Replies** exposes full email text and protected attachment downloads. Complete reply review after
-   deciding all proposals to allow a follow-up for any remaining missing fields.
+6. **Supplier review** groups every received message with its complete email text, all attachment downloads,
+   and extracted values. New values, changed values, and unchanged confirmations are labelled explicitly.
+   Replies and attachments without an extracted value remain visible. Inspect the accepted value, proposed
+   value, rationale, and source quote; edit/save if needed, then approve or reject each value separately.
+7. Click **Complete reply review** for each message after checking all its inputs and deciding its proposals.
+   Case closure and follow-ups wait for every reply to be reviewed. **Replies** also provides access to the
+   same complete original inputs. Email approval cannot approve supplier data or complete reply review.
 8. **Activity** shows case jobs and audit history. Failed evaluations and definitely rejected sends can
    be retried. Uncertain email deliveries require checking Gmail and recording the confirmed outcome.
 9. Export CSV to download accepted values. Search, status/supplier filters, statistics, and alerts use live

@@ -36,6 +36,7 @@ def test_interactive_demo_waits_for_both_approvals(env):
         ).status_code
         == 200
     )
+    assert client.post(f"/messages/{first['message_id']}/review-complete", headers=REVIEW).status_code == 200
     with factory.begin() as db:
         assert tick(db, settings)["drafted"] == 1
         followup = db.scalar(select(Draft).where(Draft.kind == "followup"))
@@ -57,6 +58,7 @@ def test_interactive_demo_waits_for_both_approvals(env):
         ).status_code
         == 200
     )
+    assert client.post(f"/messages/{final['message_id']}/review-complete", headers=REVIEW).status_code == 200
     with factory() as db:
         assert db.get(Case, case_id).status == "closed"
         assert db.get(SupplierField, "DEMO-F2").data["Value submitted"] == "2027-12-31"

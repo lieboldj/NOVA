@@ -56,9 +56,14 @@ attachments = certificate.pdf
 ```
 
 Processing states: `queued`, `processing`, `evaluated`, `needs_review`, `failed`, `reviewed`.
-An `evaluated` message has change proposals. `needs_review` means no supported candidates were produced.
-After reviewing a no-answer or failed reply, a reviewer can call `/messages/{id}/review-complete` to release
-the case for a targeted follow-up. Pending proposals must be approved or rejected first.
+An `evaluated` message has extracted value proposals, including unchanged confirmations.
+`needs_review` means no supported candidates were produced. Every message remains a review item:
+`GET /cases/{id}/messages` includes its complete original body and all attachment metadata, even when
+no proposal cites that input. Original attachments remain available through protected downloads.
+After checking the full reply and every attachment, a reviewer must call
+`POST /messages/{id}/review-complete`. That reply's pending proposals must be approved or rejected first;
+other replies can be reviewed independently. The case cannot close or produce a follow-up until all
+received messages are reviewed and all proposals are decided. Automation cannot complete a review.
 
 ## Cases, reminders and partial replies
 
@@ -67,9 +72,13 @@ Common case states are `open`, `email_review`, `awaiting_reply`, `processing_rep
 `drafted`, `closed`, `escalated`, and `skipped`.
 
 The backend filters outstanding editable fields and drafts a request for their references. Each draft has
-a `requested_fields` snapshot. A reply is evaluated against the most recent sent request's snapshot, so
-unrequested model output cannot change unrelated fields. A partial reply produces proposals for supported
-answers; after review, the next scheduled check drafts a follow-up only for unresolved fields.
+a `requested_fields` snapshot recording what was asked. Extraction considers all fields belonging to that
+case so that unsolicited answers and confirmations of already accepted values are also reviewable.
+Other cases' fields cannot be proposed. All field context and evidence still pass through anonymization
+before remote evaluation. An extracted value equal to its prior value is retained as a pending confirmation;
+the human approval and validation rules also apply to these confirmations. Content without a supported
+candidate remains visible in the complete reply and attachments. After full review, the next scheduled
+check drafts a follow-up only for unresolved fields.
 
 The response deadline begins when an email is sent/simulated, not when a draft is created or approved.
 Incoming replies pause the deadline and supersede unsent drafts. A missing reply produces a reminder draft,

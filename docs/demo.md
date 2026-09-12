@@ -20,12 +20,13 @@ not load `.env`, call live providers, send real mail, or modify the main portal 
    inspect the missing fields. Click **Prepare request for review**, review the email, and click
    **Approve email & send**. The status becomes **Simulated**.
 2. **0:40–1:20 — PDF evidence and data approval.** Within about 10 seconds, a scripted supplier reply
-   appears. Open **Data changes**: the PDF supplies “80% recycled aluminium.” Show the empty accepted
-   value, source quote, and attachment. Click **Approve data change**.
+   appears. Open **Supplier review**: the complete reply and PDF appear alongside “80% recycled aluminium.”
+   Show the empty accepted value, source quote, and attachment. Click **Approve data change**, check the
+   complete input, then click **Complete reply review**.
 3. **1:20–2:10 — Incomplete reply and follow-up.** Return to **Email**. A follow-up is prepared for the
    missing certificate date (allow up to 10 seconds for refresh). Review and approve that email too.
 4. **2:10–3:00 — Complete the case.** A second PDF reply proposes `2027-12-31`. Approve this change in
-   **Data changes**. The case closes. Show **Activity** for the recorded approvals, then export the CSV
+   **Supplier review**, then click **Complete reply review**. The case closes. Show **Activity** for the recorded approvals, then export the CSV
    from the overview to show accepted values.
 
 Each reply is generated only after the preceding email has been approved and its simulated delivery

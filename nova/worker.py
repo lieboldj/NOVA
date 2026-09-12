@@ -150,9 +150,9 @@ def evaluate_job(factory, settings, job_id, token, target_id):
         case = locked(db, Case, message.case_id)
         message.status = "processing"
         fields = db.scalars(
-            select(SupplierField).where(
-                SupplierField.id.in_(message.requested_fields), SupplierField.case_id == case.id
-            )
+            # Suppliers can confirm accepted values or volunteer other case fields.
+            # The full original reply remains reviewable even without an extracted candidate.
+            select(SupplierField).where(SupplierField.case_id == case.id).order_by(SupplierField.id)
         ).all()
         documents = db.scalars(select(Document).where(Document.message_id == message.id)).all()
     # Read evidence without holding a case lock during external requests.

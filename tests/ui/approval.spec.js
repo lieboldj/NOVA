@@ -213,6 +213,20 @@ test("email approval and data approval remain separate across reloads", async ({
   expect(detail.fields[0].data["Value submitted"]).toBe(
     "Verified recycled content",
   );
+  expect(detail.status).toBe("data_review");
+  await page
+    .getByRole("button", { name: "Complete reply review", exact: true })
+    .click();
+  await expect
+    .poll(
+      async () =>
+        (
+          await (
+            await request.get(`/api/cases/${caseId}`, { headers: apiHeaders })
+          ).json()
+        ).status,
+    )
+    .toBe("closed");
   await page.getByRole("tab", { name: "Replies", exact: true }).click();
   await expect(
     page.getByText("See attached material statement.", { exact: true }),
@@ -237,6 +251,199 @@ test("email approval and data approval remain separate across reloads", async ({
     page.getByRole("button", { name: "Sign in", exact: true }),
   ).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test("supplier review shows unchanged values, all replies and unused attachments", async ({
+  page,
+  request,
+}) => {
+  const headers = { Authorization: "Bearer ui-review-secret" };
+  const records = [
+    ["ALL-F1", "Material statement", "Existing composition", "Complete"],
+    ["ALL-F2", "Packaging statement", "", "Missing"],
+    ["ALL-F3", "Energy statement", "Previous energy mix", "Complete"],
+  ].map(([id, label, value, status]) => {
+    const record = [...row];
+    record[0] = id;
+    record[1] = "ALL-SUPPLIER";
+    record[2] = "Complete Input Supplier";
+    record[3] = "ALL-ARTICLE";
+    record[8] = label;
+    record[12] = value;
+    record[14] = status;
+    return record;
+  });
+  const imported = await request.post("/api/imports", {
+    headers,
+    multipart: {
+      file: {
+        name: "all-inputs.csv",
+        mimeType: "text/csv",
+        buffer: Buffer.from(
+          columns.join(",") +
+            "\n" +
+            records.map((r) => r.join(",")).join("\n") +
+            "\n",
+        ),
+      },
+    },
+  });
+  expect(imported.status()).toBe(201);
+  const batch = await imported.json();
+  const approved = await request.post(`/api/imports/${batch.id}/approve`, {
+    headers,
+    data: { contacts: { "ALL-SUPPLIER": "supplier@example.com" } },
+  });
+  const caseId = (await approved.json()).case_ids[0];
+  const draft = await (
+    await request.post(`/api/cases/${caseId}/draft`, { headers })
+  ).json();
+  expect(draft.requested_fields).toEqual(["ALL-F2"]);
+  expect(
+    (
+      await request.post(`/api/drafts/${draft.id}/approve`, {
+        headers,
+        data: { version: draft.version },
+      })
+    ).ok(),
+  ).toBe(true);
+  await expect
+    .poll(
+      async () =>
+        (
+          await (
+            await request.get(`/api/drafts?case_id=${caseId}`, { headers })
+          ).json()
+        )[0].status,
+    )
+    .toBe("simulated");
+  const body =
+    "ALL-F1=Existing composition\nALL-F2=Reusable packaging\nAdditional note: delivery is delayed.";
+  const first = await request.post(`/api/cases/${caseId}/messages`, {
+    headers,
+    multipart: {
+      external_id: "ui-all-inputs",
+      sender: "supplier@example.com",
+      body,
+      attachments: {
+        name: "energy.txt",
+        mimeType: "text/plain",
+        buffer: Buffer.from("ALL-F3=Renewable energy confirmed"),
+      },
+    },
+  });
+  expect(first.status()).toBe(201);
+  const second = await request.post(`/api/cases/${caseId}/messages`, {
+    headers,
+    multipart: {
+      external_id: "ui-no-extraction",
+      sender: "supplier@example.com",
+      body: "We will send further details next week.",
+      attachments: {
+        name: "additional-notes.txt",
+        mimeType: "text/plain",
+        buffer: Buffer.from("Please call us about packaging."),
+      },
+    },
+  });
+  expect(second.status()).toBe(201);
+  await expect
+    .poll(async () =>
+      (
+        await (
+          await request.get(`/api/cases/${caseId}/messages`, { headers })
+        ).json()
+      ).every((m) => ["evaluated", "needs_review"].includes(m.status)),
+    )
+    .toBe(true);
+  await login(page);
+  await page.getByRole("button").filter({ hasText: "ALL-ARTICLE" }).click();
+  await expect(
+    page.getByRole("tab", { name: /Supplier review/ }),
+  ).toHaveAttribute("aria-selected", "true");
+  const replies = page.getByTestId("supplier-reply-review");
+  await expect(replies).toHaveCount(2);
+  const extracted = replies.filter({
+    hasText: "Additional note: delivery is delayed.",
+  });
+  const unextracted = replies.filter({
+    hasText: "We will send further details next week.",
+  });
+  await expect(extracted.locator("pre")).toHaveText(body);
+  await expect(
+    extracted.getByText("Unchanged confirmation", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    extracted.getByText("Changed value", { exact: true }),
+  ).toBeVisible();
+  await expect(extracted.getByText("New value", { exact: true })).toBeVisible();
+  await expect(extracted.getByTestId("proposal-review")).toHaveCount(3);
+  await expect(
+    extracted.getByRole("link", { name: "energy.txt", exact: true }),
+  ).toBeVisible();
+  await expect(
+    extracted.getByRole("button", {
+      name: "Complete reply review",
+      exact: true,
+    }),
+  ).toBeDisabled();
+  await expect(
+    unextracted.getByText(/No extracted values are available/),
+  ).toBeVisible();
+  const attachment = unextracted.getByRole("link", {
+    name: "additional-notes.txt",
+    exact: true,
+  });
+  await expect(attachment).toBeVisible();
+  expect(
+    await (
+      await page.request.get(await attachment.getAttribute("href"))
+    ).text(),
+  ).toBe("Please call us about packaging.");
+  await unextracted
+    .getByRole("button", { name: "Complete reply review", exact: true })
+    .click();
+  await expect(
+    unextracted.getByText("Reviewed", { exact: true }),
+  ).toBeVisible();
+  await extracted
+    .getByRole("button", { name: "Approve confirmation", exact: true })
+    .click();
+  await extracted
+    .getByRole("button", { name: "Approve data change", exact: true })
+    .first()
+    .click();
+  await expect(
+    extracted.getByRole("button", { name: "Approve data change", exact: true }),
+  ).toHaveCount(1);
+  await extracted
+    .getByRole("button", { name: "Approve data change", exact: true })
+    .click();
+  await expect(
+    extracted.getByRole("button", {
+      name: "Complete reply review",
+      exact: true,
+    }),
+  ).toBeEnabled();
+  await page.screenshot({
+    path: ".data/screenshots/all-supplier-inputs.png",
+    fullPage: true,
+  });
+  expect(
+    (await (await request.get(`/api/cases/${caseId}`, { headers })).json())
+      .status,
+  ).toBe("data_review");
+  await extracted
+    .getByRole("button", { name: "Complete reply review", exact: true })
+    .click();
+  await expect
+    .poll(
+      async () =>
+        (await (await request.get(`/api/cases/${caseId}`, { headers })).json())
+          .status,
+    )
+    .toBe("closed");
+  await expect(replies).toHaveCount(2);
 });
 
 test("mobile layout, filters and real empty operation state", async ({

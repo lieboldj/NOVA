@@ -166,7 +166,7 @@ def blocking_message(db, case_id):
         db.scalar(
             select(Message.id).where(
                 Message.case_id == case_id,
-                Message.status.in_(["queued", "processing", "failed", "needs_review"]),
+                Message.status.in_(["queued", "processing", "failed", "needs_review", "evaluated"]),
             )
         )
     )

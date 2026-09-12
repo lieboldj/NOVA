@@ -101,7 +101,9 @@ Operator = Annotated[str, Depends(authorize)]
 
 def finish_review(db, case):
     db.flush()
-    if not pending_review(db, case.id):
+    if pending_review(db, case.id) or blocking_message(db, case.id):
+        case.status, case.next_action_at = "data_review", None
+    else:
         if outstanding(db, case.id):
             case.status, case.next_action_at = "open", now()
         else:
@@ -441,8 +443,10 @@ def create_app(settings=None, engine=None):
         case = locked(db, Case, message.case_id)
         if message.status not in ["needs_review", "evaluated", "failed"]:
             fail("Reply processing is still active")
-        if pending_review(db, case.id):
-            fail("Approve or reject pending proposals first")
+        if db.scalar(
+            select(Proposal.id).where(Proposal.message_id == message.id, Proposal.status == "pending")
+        ):
+            fail("Approve or reject this reply's pending proposals first")
         message.status = "reviewed"
         finish_review(db, case)
         audit(db, actor, "reply.reviewed", message.id)

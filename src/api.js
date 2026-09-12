@@ -60,7 +60,7 @@ export const statusMeta = {
   open: ["Open", "blue"],
   closed: ["Completed", "green"],
   email_review: ["Email approval", "amber"],
-  data_review: ["Data review", "amber"],
+  data_review: ["Supplier review", "amber"],
   awaiting_reply: ["Waiting for supplier", "amber"],
   processing_reply: ["Processing reply", "blue"],
   paused: ["Paused", "gray"],
@@ -79,7 +79,7 @@ export const statusMeta = {
   failed: ["Failed", "red"],
   cancelled: ["Cancelled", "gray"],
   processing: ["Processing", "blue"],
-  evaluated: ["Evaluated", "green"],
+  evaluated: ["Ready for review", "amber"],
   reviewed: ["Reviewed", "green"],
   needs_review: ["Review required", "amber"],
 };
