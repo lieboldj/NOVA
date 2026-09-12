@@ -122,3 +122,8 @@ The frontend can show one fictional case with three requested fields, a pending 
 with a one-page PDF. Show both approvals and the resulting CSV change. Integration tests already exercise
 this flow. They advance stored deadlines in disposable test databases to exercise reminders; no production
 API bypasses the configured response deadlines or approval requirements.
+
+## Gmail inbox and delivery
+
+See [the Gmail integration contract](gmail-setup.md#frontend-and-n8n-contract) for connection status,
+inbox reading, paginated n8n synchronization, and retry/reconciliation behavior.

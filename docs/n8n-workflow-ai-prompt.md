@@ -26,9 +26,8 @@ CONFIGURATION
   header name Authorization; header value Bearer <NOVA_AUTOMATION_TOKEN>.
   Leave the real credential for me to configure. Never request NOVA_REVIEWER_TOKEN.
 - Timezone: Europe/Berlin.
-- Email provider is not selected yet. Do not invent Gmail/Outlook credentials. Build the ingestion portion
-  with an Execute Sub-workflow Trigger and documented input contract; explain where a mailbox trigger
-  and full-message/attachment retrieval step will connect later.
+- Email provider is Gmail. NOVA internal: devstar4415@gcplab.me. Test supplier: devstar4418@gcplab.me.
+  Gmail OAuth credentials stay in NOVA; n8n needs only the NOVA Automation credential.
 
 WORKFLOW 1: NOVA - Check pending cases
 1. Schedule Trigger: every 15 minutes, plus an alternative Manual Trigger for testing.
@@ -40,37 +39,30 @@ WORKFLOW 1: NOVA - Check pending cases
    HTTP 401/403: credential/access failure. Other HTTP 4xx: manual inspection; do not retry indefinitely.
 5. Make exhausted retries and non-retryable errors visible as failed executions with a concise reason.
 
-WORKFLOW 2: NOVA - Ingest supplier reply
-Expected input: mailbox/provider identifier, stable provider message ID, sender email, subject,
-full plain-text body, and zero or more binary attachments. One input item represents one whole email.
-1. Validate input. Prefer the full plain-text body; do not use a truncated mailbox preview/snippet.
-2. Extract case_id from the subject reference [NOVA:UUID], preserving replies such as Re: [NOVA:UUID].
-   If there is no reference, or multiple different references, stop for manual routing. Never guess.
-3. Form external_id from mailbox identity + provider message ID. Keep it stable for every retry;
-   never generate a new timestamp or random ID for the same email.
-4. Send exactly ONE HTTP multipart/form-data request to:
-   POST {{NOVA_BASE_URL}}/cases/{case_id}/messages
-   with NOVA Automation authentication and these fields:
-     external_id: stable identifier from step 3
-     sender: supplier email address
-     body: full plain-text email body
-     attachments: each PDF/TXT as an actual binary file part under the repeated name attachments
-   Forward all attachments together. Do not split one email into multiple ingestion requests, send
-   base64 inside JSON, or silently drop unsupported/oversized files. NOVA supports PDF and UTF-8 TXT,
-   up to 10 attachments and 10 MiB for the combined body and files. Route unsupported input for review.
-5. Successful response, HTTP 201:
-   {"id":"MESSAGE_UUID","status":"queued","duplicate":false}
-   A retry can return duplicate:true and the existing message status. Treat this as success too.
-   Ingestion success does NOT mean extraction completed or any data was approved.
-6. HTTP 409 means routing/contact/state conflict and requires manual review. HTTP 413/422 means an
-   input problem. Do not retry these blindly. Apply bounded retries only to transient failures.
-7. Do not mark or move the provider email until NOVA acknowledges ingestion. Leave this mailbox-specific
-   step as a documented connection point until a provider has been selected.
+WORKFLOW 2: NOVA - Sync Gmail supplier replies
+1. Schedule Trigger every minute, plus an alternative Manual Trigger for testing.
+2. HTTP Request POST {{NOVA_BASE_URL}}/automation/gmail/sync with NOVA Automation authentication.
+   No request body. Set an appropriate timeout (120 seconds for the demo).
+3. NOVA reads the internal Gmail inbox for messages from the configured supplier, retrieves full text
+   and attachments, routes by [NOVA:UUID], validates the approved contact, and queues evaluation.
+   NOVA never marks messages read or moves them. Do not add Gmail send/read nodes to n8n.
+4. Response example:
+   {"results":[{"gmail_id":"abc123","id":"MESSAGE_UUID","status":"queued","duplicate":false}],
+    "next_page_token":null}
+   duplicate:true is also success. Queued does not mean evaluation completed or data was approved.
+5. Paginate: pass next_page_token as the query parameter page_token on the next request. Stop only
+   when next_page_token is null. Use built-in HTTP pagination, updating a query parameter per request;
+   the first request has no token. Do not process just the first page and silently skip older mail.
+6. Results with status:manual_review include a safe reason and Gmail ID. Collect them visibly for the
+   operator. They remain in Gmail; there is no separate persistent NOVA queue for these failures yet.
+   Missing case references, unsupported attachments, and contact conflicts require manual routing.
+7. HTTP 503 means Gmail access/read failed (including missing OAuth consent). HTTP 401/403 means
+   the NOVA credential is invalid. Show a failed execution; no indefinite retries. Bounded transient
+   retries are safe because NOVA deduplicates ingestion. Do not approve or retry email delivery jobs.
 
 IMPLEMENTATION REQUIREMENTS
 - Use current built-in n8n nodes; no unverified community packages.
-- Keep binary data intact through validation and routing. If dynamic repeated multipart file parts need
-  additional configuration, explain it; do not produce a workflow that only uploads the first file.
+- NOVA handles binary attachments; n8n carries only references and processing results.
 - On failure, report workflow name, step, execution/message reference, and status code. Do not send full
   email bodies, attachments, or credentials to an external notification channel.
 - Explain how to limit retained execution data because supplier emails can contain identifying information.

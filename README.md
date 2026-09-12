@@ -177,3 +177,9 @@ deployment credentials, an authenticated review frontend, and private automation
 The final presentation is three minutes and the frontend is owned separately. Backend acceptance focuses
 on a repeatable request → approval → reply/PDF → proposal → approval → CSV flow, plus partial replies and
 reminders. Fixture simulation must remain visibly distinct from live provider processing.
+
+## Gmail test accounts
+
+The Gmail transport uses internal `devstar4415@gcplab.me` and supplier `devstar4418@gcplab.me`.
+See [Gmail authorization and frontend/n8n integration](docs/gmail-setup.md).
+Live access requires local OAuth setup; outgoing mail and accepted supplier data still require human approval.

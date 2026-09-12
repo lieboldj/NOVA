@@ -1,0 +1,120 @@
+{
+  "name": "NOVA - Sync Gmail supplier replies",
+  "nodes": [
+    {
+      "id": "gmail-schedule",
+      "name": "Every minute",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "gmail-manual",
+      "name": "Test manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "gmail-sync",
+      "name": "Sync all inbox pages through NOVA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        300,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/automation/gmail/sync",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 120000,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          },
+          "pagination": {
+            "pagination": {
+              "paginationMode": "updateAParameterInEachRequest",
+              "parameters": {
+                "parameters": [
+                  {
+                    "type": "qs",
+                    "name": "page_token",
+                    "value": "={{ $pageCount === 0 ? \"\" : $response.body.next_page_token }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ !$response.body.next_page_token }}"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "gmail-note",
+      "name": "Setup and review",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        280,
+        240
+      ],
+      "parameters": {
+        "content": "Configure HTTP Header Auth: Authorization = Bearer <NOVA_AUTOMATION_TOKEN>. Gmail OAuth stays in NOVA. Use a reachable HTTPS NOVA URL for hosted n8n. Inspect results with status manual_review. Gmail IDs are deduplicated. No approval or email-send calls. Import and test before publishing.",
+        "width": 500,
+        "height": 200
+      }
+    }
+  ],
+  "connections": {
+    "Every minute": {
+      "main": [
+        [
+          {
+            "node": "Sync all inbox pages through NOVA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test manually": {
+      "main": [
+        [
+          {
+            "node": "Sync all inbox pages through NOVA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "Europe/Berlin",
+    "executionOrder": "v1"
+  },
+  "active": false
+}

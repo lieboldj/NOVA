@@ -1,3 +1,7 @@
+> Gmail update: test mailboxes are selected and the backend Gmail send/read/sync transport is implemented.
+> See [Gmail setup](gmail-setup.md). Local OAuth authorization is still required; the provider-selection
+> and mailbox-adapter tasks below are now superseded for the demo. Cloud deployment work remains planned.
+
 # NOVA integration and deployment plan
 
 Status: planned work, not a completed cloud deployment. The two approval gates are mandatory throughout.
