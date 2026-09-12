@@ -112,6 +112,7 @@ class Gmail:
             message["From"] = self.settings.gmail_mailbox
             message["To"] = draft.recipient
             message["Subject"] = draft.subject
+            message["X-NOVA-Message-Type"] = "request"
             message["Message-ID"] = (
                 f"<nova-{draft.id}-v{draft.version}@{self.settings.gmail_mailbox.split('@')[1]}>"
             )
@@ -205,6 +206,13 @@ class Gmail:
             "subject": headers["subject"][0],
             "body": text,
             "attachments": attachments,
+            "is_nova_request": (
+                "request" in headers.get("x-nova-message-type", [])
+                or any(
+                    re.fullmatch(r"<nova-[0-9a-f-]{36}-v\d+@[^>]+>", value)
+                    for value in headers.get("message-id", [])
+                )
+            ),
         }
 
 
@@ -260,6 +268,11 @@ def install_gmail_routes(app, settings, Reviewer, Operator):
                             continue
                     try:
                         message = gmail.message(item["id"])
+                        # A single mailbox can play both sides of a test. Never ingest our
+                        # own request as a supplier answer, even before send persistence completes.
+                        if message["is_nova_request"]:
+                            results.append({"gmail_id": item["id"], "status": "outgoing_request"})
+                            continue
                         matches = set(re.findall(r"\[NOVA:([0-9a-fA-F-]{36})\]", message["subject"]))
                         if len(matches) != 1:
                             raise GmailUnavailable(

@@ -20,4 +20,4 @@ RUN useradd --create-home --uid 10001 nova && mkdir -p /app/.data/documents && c
 USER nova
 ENV PATH="/app/.venv/bin:$PATH"
 EXPOSE 8000
-CMD ["uvicorn", "nova.api:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "nova.api:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers"]

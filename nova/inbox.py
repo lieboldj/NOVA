@@ -5,6 +5,7 @@ from pydantic import EmailStr, TypeAdapter, ValidationError
 from sqlalchemy import select
 
 from nova.models import Case, Document, Draft, Message, now, uid
+from nova.storage import write_document
 from nova.workflow import audit, enqueue, fail, invalidate_drafts, locked
 
 
@@ -61,7 +62,7 @@ def ingest_message(db, settings, case_id, external_id, sender, body, attachments
     db.flush()
     for name, kind, data in uploads:
         key = uid()
-        (settings.storage_path / key).write_bytes(data)
+        write_document(settings, key, data, kind)
         db.add(
             Document(
                 message_id=message.id,

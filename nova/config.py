@@ -11,6 +11,7 @@ class Settings(BaseSettings):
 
     database_url: str = "sqlite:///./.data/nova.db"
     storage_path: Path = Path(".data/documents")
+    storage_bucket: str = ""
     nova_reviewer_token: SecretStr = SecretStr("")
     nova_automation_token: SecretStr = SecretStr("")
     nova_reviewer_name: str = "local-reviewer"

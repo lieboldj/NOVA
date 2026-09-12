@@ -220,3 +220,34 @@ def test_html_only_reply(env, monkeypatch):
     }
     response = client.get("/mail/gmail/messages/html123", headers=REVIEW)
     assert response.json()["body"].strip() == "Value & evidence"
+
+
+def test_single_mailbox_skips_requests_and_ingests_actual_replies(env, monkeypatch):
+    client, factory, settings = env
+    settings.gmail_supplier = settings.gmail_mailbox
+    case_id, _, payloads = setup(env, monkeypatch)
+    draft = request_draft(client, case_id)
+    approve_email(client, draft)
+    run_once(factory, settings)
+    for key, outgoing in [("ownrequest", True), ("actualreply", False)]:
+        headers = [
+            {"name": "From", "value": settings.gmail_mailbox},
+            {"name": "Subject", "value": draft["subject"]},
+        ]
+        if outgoing:
+            headers.append({"name": "X-NOVA-Message-Type", "value": "request"})
+        payloads[key] = {
+            "payload": {
+                "headers": headers,
+                "mimeType": "text/plain",
+                "body": {"data": encoded("F1=Supplier value")},
+            }
+        }
+    response = client.post("/automation/gmail/sync", headers=AUTOMATION)
+    assert response.status_code == 200
+    assert response.json()["results"][0]["status"] == "outgoing_request"
+    assert response.json()["results"][1]["duplicate"] is False
+    with factory() as db:
+        messages = db.scalars(select(Message)).all()
+        assert len(messages) == 1
+        assert messages[0].external_id.endswith(":actualreply")

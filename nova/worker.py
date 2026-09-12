@@ -12,6 +12,7 @@ from nova.db import make_engine, sessions
 from nova.gmail import GmailNotSent
 from nova.models import Case, Document, Draft, Job, Message, Proposal, SupplierField, now, uid
 from nova.providers import ProviderUnavailable, known_redaction, known_restore, providers, send_email
+from nova.storage import read_document
 from nova.workflow import audit, draft_digest, locked, locked_child, validate_value
 
 
@@ -114,7 +115,7 @@ def send_job(factory, settings, job_id, token, target_id):
 def raw_sources(db, settings, message, anonymizer):
     sources = [{"source_id": "email", "text": message.body, "page": None, "document_id": None}]
     for doc in db.scalars(select(Document).where(Document.message_id == message.id)):
-        content = (settings.storage_path / doc.storage_key).read_bytes()
+        content = read_document(settings, doc.storage_key)
         if doc.content_type == "text/plain":
             sources.append(
                 {"source_id": doc.id, "text": content.decode("utf-8"), "page": None, "document_id": doc.id}

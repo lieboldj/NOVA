@@ -37,6 +37,7 @@ from nova.schemas import (
     ProposalEdit,
     SendReconciliation,
 )
+from nova.storage import read_document
 from nova.workflow import (
     CSV_COLUMNS,
     OUTSTANDING,
@@ -455,6 +456,14 @@ def create_app(settings=None, engine=None):
     @app.get("/documents/{document_id}", tags=["Replies"])
     def document(document_id: str, db: DB, actor: Reviewer):
         doc = locked(db, Document, document_id)
+        if settings.storage_bucket:
+            from urllib.parse import quote
+
+            return Response(
+                read_document(settings, doc.storage_key),
+                media_type=doc.content_type,
+                headers={"Content-Disposition": "attachment; filename*=UTF-8''" + quote(doc.filename)},
+            )
         return FileResponse(
             settings.storage_path / doc.storage_key,
             media_type=doc.content_type,
