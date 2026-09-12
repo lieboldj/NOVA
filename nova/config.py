@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     nova_automation_token: SecretStr = SecretStr("")
     nova_reviewer_name: str = "local-reviewer"
     nova_cookie_secure: bool = False
+    nova_session_cookie: str = "nova_review"
     frontend_dist: Path = Path("dist")
     ai_mode: Literal["gemini", "fixture"] = "gemini"
     anonymizer_mode: Literal["anymize", "fixture"] = "anymize"

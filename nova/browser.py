@@ -31,7 +31,7 @@ def install_browser(app, settings, Reviewer):
     app.add_middleware(
         SessionMiddleware,
         secret_key=settings.nova_reviewer_token.get_secret_value(),
-        session_cookie="nova_review",
+        session_cookie=settings.nova_session_cookie,
         max_age=8 * 60 * 60,
         same_site="strict",
         https_only=settings.nova_cookie_secure,

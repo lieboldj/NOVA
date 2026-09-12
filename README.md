@@ -187,3 +187,9 @@ reminders. Fixture simulation must remain visibly distinct from live provider pr
 The Gmail transport uses internal `devstar4415@gcplab.me` and supplier `devstar4418@gcplab.me`.
 See [Gmail authorization and frontend/n8n integration](docs/gmail-setup.md).
 Live access requires local OAuth setup; outgoing mail and accepted supplier data still require human approval.
+
+## Interactive demonstration
+
+Run `npm run demo`, open **http://localhost:8012/**, and sign in with **nova-demo**.
+This loads fictional data and demonstrates email approval, PDF reply review, a follow-up, and separate
+data approval without live providers or changes to the main database. See [the three-minute demo guide](docs/demo.md).

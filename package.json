@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test:ui": "npm run build && playwright test"
+    "test:ui": "npm run build && playwright test",
+    "demo": "npm run build && uv run python scripts/run_demo.py"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.4",

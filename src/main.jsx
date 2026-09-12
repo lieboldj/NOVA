@@ -322,6 +322,12 @@ function Dashboard({ session, onLogout }) {
               cases, approve emails, and read incoming replies.
             </Notice>
           )}
+        {data?.config.ai_mode === "fixture" && (
+          <Notice>
+            Demo evaluation uses scripted answers from fictional evidence. It
+            does not call Gemini or Anymize.
+          </Notice>
+        )}
         {data?.config.mail_mode === "simulation" && (
           <Notice>
             Simulation mode: approved emails are recorded without sending real
