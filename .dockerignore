@@ -1,0 +1,14 @@
+.git
+.env
+.env.*
+**/.env
+**/.env.*
+.data
+.venv
+__pycache__
+.pytest_cache
+.ruff_cache
+*.xlsx
+Supplier_*.csv
+tests
+docs

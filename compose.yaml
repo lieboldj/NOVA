@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: nova
+      POSTGRES_USER: nova
+      POSTGRES_PASSWORD: ${NOVA_DB_PASSWORD:-local-development-only}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nova -d nova"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  migrate:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://nova:${NOVA_DB_PASSWORD:-local-development-only}@postgres/nova
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+  api:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://nova:${NOVA_DB_PASSWORD:-local-development-only}@postgres/nova
+      STORAGE_PATH: /app/.data/documents
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - documents:/app/.data/documents
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+  worker:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://nova:${NOVA_DB_PASSWORD:-local-development-only}@postgres/nova
+      STORAGE_PATH: /app/.data/documents
+    command: ["python", "-m", "nova.worker"]
+    volumes:
+      - documents:/app/.data/documents
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    profiles: ["n8n"]
+    ports:
+      - "127.0.0.1:5678:5678"
+    environment:
+      GENERIC_TIMEZONE: Europe/Berlin
+      TZ: Europe/Berlin
+      N8N_SECURE_COOKIE: "false"
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  postgres_data:
+  documents:
+  n8n_data:
