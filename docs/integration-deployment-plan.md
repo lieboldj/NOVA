@@ -14,13 +14,17 @@ Status: planned work, not a completed cloud deployment. The two approval gates a
 - The 52,546-row v2 submission dataset passed isolated import, approval, and export.
 - `gemini-3.6-flash` passed a live structured extraction check with fictional evidence through the Gemini
   Developer API. Vertex AI is not configured. Emails use deterministic templates; Gemini evaluates evidence.
-- End-to-end automated tests use fixture providers. Live Anymize/OCR, mailbox integration, n8n workflow
-  execution, Google Cloud deployment, and individual reviewer sign-in remain unverified or unimplemented.
+- Live Anymize text anonymization, evidence JSON preservation, restoration, a generated PDF through the OCR
+  endpoint, and sanitized Gemini extraction passed fictional-data checks. Repeat with
+  `uv run python scripts/check_anymize.py --ocr --with-gemini`. Scanned and mixed-page PDF detection quality
+  remains unverified. The local API and worker have been recreated with the configured Anymize key.
+- End-to-end automated tests use fixture providers. Mailbox integration, n8n workflow execution, Google
+  Cloud deployment, and individual reviewer sign-in remain unverified or unimplemented.
 
 ## 1. Connect and validate Anymize
 
-Needed: approved account, available API credits, and a dedicated development API key configured locally as
-`ANYMIZE_API_KEY`. Never send the key in chat or commit `.env`.
+The development key is configured locally as `ANYMIZE_API_KEY`; basic live checks have passed. Remaining
+validation and resilience work is listed below. Never send the key in chat or commit `.env`.
 
 1. Confirm the account's current API contract and base URL. The implemented adapter follows the documented
    asynchronous text, OCR, status, and restoration endpoints. Check these against the approved account

@@ -112,9 +112,19 @@ The model returns candidate field values with exact source citations; it cannot 
 or browse the database. NOVA checks the candidate schema, field scope, citations, validation rules, and
 field revision. Values and evidence are restored for human review inside the trusted backend.
 
-Live Anymize behavior is pending account access. The documented text API is used for a JSON evidence bundle;
-if its response cannot preserve that structure, the job fails closed and requires integration adjustment.
-The current fixture provider exists only for repeatable offline testing and must not be presented as live AI.
+Live Anymize text anonymization, JSON preservation, restoration, PDF processing, and sanitized Gemini
+extraction have passed checks with fictional evidence. The documented text API is used for a JSON evidence
+bundle; if its response cannot preserve that structure, the job fails closed. These checks do not measure
+identity detection across real supplier documents or scanned/mixed-page PDFs.
+
+For frontend connection status, authenticated `GET /configuration` returns `anonymizer_mode`,
+`anymize_configured`, `ai_mode`, and `gemini_configured`. Configured flags indicate loaded credentials,
+not a live provider health check. Submit replies through the existing message endpoint and poll jobs and
+proposals. Failed evaluations expose a safe error in `GET /jobs`; `POST /jobs/{id}/retry` queues a retry
+after the provider issue is resolved. No Anymize credentials or direct provider calls belong in the browser.
+
+Run `uv run python scripts/check_anymize.py --ocr --with-gemini` for the synthetic live check. The fixture
+provider remains available only for repeatable offline testing and must not be presented as live AI.
 
 ## Three-minute presentation support
 

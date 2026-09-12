@@ -52,6 +52,28 @@ After changing `.env`, restart the local processes, or recreate the containers:
 docker compose up -d --force-recreate api worker
 ```
 
+### Anymize integration
+
+Set `ANYMIZE_API_KEY` in `.env` and keep `ANONYMIZER_MODE=anymize` and `AI_MODE=gemini`.
+The existing reply worker anonymizes email bodies and extracted attachment text before evaluation;
+textless PDF pages use Anymize's document endpoint. Proposed values and citations are restored in the
+backend for human review. The frontend uses the normal reply and proposal endpoints.
+
+After updating `.env`, recreate the API and worker containers using the command above. A container restart
+alone does not load changed Compose environment values. Check authenticated `GET /configuration` for
+`anonymizer_mode: "anymize"` and `anymize_configured: true`; the flag indicates a loaded key, not a live
+provider connectivity test. Failed evaluation jobs can be retried through `POST /jobs/{id}/retry`.
+
+Run the live check with fictional evidence only:
+
+```bash
+uv run python scripts/check_anymize.py --ocr --with-gemini
+```
+
+This checks text anonymization, JSON preservation, restoration, a generated PDF through the OCR endpoint,
+and Gemini extraction from sanitized evidence. It uses provider credits. It does not read supplier files,
+send email, or change accepted records. Omit the flags to check only Anymize text processing.
+
 ## API access and approvals
 
 `NOVA_REVIEWER_TOKEN` is for the trusted human review client. `NOVA_AUTOMATION_TOKEN` is for n8n and can only
