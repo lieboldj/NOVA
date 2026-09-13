@@ -128,11 +128,9 @@ def test_corrected_pending_answer_cancels_stale_request(env):
     )
     run_once(factory, settings)
     proposal = next(p for p in client.get("/proposals", headers=REVIEW).json() if p["field_id"] == "F2")
-    assert (
-        client.patch(
-            "/proposals/" + proposal["id"], headers=REVIEW, json={"version": 1, "value": "2028-12-31"}
-        ).status_code
-        == 200
-    )
+    assert client.patch(
+        "/proposals/" + proposal["id"], headers=REVIEW, json={"version": 1, "value": "2028-12-31"}
+    ).status_code == 422
+    reply(client, case, "F2=2028-12-31", external_id="corrected-supplier-reply")
     run_once(factory, settings)
     assert automatic(client)[0]["status"] == "superseded"

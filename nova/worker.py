@@ -13,7 +13,16 @@ from nova.gmail import GmailNotSent
 from nova.models import Case, Document, Draft, Job, Message, Proposal, SupplierField, now, uid
 from nova.providers import ProviderUnavailable, known_redaction, known_restore, providers, send_email
 from nova.storage import read_document
-from nova.workflow import audit, draft_digest, enqueue, locked, locked_child, validate_value
+from nova.workflow import (
+    audit,
+    blocking_message,
+    draft_digest,
+    enqueue,
+    locked,
+    locked_child,
+    pending_review,
+    validate_value,
+)
 
 
 def claim_job(factory):
@@ -116,7 +125,11 @@ def send_job(factory, settings, job_id, token, target_id):
         case.last_sent_at = now()
         if case.revision == draft.case_revision:
             case.next_action_at = now() + timedelta(days=settings.response_days)
-            case.status = "data_review" if draft.kind == "auto_followup" else "awaiting_reply"
+            case.status = (
+                "data_review"
+                if blocking_message(db, case.id) or pending_review(db, case.id)
+                else "awaiting_reply"
+            )
         if draft.kind == "reminder":
             case.reminders_sent += 1
         job.status = "done"
@@ -276,6 +289,7 @@ def evaluate_job(factory, settings, job_id, token, target_id):
                 value=value,
                 rationale=known_restore(anonymizer.restore(candidate.rationale), case),
                 evidence={
+                    "confidence": candidate.confidence,
                     "source_id": src["source_id"],
                     "document_id": src["document_id"],
                     "page": src["page"],

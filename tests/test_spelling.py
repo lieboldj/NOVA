@@ -22,7 +22,7 @@ def test_spelling_suggestions_preserve_quantities_and_identifiers():
     assert not eligible_correction(field, "2026-01-01", "2027-01-01", "2026-01-01")
 
 
-def test_correction_is_separate_until_reviewer_edits_and_approves(env, monkeypatch):
+def test_correction_requires_supplier_clarification_and_preserves_received_value(env, monkeypatch):
     client, factory, settings = env
     case = seed(client)
     approve_email(client, request_draft(client, case))
@@ -52,22 +52,23 @@ def test_correction_is_separate_until_reviewer_edits_and_approves(env, monkeypat
     correction = proposal["evidence"]["spelling_correction"]
     assert correction["value"] == "80% recycled aluminium"
     assert client.get("/cases/" + case, headers=REVIEW).json()["fields"][0]["data"]["Value submitted"] == ""
-    edited = client.patch(
-        "/proposals/" + proposal["id"], headers=REVIEW, json={"version": 1, "value": correction["value"]}
-    ).json()
-    assert edited["version"] == 2
     assert (
-        client.post(
-            "/proposals/" + proposal["id"] + "/approve", headers=REVIEW, json={"version": 1}
+        client.patch(
+            "/proposals/" + proposal["id"], headers=REVIEW, json={"version": 1, "value": correction["value"]}
         ).status_code
-        == 409
+        == 422
     )
     assert (
         client.post(
-            "/proposals/" + proposal["id"] + "/approve", headers=REVIEW, json={"version": 2}
+            "/proposals/" + proposal["id"] + "/reject",
+            headers=REVIEW,
+            json={"version": 1, "reason": "Please confirm the spelling: 80% recycled aluminium."},
         ).status_code
         == 200
     )
     current = client.get("/cases/" + case, headers=REVIEW).json()["fields"][0]
-    assert current["data"]["Value submitted"] == "80% recycled aluminium"
-    assert proposal["evidence"]["quote"] == "80% recylced aluminium"
+    assert current["data"]["Value submitted"] == ""
+    original = client.get("/proposals", headers=REVIEW).json()[0]
+    assert original["value"] == "80% recylced aluminium"
+    assert original["evidence"]["quote"] == "80% recylced aluminium"
+    assert original["confidence"] is None

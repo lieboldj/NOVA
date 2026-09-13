@@ -2,8 +2,22 @@
 
 from sqlalchemy import func, select
 
-from nova.models import Audit, Draft, Message, Proposal, SupplierField
-from nova.workflow import ACTIVE_DRAFTS, AI_DISCLOSURE, OUTSTANDING, audit, auto_approve_draft, validate_value
+from nova.models import Audit, Draft, Message, Proposal, SupplierField, now
+from nova.workflow import (
+    ACTIVE_DRAFTS,
+    AI_DISCLOSURE,
+    OUTSTANDING,
+    audit,
+    auto_approve_draft,
+    blocking_message,
+    draft_digest,
+    enqueue,
+    fail,
+    field_guidance,
+    invalidate_drafts,
+    supplier_display_name,
+    validate_value,
+)
 
 AUTO_ACTOR = "automation"
 
@@ -121,7 +135,7 @@ def plan_followup(db, settings, case, message):
             line += "\n  Please provide a four-digit reporting year."
         lines.append(line)
     body = (
-        f"Hello {case.supplier_name},\n\nThank you for your reply. We still need a complete, valid answer "
+        f"Let's stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\nThank you for your reply. We still need a complete, valid answer "
         f"to the following {len(fields)} question(s) for article {case.nart or '(supplier level)'}. "
         "Please provide missing answers or clarify entries that do not meet the requested format. "
         "You do not need to repeat information already provided in a valid format. "
@@ -134,7 +148,7 @@ def plan_followup(db, settings, case, message):
         case_id=case.id,
         kind="auto_followup",
         recipient=case.recipient,
-        subject=f"[NOVA:{case.id}] Additional supplier information requested",
+        subject="Your business partner has an information request",
         body=body,
         requested_fields=[f.id for f in fields],
         case_revision=case.revision,
@@ -154,4 +168,95 @@ def plan_followup(db, settings, case, message):
         policy="Missing or invalid answers only; supplier data still requires review",
     )
     case.status, case.next_action_at = "data_review", None
+    return draft
+
+
+def send_rejection_followup(db, settings, case, message, rejected, actor):
+    """One immediate, durable email authorized by the submitted rejection decisions."""
+    if not case.recipient and rejected:
+        fail("Add a supplier email before submitting rejections", 422)
+    if not case.recipient:
+        return None
+    # Preserve other rejected answers if an unsent correction request is replaced.
+    prior_ids = set()
+    prior_proposals = set()
+    for draft in db.scalars(
+        select(Draft).where(
+            Draft.case_id == case.id,
+            Draft.kind == "rejection_followup",
+            Draft.status.in_(["pending", "approved"]),
+        )
+    ):
+        prior_ids.update(draft.requested_fields)
+        marker = db.scalar(
+            select(Audit).where(
+                Audit.entity_id == draft.id, Audit.action == "email.rejection_followup_queued"
+            )
+        )
+        if marker:
+            prior_proposals.update(marker.details.get("proposal_ids", []))
+    if not rejected and not prior_ids:
+        return None
+    if settings.mail_mode == "gmail" and case.recipient.casefold() != settings.gmail_supplier.casefold():
+        fail("Supplier contact is outside the configured Gmail recipient", 422)
+    combined = {
+        p.field_id: p
+        for p in db.scalars(
+            select(Proposal).where(
+                Proposal.case_id == case.id, Proposal.id.in_(prior_proposals), Proposal.status == "rejected"
+            )
+        )
+    }
+    combined.update({p.field_id: p for p in rejected})
+    lines = []
+    requested = []
+    for field_id, proposal in combined.items():
+        field = db.get(SupplierField, field_id)
+        if field.revision > proposal.field_revision and proposal not in rejected:
+            continue
+        reason = proposal.evidence.get("rejection_reason", "Please clarify this answer.")
+        lines.append(
+            f"- [{field.id}] {field.data['Field (label)']}\n"
+            f"  You sent: {proposal.value}\n  {reason}\n  {field_guidance(field)}"
+        )
+        requested.append(field.id)
+    if not requested:
+        return None
+    invalidate_drafts(db, case)
+    draft = Draft(
+        case_id=case.id,
+        kind="rejection_followup",
+        recipient=case.recipient,
+        subject="Your business partner has an information request",
+        body=(
+            f"Let's stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\n"
+            f"Thank you for sharing your information for article {case.nart or '(supplier level)'}. "
+            "We need your help to clarify a few answers before we can accept them:\n\n"
+            + "\n\n".join(lines)
+            + "\n\nPlease reply with the corrected details, and attach supporting documents if helpful. "
+            "There’s no need to repeat the answers we’ve already accepted. "
+            "If anything is unclear, let us know and we’ll help.\n\n"
+            "Thank you for your help,\nSupplier Information Team\n\n" + AI_DISCLOSURE
+        ),
+        requested_fields=requested,
+        case_revision=case.revision,
+        version=1,
+        status="approved",
+        approved_by=actor,
+        approved_at=now(),
+    )
+    db.add(draft)
+    db.flush()
+    draft.approved_digest = draft_digest(draft)
+    enqueue(db, "send", draft.id, f"send:{draft.id}:{draft.version}")
+    audit(
+        db,
+        actor,
+        "email.rejection_followup_queued",
+        draft.id,
+        message_id=message.id,
+        proposal_ids=[p.id for field_id, p in combined.items() if field_id in requested],
+    )
+    case.status = "data_review" if blocking_message(db, case.id) else "awaiting_reply"
+    case.next_action_at = None
     return draft

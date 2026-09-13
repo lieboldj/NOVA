@@ -1,9 +1,6 @@
 import React, { useRef, useState } from "react";
-import { api } from "./api";
+import { api, supplierName } from "./api";
 import { Notice } from "./components";
-
-const example =
-  "For suppliers who are in region APAC and are in automotive industry, send the MDF request.";
 
 export default function NaturalLanguageStarter({
   onChanged,
@@ -12,12 +9,12 @@ export default function NaturalLanguageStarter({
 }) {
   const [command, setCommand] = useState("");
   const [preview, setPreview] = useState(null);
+  const [expanded, setExpanded] = useState(false);
   const [selected, setSelected] = useState([]);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const lock = useRef(false);
-
   async function act(work) {
     if (lock.current) return;
     lock.current = true;
@@ -35,21 +32,20 @@ export default function NaturalLanguageStarter({
       onBusyChange(false);
     }
   }
-
   return (
-    <section
-      className="review-card"
-      aria-label="Request questionnaires in natural language"
-    >
+    <section aria-label="Request questionnaires in natural language">
       <form
-        onSubmit={(event) => {
-          event.preventDefault();
+        onSubmit={(e) => {
+          e.preventDefault();
           act(async () => {
             setPreview(null);
             setResult(null);
+            setExpanded(false);
             const data = await api("/processes/preview", {
               method: "POST",
-              body: { command },
+              body: {
+                command: /\bmdf\b/i.test(command) ? command : `MDF ${command}`,
+              },
             });
             setPreview(data);
             setSelected(
@@ -60,6 +56,7 @@ export default function NaturalLanguageStarter({
           });
         }}
       >
+        <p className="muted">Use case: MDF</p>
         <label className="field-label">
           Describe your supplier request
           <textarea
@@ -67,123 +64,59 @@ export default function NaturalLanguageStarter({
             required
             maxLength={2000}
             disabled={busy}
-            placeholder={example}
+            placeholder="For example: suppliers in APAC and the automotive industry"
             value={command}
-            onChange={(event) => {
-              setCommand(event.target.value);
+            onChange={(e) => {
+              setCommand(e.target.value);
               setPreview(null);
               setResult(null);
               setError("");
             }}
           />
         </label>
-        <p>
-          Request the MDF questionnaire by supplier name or ID, region and
-          industry. Combine criteria with “and”, or explicitly ask for all
-          suppliers.
-        </p>
-        <div className="drawer-actions">
-          <button className="primary-btn" disabled={busy || !command.trim()}>
-            {busy ? "Working…" : "Preview matching suppliers"}
-          </button>
-          <button
-            type="button"
-            className="secondary-btn"
-            disabled={busy}
-            onClick={() => {
-              setCommand(example);
-              setPreview(null);
-              setResult(null);
-              setError("");
-            }}
-          >
-            Use APAC automotive example
-          </button>
-        </div>
+        <button className="primary-btn" disabled={busy || !command.trim()}>
+          {busy ? "Searching…" : "Search"}
+        </button>
       </form>
       <Notice error>{error}</Notice>
       {preview && !result && (
         <div className="process-preview" aria-live="polite">
-          <h3>
-            {preview.supplier_count} suppliers · {preview.matches.length}{" "}
-            article cases
-          </h3>
-          <p>
-            Questionnaire: MDF
-            {preview.criteria.region.length > 0 &&
-              ` · Region: ${preview.criteria.region.join(", ").toUpperCase()}`}
-            {preview.criteria.industry.length > 0 &&
-              ` · Industry: ${preview.criteria.industry.join(", ")}`}
-          </p>
-          {preview.missing_metadata_count > 0 && (
-            <Notice>
-              {preview.missing_metadata_count} cases have missing or conflicting
-              targeting attributes and were excluded. Import supplier
-              submissions with Region and Industry columns to make them
-              available for targeting.
-            </Notice>
-          )}
-          {!preview.matches.length && (
-            <p>
-              No suppliers match these criteria. Check the imported attributes
-              or change your request.
-            </p>
-          )}
-          {!!preview.matches.length && (
+          <button
+            className="match-count"
+            disabled={!preview.matches.length}
+            aria-expanded={expanded}
+            onClick={() => setExpanded((value) => !value)}
+          >
+            {preview.supplier_count} matching{" "}
+            {preview.supplier_count === 1 ? "supplier" : "suppliers"}
+          </button>
+          {expanded && (
             <>
-              <p>
-                Select the article cases to request. Each selected case creates
-                one email for review.
-              </p>
               <div className="starter-options">
                 {preview.matches.map((item) => (
-                  <div className="review-card" key={item.id}>
-                    <label className="audience-option">
-                      <input
-                        type="checkbox"
-                        disabled={busy || !item.eligible}
-                        checked={selected.includes(item.id)}
-                        onChange={(event) =>
-                          setSelected((ids) =>
-                            event.target.checked
-                              ? [...ids, item.id]
-                              : ids.filter((id) => id !== item.id),
-                          )
-                        }
-                      />
-                      <span>
-                        <strong>{item.supplier_name}</strong> ·{" "}
-                        {item.supplier_id} · Article{" "}
-                        {item.nart || "Supplier level"}
-                        <br />
-                        {item.region?.toUpperCase() ||
-                          "Region unavailable"} ·{" "}
-                        {item.industry || "Industry unavailable"}
-                        <br />
-                        {item.recipient || "No approved email"} ·{" "}
-                        {item.fields.length} outstanding MDF fields
-                      </span>
-                    </label>
-                    {item.reason && <p>{item.reason}</p>}
-                    {item.fields.length > 0 && (
-                      <details>
-                        <summary>Information to request</summary>
-                        <ul>
-                          {item.fields.map((field) => (
-                            <li key={field.id}>{field.label}</li>
-                          ))}
-                        </ul>
-                      </details>
-                    )}
-                    {!item.eligible && (
-                      <button
-                        className="secondary-btn"
-                        disabled={busy}
-                        onClick={() => onOpenReview(item.id, "activity")}
-                      >
-                        Review case
-                      </button>
-                    )}
+                  <div className="audience-row" key={item.id}>
+                    <input
+                      type="checkbox"
+                      aria-label={`Select ${supplierName(item.supplier_name)} ${item.nart}`}
+                      disabled={busy || !item.eligible}
+                      checked={selected.includes(item.id)}
+                      onChange={(e) =>
+                        setSelected((ids) =>
+                          e.target.checked
+                            ? [...ids, item.id]
+                            : ids.filter((id) => id !== item.id),
+                        )
+                      }
+                    />
+                    <button
+                      className="supplier-result"
+                      disabled={busy}
+                      onClick={() => onOpenReview(item.id, "email")}
+                    >
+                      <strong>{supplierName(item.supplier_name)}</strong>
+                      <small>Article {item.nart || "Supplier level"}</small>
+                      {item.reason && <small>{item.reason}</small>}
+                    </button>
                   </div>
                 ))}
               </div>
@@ -207,18 +140,16 @@ export default function NaturalLanguageStarter({
                 Prepare {selected.length}{" "}
                 {selected.length === 1 ? "request" : "requests"} for review
               </button>
-              <p>Review and approve each email before it is sent.</p>
             </>
           )}
         </div>
       )}
       {result && (
-        <div className="process-preview" role="status">
-          <h3>
+        <div className="process-preview">
+          <p role="status">
             {result.drafts.length}{" "}
             {result.drafts.length === 1 ? "request" : "requests"} prepared
-          </h3>
-          <p>Your requests are waiting for email approval.</p>
+          </p>
           <div className="starter-options">
             {result.drafts.map((draft) => {
               const item = preview.matches.find(
@@ -228,10 +159,10 @@ export default function NaturalLanguageStarter({
                 <button
                   className="secondary-btn"
                   key={draft.id}
-                  disabled={busy}
                   onClick={() => onOpenReview(draft.case_id, "email")}
                 >
-                  Review {item.supplier_name} · {item.nart || "Supplier level"}
+                  Review {supplierName(item.supplier_name)} ·{" "}
+                  {item.nart || "Supplier level"}
                 </button>
               );
             })}

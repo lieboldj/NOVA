@@ -195,16 +195,27 @@ def test_validation_requires_correction_and_fresh_approval(env):
         client.post(f"/proposals/{proposal['id']}/approve", headers=REVIEW, json={"version": 1}).status_code
         == 422
     )
-    edited = client.patch(
-        f"/proposals/{proposal['id']}", headers=REVIEW, json={"version": 1, "value": "2028-12-31"}
-    ).json()
-    assert edited["version"] == 2 and edited["validation_errors"] == []
     assert (
-        client.post(f"/proposals/{proposal['id']}/approve", headers=REVIEW, json={"version": 1}).status_code
-        == 409
+        client.patch(
+            f"/proposals/{proposal['id']}", headers=REVIEW, json={"version": 1, "value": "2028-12-31"}
+        ).status_code
+        == 422
     )
     assert (
-        client.post(f"/proposals/{proposal['id']}/approve", headers=REVIEW, json={"version": 2}).status_code
+        client.post(
+            f"/proposals/{proposal['id']}/reject",
+            headers=REVIEW,
+            json={"version": 1, "reason": "Please provide a valid date in YYYY-MM-DD format."},
+        ).status_code
+        == 200
+    )
+    run_once(factory, settings)
+    reply(client, case_id, "F2=2028-12-31", external_id="corrected-date")
+    run_once(factory, settings)
+    corrected = next(p for p in client.get("/proposals", headers=REVIEW).json() if p["status"] == "pending")
+    assert corrected["value"] == "2028-12-31" and not corrected["validation_errors"]
+    assert (
+        client.post(f"/proposals/{corrected['id']}/approve", headers=REVIEW, json={"version": 1}).status_code
         == 200
     )
 

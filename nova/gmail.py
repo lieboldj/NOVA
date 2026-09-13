@@ -13,7 +13,7 @@ from fastapi import HTTPException, Query
 from sqlalchemy import select
 
 from nova.inbox import ingest_message
-from nova.models import Message
+from nova.models import Draft, Message
 
 ROOT = "https://gmail.googleapis.com/gmail/v1/users/me"
 
@@ -204,6 +204,7 @@ class Gmail:
             "gmail_id": message_id,
             "sender": sender,
             "subject": headers["subject"][0],
+            "references": " ".join(headers.get("in-reply-to", []) + headers.get("references", [])),
             "body": text,
             "attachments": attachments,
             "is_nova_request": (
@@ -273,15 +274,25 @@ def install_gmail_routes(app, settings, Reviewer, Operator):
                         if message["is_nova_request"]:
                             results.append({"gmail_id": item["id"], "status": "outgoing_request"})
                             continue
-                        matches = set(re.findall(r"\[NOVA:([0-9a-fA-F-]{36})\]", message["subject"]))
+                        # Standard reply headers keep case IDs out of the human-facing subject.
+                        reference_ids = set(
+                            re.findall(r"<nova-([0-9a-f-]{36})-v\d+@[^>]+>", message.get("references", ""))
+                        )
+                        with app.state.factory() as db:
+                            matches = set(
+                                db.scalars(
+                                    select(Draft.case_id).where(
+                                        Draft.id.in_(reference_ids), Draft.status.in_(["sent", "simulated"])
+                                    )
+                                )
+                            )
+                        legacy = set(re.findall(r"\[NOVA:([0-9a-fA-F-]{36})\]", message["subject"]))
+                        matches.update(str(UUID(value)) for value in legacy)
                         if len(matches) != 1:
                             raise GmailUnavailable(
-                                "Missing or ambiguous NOVA case reference; manual routing required."
+                                "Missing or ambiguous reply reference; manual routing required."
                             )
-                        try:
-                            case_id = str(UUID(matches.pop()))
-                        except ValueError:
-                            raise GmailUnavailable("Invalid NOVA case reference.") from None
+                        case_id = matches.pop()
                         with app.state.factory.begin() as db:
                             result = ingest_message(
                                 db,

@@ -37,6 +37,25 @@ AI_DISCLOSURE = "This email was written and sent automatically by an AI system."
 ACTIVE_DRAFTS = ["pending", "approved", "sending", "uncertain"]
 
 
+def supplier_display_name(name):
+    return re.sub(r"\s+", " ", re.sub(r"\bDemo\b", "", name, flags=re.I)).strip(" -") or name
+
+
+def field_guidance(field):
+    data = field.data
+    required = data.get("Required @ go-live", "").strip()
+    requirement = {"yes": "Required", "no": "Optional"}.get(
+        required.lower(), required or "Requirement unspecified"
+    )
+    kind = data.get("Field Type", "Text")
+    guidance = f"{requirement} · {kind}"
+    if kind == "Date":
+        guidance += " · YYYY-MM-DD"
+    if field.rules.get("options"):
+        guidance += " · Choose from: " + "; ".join(field.rules["options"])
+    return guidance
+
+
 def fail(message: str, code: int = 409):
     raise HTTPException(code, message)
 
@@ -219,24 +238,16 @@ def create_draft(db, case, kind, use_case=None, settings=None):
         fields = [f for f in fields if f.data["Use case"].strip().casefold() == use_case.casefold()]
     if not fields:
         fail("No outstanding fields.")
-    heading = {
-        "request": "Information request",
-        "followup": "Outstanding information",
-        "reminder": "Reminder",
-    }[kind]
-    if use_case:
-        heading = f"{use_case} {heading}"
     lines = []
     for field in fields:
         d = field.data
-        line = f"- [{field.id}] {d['Section']} — {d['Field (label)']} (status: {d['Status']})"
-        if field.rules.get("options"):
-            line += "\n  Accepted answers: " + "; ".join(field.rules["options"])
+        line = f"- [{field.id}] {d['Field (label)']} ({field_guidance(field)})"
         lines.append(line)
     body = (
-        f"Hello {case.supplier_name},\n\n"
-        f"Please provide or confirm the following information for article {case.nart or '(supplier level)'}. "
-        "You may reply in this email thread and attach supporting documents. "
+        f"Let's stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\n"
+        f"We’re updating our supplier information and would appreciate your help with article {case.nart or '(supplier level)'}. "
+        "Please share or confirm the details below by replying to this email. "
+        "You’re welcome to attach supporting documents. "
         "Please include the field references shown below.\n\n"
         + "\n".join(lines)
         + "\n\nThank you,\nSupplier Information Team"
@@ -247,7 +258,7 @@ def create_draft(db, case, kind, use_case=None, settings=None):
         case_id=case.id,
         kind=kind,
         recipient=case.recipient,
-        subject=f"[NOVA:{case.id}] {heading}",
+        subject="Your business partner has an information request",
         body=body,
         requested_fields=[f.id for f in fields],
         case_revision=case.revision,

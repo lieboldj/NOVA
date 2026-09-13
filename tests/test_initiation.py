@@ -82,7 +82,7 @@ def test_human_batch_targets_intersection_and_requires_email_approval(env):
     assert len(response.json()["drafts"]) == 2
     with factory() as db:
         drafts = db.scalars(select(Draft)).all()
-        assert all(d.status == "pending" and "MDF" in d.subject for d in drafts)
+        assert all(d.status == "pending" and d.subject == "Your business partner has an information request" for d in drafts)
         assert {fid for d in drafts for fid in d.requested_fields} == {"A1-MDF", "A2-MDF"}
         assert not db.scalar(select(Job))
         events = db.scalars(select(Audit).where(Audit.action == "process.initiated")).all()

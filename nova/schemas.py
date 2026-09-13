@@ -12,6 +12,10 @@ class Approval(StrictModel):
     version: int = Field(ge=1)
 
 
+class Rejection(Approval):
+    reason: str = Field(min_length=1, max_length=2000)
+
+
 class ImportApproval(StrictModel):
     contacts: dict[str, EmailStr] = Field(default_factory=dict)
 
@@ -34,6 +38,7 @@ class ProposalDecision(StrictModel):
     proposal_id: str = Field(min_length=1)
     value: str = Field(max_length=10000)
     action: Literal["approve", "reject"]
+    reason: str = Field(default="", max_length=2000)
     version: int | None = Field(default=None, ge=1)
 
 
@@ -59,6 +64,7 @@ class Candidate(StrictModel):
     value: str = Field(min_length=1, max_length=10000)
     evidence: Evidence
     rationale: str
+    confidence: float | None = Field(default=None, ge=0, le=1)
     spelling_correction: SpellingCorrection | None = None
 
 

@@ -2,12 +2,16 @@ import React, { useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { statusMeta } from "./api";
 
-export function StatusBadge({ status }) {
+export function StatusBadge({ status, waitingSince }) {
   const [label, tone] = statusMeta[status] || [status, "gray"];
   return (
     <span className={`badge ${tone}`}>
       <span className="dot" />
       {label}
+      {status === "awaiting_reply" &&
+        (waitingSince
+          ? ` · ${Math.max(0, Math.floor((Date.now() - new Date(/Z$|[+-]\d\d:\d\d$/.test(waitingSince) ? waitingSince : `${waitingSince}Z`).getTime()) / 86400000))}d waiting`
+          : " · sending")}
     </span>
   );
 }
@@ -23,7 +27,14 @@ export function Notice({ children, error = false }) {
   ) : null;
 }
 
-export function Modal({ title, subtitle, onClose, children, busy = false }) {
+export function Modal({
+  title,
+  subtitle,
+  onClose,
+  children,
+  busy = false,
+  backLabel,
+}) {
   const ref = useRef(null);
   useEffect(() => {
     const previous = document.activeElement;
@@ -78,9 +89,17 @@ export function Modal({ title, subtitle, onClose, children, busy = false }) {
       >
         <div className="drawer-head">
           <div>
-            <span className="drawer-kicker">NOVA REVIEW</span>
             <h2>{title}</h2>
-            <p>{subtitle}</p>
+            {subtitle && <p>{subtitle}</p>}
+            {backLabel && (
+              <button
+                className="secondary-btn"
+                onClick={onClose}
+                disabled={busy}
+              >
+                {backLabel}
+              </button>
+            )}
           </div>
           <button
             className="icon-btn close"

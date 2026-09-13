@@ -142,6 +142,7 @@ def test_inbox_sync_pdf_and_deduplication_preserves_values(env, monkeypatch):
             "headers": [
                 {"name": "From", "value": settings.gmail_supplier},
                 {"name": "Subject", "value": "Re: " + draft["subject"]},
+                {"name": "In-Reply-To", "value": f"<nova-{draft['id']}-v1@example.com>"},
             ],
             "mimeType": "multipart/mixed",
             "parts": [
@@ -233,6 +234,7 @@ def test_single_mailbox_skips_requests_and_ingests_actual_replies(env, monkeypat
         headers = [
             {"name": "From", "value": settings.gmail_mailbox},
             {"name": "Subject", "value": draft["subject"]},
+            {"name": "References", "value": f"<nova-{draft['id']}-v1@example.com>"},
         ]
         if outgoing:
             headers.append({"name": "X-NOVA-Message-Type", "value": "request"})

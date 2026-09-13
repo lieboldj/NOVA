@@ -6,7 +6,7 @@ async function login(page) {
   await page.getByLabel("Reviewer access key").fill("ui-review-secret");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Request operations" }),
+    page.getByRole("heading", { name: "My Dashboard" }),
   ).toBeVisible();
 }
 
@@ -53,49 +53,52 @@ test("email approval and data approval remain separate across reloads", async ({
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await login(page);
-  await page
-    .getByRole("button", { name: "Start process", exact: true })
-    .click();
-  await expect(
-    page.getByText(/No supplier data has been imported yet/),
-  ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Import supplier CSV", exact: true })
-    .click();
-  await page.getByLabel("Supplier CSV", { exact: true }).setInputFiles({
-    name: "supplier.csv",
-    mimeType: "text/csv",
-    buffer: Buffer.from(columns.join(",") + "\n" + row.join(",") + "\n"),
+  const seedHeaders = { Authorization: "Bearer ui-review-secret" };
+  const imported = await request.post("/api/imports", {
+    headers: seedHeaders,
+    multipart: {
+      file: {
+        name: "supplier.csv",
+        mimeType: "text/csv",
+        buffer: Buffer.from(columns.join(",") + "\n" + row.join(",") + "\n"),
+      },
+    },
   });
-  await page
-    .getByRole("button", { name: "Preview import", exact: true })
-    .click();
-  await expect(page.getByText("1 fields · 1 suppliers")).toBeVisible();
-  await page
-    .getByRole("button", { name: "Approve import into database", exact: true })
-    .click();
-  const starter = page.getByRole("dialog", {
-    name: "Start a supplier process",
-    exact: true,
+  const batch = await imported.json();
+  await request.post(`/api/imports/${batch.id}/approve`, {
+    headers: seedHeaders,
+    data: { contacts: {} },
   });
-  await expect(starter).toBeVisible();
-  await starter.getByLabel("Find a supplier or article").fill("UI-ARTICLE");
-  await starter
+  await page.reload();
+  await page.getByRole("button", { name: "Talk to NOVA", exact: true }).click();
+  await page
+    .getByLabel("Describe your supplier request")
+    .fill("Fictional UI Supplier");
+  await page.getByRole("button", { name: "Search", exact: true }).click();
+  await page
+    .getByRole("button", { name: "1 matching supplier", exact: true })
+    .click();
+  await page
+    .getByRole("dialog")
     .getByRole("button")
     .filter({ hasText: "Fictional UI Supplier" })
     .click();
   await expect(
-    page.getByRole("button", {
-      name: "Prepare request for review",
-      exact: true,
-    }),
+    page.getByRole("button", { name: "Create email draft", exact: true }),
   ).toBeDisabled();
-  await page.getByLabel("Process recipient").fill("supplier@example.com");
   await page
-    .getByRole("button", { name: "Approve supplier contact", exact: true })
+    .getByLabel("Supplier email", { exact: true })
+    .fill("supplier@example.com");
+  await page
+    .getByRole("button", { name: "Save supplier email", exact: true })
     .click();
+  await expect(
+    page.getByText(
+      "This email is saved. Change the address to save a new contact.",
+    ),
+  ).toBeVisible();
   await page
-    .getByRole("button", { name: "Prepare request for review", exact: true })
+    .getByRole("button", { name: "Create email draft", exact: true })
     .click();
   await expect(
     page
@@ -112,17 +115,16 @@ test("email approval and data approval remain separate across reloads", async ({
     .getByRole("button", { name: "Save email edits", exact: true })
     .click();
   await expect(page.getByText(/Version 2 ·/)).toBeVisible();
-  await page.getByRole("button", { name: "Close review", exact: true }).click();
   await page
-    .getByRole("button", { name: "Start process", exact: true })
+    .getByRole("button", { name: "Return to search list", exact: true })
     .click();
+  await expect(page.getByLabel("Describe your supplier request")).toHaveValue(
+    "Fictional UI Supplier",
+  );
   await page
-    .getByRole("dialog", { name: "Start a supplier process", exact: true })
+    .getByRole("dialog")
     .getByRole("button")
     .filter({ hasText: "Fictional UI Supplier" })
-    .click();
-  await page
-    .getByRole("button", { name: "Review existing email", exact: true })
     .click();
   await expect(page.getByText(/Version 2 ·/)).toBeVisible();
   const apiHeaders = { Authorization: "Bearer ui-review-secret" };
@@ -189,7 +191,7 @@ test("email approval and data approval remain separate across reloads", async ({
   await page.reload();
   await page.getByRole("button").filter({ hasText: "UI-ARTICLE" }).click();
   const proposal = page.getByTestId("proposal-review");
-  await expect(proposal.getByLabel("Proposed value")).toHaveValue(
+  await expect(proposal.getByLabel("Received value")).toHaveValue(
     "Verified recycled content",
   );
   let detail = await (
@@ -371,12 +373,14 @@ test("supplier review shows unchanged values, all replies and unused attachments
   });
   await expect(extracted.locator("pre")).toHaveText(body);
   await expect(
-    extracted.getByText("Unchanged confirmation", { exact: true }),
+    extracted.getByText("Unchanged confirmation", { exact: false }),
   ).toBeVisible();
   await expect(
-    extracted.getByText("Changed value", { exact: true }),
+    extracted.getByText("Changed value", { exact: false }),
   ).toBeVisible();
-  await expect(extracted.getByText("New value", { exact: true })).toBeVisible();
+  await expect(
+    extracted.getByText("New value", { exact: false }),
+  ).toBeVisible();
   await expect(extracted.getByTestId("proposal-review")).toHaveCount(3);
   await expect(
     extracted.getByRole("link", { name: "energy.txt", exact: true }),
@@ -403,11 +407,12 @@ test("supplier review shows unchanged values, all replies and unused attachments
   await expect(
     unextracted.getByText("Reviewed", { exact: true }),
   ).toBeVisible();
-  await extracted
-    .getByTestId("proposal-review")
-    .filter({ hasText: "ALL-F2" })
-    .getByLabel("Proposed value")
-    .fill("Reusable cardboard packaging");
+  await expect(
+    extracted
+      .getByTestId("proposal-review")
+      .filter({ hasText: "ALL-F2" })
+      .getByLabel("Received value"),
+  ).toHaveAttribute("readonly", "");
   await page.screenshot({
     path: ".data/screenshots/all-supplier-inputs.png",
     fullPage: true,
@@ -422,7 +427,7 @@ test("supplier review shows unchanged values, all replies and unused attachments
   ).json();
   expect(
     detail.fields.find((f) => f.id === "ALL-F2").data["Value submitted"],
-  ).toBe("Reusable cardboard packaging");
+  ).toBe("Reusable packaging");
   await expect
     .poll(
       async () =>
@@ -504,23 +509,20 @@ test("human describes an audience and prepares selected MDF requests", async ({
     ).ok(),
   ).toBe(true);
   await login(page);
-  await page
-    .getByRole("button", { name: "Start process", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Talk to NOVA", exact: true }).click();
   await page
     .getByLabel("Describe your supplier request")
     .fill(
       "For suppliers who are in region APAC and are in automotive industry, send the MDF request.",
     );
-  await page
-    .getByRole("button", { name: "Preview matching suppliers", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Search", exact: true }).click();
   const audience = page.getByRole("region", {
     name: "Request questionnaires in natural language",
   });
-  await expect(
-    audience.getByText("2 suppliers · 2 article cases", { exact: true }),
-  ).toBeVisible();
+  await expect(audience.getByRole("checkbox")).toHaveCount(0);
+  await audience
+    .getByRole("button", { name: "2 matching suppliers", exact: true })
+    .click();
   await expect(audience.getByRole("checkbox")).toHaveCount(2);
   await expect(
     audience.getByText("Natural Language NL-E1", { exact: true }),
@@ -543,9 +545,268 @@ test("human describes an audience and prepares selected MDF requests", async ({
     .getByRole("button", { name: /Review Natural Language/ })
     .click();
   await expect(page.getByLabel("Email subject")).toHaveValue(
-    /MDF Information request/,
+    "Your business partner has an information request",
   );
   await expect(
     page.getByRole("button", { name: "Approve email & send", exact: true }),
   ).toBeEnabled();
+});
+
+test("confidence prioritizes review and rejection sends supplier reasons immediately", async ({
+  page,
+  request,
+}) => {
+  const headers = { Authorization: "Bearer ui-review-secret" };
+  const fields = [
+    ["CONF-F1", "High confidence", "Freetext", "Yes"],
+    ["CONF-F2", "Threshold answer", "Freetext", "No"],
+    ["CONF-F3", "Unknown confidence", "Freetext", "Yes"],
+    ["CONF-F4", "Certificate date", "Date", "Yes"],
+  ];
+  const rows = fields.map(([id, label, type, required]) => {
+    const record = [...row];
+    record[0] = id;
+    record[1] = "CONF-SUP";
+    record[2] = "Demo Confidence Supplier";
+    record[3] = "CONF-ARTICLE";
+    record[8] = label;
+    record[9] = type;
+    record[10] = required;
+    return record;
+  });
+  const batch = await (
+    await request.post("/api/imports", {
+      headers,
+      multipart: {
+        file: {
+          name: "confidence.csv",
+          mimeType: "text/csv",
+          buffer: Buffer.from(
+            columns.join(",") + "\n" + rows.map((r) => r.join(",")).join("\n"),
+          ),
+        },
+      },
+    })
+  ).json();
+  const imported = await (
+    await request.post(`/api/imports/${batch.id}/approve`, {
+      headers,
+      data: { contacts: { "CONF-SUP": "supplier@example.com" } },
+    })
+  ).json();
+  const caseId = imported.case_ids[0];
+  const draft = await (
+    await request.post(`/api/cases/${caseId}/draft`, { headers })
+  ).json();
+  expect(draft.subject).not.toContain("NOVA:");
+  expect(draft.body).not.toContain("Demo Confidence");
+  await request.post(`/api/drafts/${draft.id}/approve`, {
+    headers,
+    data: { version: 1 },
+  });
+  await expect
+    .poll(
+      async () =>
+        (
+          await (
+            await request.get(`/api/drafts?case_id=${caseId}`, { headers })
+          ).json()
+        )[0].status,
+    )
+    .toBe("simulated");
+  await request.post(`/api/cases/${caseId}/messages`, {
+    headers,
+    multipart: {
+      external_id: "confidence-reply",
+      sender: "supplier@example.com",
+      body: "CONF-F1=Confirmed\nCONF-F2=Ambiguous answer\nCONF-F3=Unclear answer\nCONF-F4=2028-13-40",
+    },
+  });
+  await expect
+    .poll(
+      async () =>
+        (
+          await (
+            await request.get(`/api/proposals?case_id=${caseId}`, { headers })
+          ).json()
+        ).length,
+    )
+    .toBe(4);
+  // Exercise the UI boundary with controlled model scores while retaining the real review/send API.
+  await page.route(`**/api/proposals?case_id=${caseId}`, async (route) => {
+    const response = await route.fetch();
+    const proposals = await response.json();
+    const confidence = {
+      "CONF-F1": 0.91,
+      "CONF-F2": 0.9,
+      "CONF-F3": null,
+      "CONF-F4": 0.99,
+    };
+    await route.fulfill({
+      response,
+      json: proposals.map((p) => ({
+        ...p,
+        confidence: confidence[p.field_id],
+      })),
+    });
+  });
+  await login(page);
+  await expect(
+    page.getByRole("button", { name: "Import CSV", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Sync inbox", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Check due cases", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByText("Backend connected", { exact: true }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: /Need review/ }).click();
+  await page.getByRole("button").filter({ hasText: "CONF-ARTICLE" }).click();
+  const rowsUI = page.getByTestId("proposal-review");
+  await expect(rowsUI.first()).toContainText("Unknown confidence");
+  await expect(rowsUI.nth(1)).toContainText("Threshold answer");
+  await expect(
+    rowsUI.filter({ hasText: "CONF-F1" }).getByLabel("Data point decision"),
+  ).toHaveValue("approve");
+  await expect(
+    rowsUI.filter({ hasText: "CONF-F2" }).getByLabel("Data point decision"),
+  ).toHaveValue("reject");
+  await expect(rowsUI.filter({ hasText: "CONF-F2" })).toContainText(
+    "Optional · Freetext",
+  );
+  await expect(
+    rowsUI.filter({ hasText: "CONF-F4" }).getByLabel("Data point decision"),
+  ).toHaveValue("reject");
+  await expect(
+    rowsUI.filter({ hasText: "CONF-F4" }).getByLabel("Rejection reason"),
+  ).not.toHaveValue("");
+  await expect(
+    page.getByRole("columnheader", { name: /Accepted value/ }),
+  ).toHaveCount(0);
+  await expect(rowsUI.first().getByLabel("Received value")).toHaveAttribute(
+    "readonly",
+    "",
+  );
+  const submit = page.getByRole("button", {
+    name: "Submit reply review",
+    exact: true,
+  });
+  await expect(submit).toBeDisabled();
+  await rowsUI
+    .filter({ hasText: "CONF-F2" })
+    .getByLabel("Rejection reason")
+    .fill("Please clarify the material composition.");
+  await rowsUI
+    .filter({ hasText: "CONF-F3" })
+    .getByLabel("Rejection reason")
+    .fill("Please attach supporting evidence.");
+  await page.getByRole("button", { name: /Agent confidence/ }).click();
+  await expect(rowsUI.first()).toContainText("Certificate date");
+  await rowsUI.first().scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: ".data/screenshots/confidence-review.png",
+    fullPage: true,
+  });
+  await submit.click();
+  await expect(
+    page.getByText(
+      "Reply review saved. Supplier correction email queued for immediate delivery.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await expect
+    .poll(
+      async () =>
+        (
+          await (
+            await request.get(`/api/drafts?case_id=${caseId}`, { headers })
+          ).json()
+        ).find((d) => d.kind === "rejection_followup")?.status,
+    )
+    .toBe("simulated");
+  const drafts = await (
+    await request.get(`/api/drafts?case_id=${caseId}`, { headers })
+  ).json();
+  const followups = drafts.filter((d) => d.kind === "rejection_followup");
+  expect(followups).toHaveLength(1);
+  expect(followups[0].body).toContain(
+    "Please clarify the material composition.",
+  );
+  expect(followups[0].body).toContain("Please attach supporting evidence.");
+  await page.getByRole("button", { name: "Close review", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Active agents", exact: true })
+    .click();
+  await page.locator(".agent-card").first().click();
+  await expect(
+    page.getByRole("tab", { name: "Activity", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+});
+
+test("alerts reserve red for overdue cases and request columns sort", async ({
+  page,
+}) => {
+  const base = {
+    supplier_id: "STATUS-SUP",
+    outstanding_count: 2,
+    last_sent_at: "2026-01-01T00:00:00",
+    last_reply_at: null,
+  };
+  await page.route("**/api/cases?offset=0&limit=500", (route) =>
+    route.fulfill({
+      json: [
+        {
+          ...base,
+          id: "status-a",
+          nart: "A1",
+          supplier_name: "Zeta Supplier",
+          status: "email_review",
+          next_action_at: null,
+        },
+        {
+          ...base,
+          id: "status-b",
+          nart: "B1",
+          supplier_name: "Alpha Supplier",
+          status: "awaiting_reply",
+          next_action_at: "2020-01-01T00:00:00",
+        },
+        {
+          ...base,
+          id: "status-c",
+          nart: "C1",
+          supplier_name: "Beta Supplier",
+          status: "data_review",
+          next_action_at: null,
+        },
+      ],
+    }),
+  );
+  await page.route("**/api/jobs", (route) => route.fulfill({ json: [] }));
+  await login(page);
+  await page
+    .getByRole("button", { name: "Sort by Supplier", exact: true })
+    .click();
+  await expect(page.locator(".table-row .supplier-name")).toHaveText([
+    "Alpha Supplier",
+    "Beta Supplier",
+    "Zeta Supplier",
+  ]);
+  await page
+    .getByRole("button", { name: "Sort by Supplier", exact: true })
+    .click();
+  await expect(page.locator(".table-row .supplier-name")).toHaveText([
+    "Zeta Supplier",
+    "Beta Supplier",
+    "Alpha Supplier",
+  ]);
+  await page.getByRole("button", { name: /Alerts/ }).click();
+  await expect(page.locator(".alert-card.urgent")).toHaveCount(1);
+  await expect(page.locator(".alert-card.urgent")).toContainText(
+    "Alpha Supplier",
+  );
+  await expect(page.locator(".alert-card.info")).toHaveCount(2);
 });

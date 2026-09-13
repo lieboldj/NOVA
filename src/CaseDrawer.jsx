@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { api, dateLabel } from "./api";
+import { api, dateLabel, dataPointFormat } from "./api";
 import { Modal, Notice, StatusBadge } from "./components";
 
 function EmailReview({ draft, caseId, config, busy, act, sendJob }) {
@@ -10,7 +10,6 @@ function EmailReview({ draft, caseId, config, busy, act, sendJob }) {
   const allowed =
     config.mail_mode !== "gmail" ||
     draft.recipient.toLowerCase() === config.gmail_supplier.toLowerCase();
-  const reference = subject.includes(`[NOVA:${caseId}]`);
   return (
     <article
       className="review-card"
@@ -75,12 +74,6 @@ function EmailReview({ draft, caseId, config, busy, act, sendJob }) {
               Approve the correct case contact before drafting again.
             </Notice>
           )}
-          {!reference && (
-            <Notice error>
-              Keep [NOVA:{caseId}] in the subject so supplier replies can be
-              matched.
-            </Notice>
-          )}
           {dirty && (
             <Notice>
               Save your edits, then review the new version before approval.
@@ -89,9 +82,7 @@ function EmailReview({ draft, caseId, config, busy, act, sendJob }) {
           <div className="drawer-actions">
             <button
               className="secondary-btn"
-              disabled={
-                busy || !dirty || !subject.trim() || !body.trim() || !reference
-              }
+              disabled={busy || !dirty || !subject.trim() || !body.trim()}
               onClick={() =>
                 act(
                   () =>
@@ -124,7 +115,7 @@ function EmailReview({ draft, caseId, config, busy, act, sendJob }) {
             {draft.status === "pending" && (
               <button
                 className="primary-btn"
-                disabled={busy || dirty || !allowed || !reference}
+                disabled={busy || dirty || !allowed}
                 onClick={() =>
                   act(
                     () =>
@@ -233,6 +224,9 @@ function Reconcile({ draft, busy, act }) {
 
 function ReplyProposalTable({ message, proposals, fields, busy, act }) {
   const pending = proposals.filter((p) => p.status === "pending");
+  const recommendation = (p) =>
+    p.confidence > 0.9 && !p.validation_errors?.length ? "approve" : "reject";
+  const initialReason = (p) => p.validation_errors?.join("; ") || "";
   const [entries, setEntries] = useState(() =>
     Object.fromEntries(
       pending.map((p) => [
@@ -241,14 +235,17 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
           proposal_id: p.id,
           version: p.version,
           value: p.value,
-          action: "approve",
+          action: recommendation(p),
+          reason: initialReason(p),
         },
       ]),
     ),
   );
+  const [sort, setSort] = useState({ key: "confidence", direction: 1 });
   const dirty = pending.some(
     (p) =>
-      entries[p.id].value !== p.value || entries[p.id].action !== "approve",
+      entries[p.id].action !== recommendation(p) ||
+      entries[p.id].reason !== initialReason(p),
   );
   function update(id, changes) {
     setEntries((current) => ({
@@ -256,6 +253,24 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
       [id]: { ...current[id], ...changes },
     }));
   }
+  const valueFor = (p) =>
+    sort.key === "label"
+      ? fields.find((f) => f.id === p.field_id)?.data["Field (label)"] ||
+        p.field_id
+      : sort.key === "decision"
+        ? entries[p.id]?.action || p.status
+        : sort.key === "confidence"
+          ? (p.confidence ?? -1)
+          : p.value;
+  const sorted = [...proposals].sort(
+    (a, b) =>
+      sort.direction *
+      (sort.key === "confidence"
+        ? valueFor(a) - valueFor(b)
+        : String(valueFor(a)).localeCompare(String(valueFor(b)), undefined, {
+            numeric: true,
+          })),
+  );
   return (
     <form
       data-review-dirty={dirty}
@@ -267,10 +282,23 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
               method: "POST",
               body: pending.map((p) => entries[p.id]),
             }),
-          "Reply review saved. Approved values written to the database.",
+          pending.some((p) => entries[p.id].action === "reject")
+            ? "Reply review saved. Supplier correction email queued for immediate delivery."
+            : "Reply review saved. Approved values written to the database.",
         );
       }}
     >
+      <p>
+        Review every value and all original inputs above. Select Approve or
+        Reject, then submit this reply once. All decisions are saved together.
+        Received values cannot be edited. For Reject, add a reason to send to
+        the supplier.
+      </p>
+      <p className="muted">
+        NOVA suggests Approve above 90% confidence when format checks pass;
+        otherwise Reject. You confirm the decisions below. Unknown confidence
+        appears first.
+      </p>
       <div className="reply-table-scroll">
         <table
           className="reply-proposal-table"
@@ -278,29 +306,60 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
         >
           <thead>
             <tr>
-              <th>Field and evidence</th>
-              <th>Accepted value</th>
-              <th>Proposed value</th>
-              <th>Decision</th>
+              {[
+                ["label", "Data point and evidence"],
+                ["value", "Received"],
+                ["confidence", "Agent confidence"],
+                ["decision", "Decision"],
+              ].map(([key, label]) => (
+                <th
+                  key={key}
+                  aria-sort={
+                    sort.key === key
+                      ? sort.direction === 1
+                        ? "ascending"
+                        : "descending"
+                      : "none"
+                  }
+                >
+                  <button
+                    type="button"
+                    className="sort-heading"
+                    onClick={() =>
+                      setSort((old) => ({
+                        key,
+                        direction: old.key === key ? -old.direction : 1,
+                      }))
+                    }
+                  >
+                    {label}{" "}
+                    {sort.key === key
+                      ? sort.direction === 1
+                        ? "↑"
+                        : "↓"
+                      : "↕"}
+                  </button>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {proposals.map((proposal) => {
+            {sorted.map((proposal) => {
               const field = fields.find((f) => f.id === proposal.field_id);
               const entry = entries[proposal.id];
-              const correction = proposal.evidence?.spelling_correction;
-              const unchanged = proposal.old_value === proposal.value;
               return (
                 <tr key={proposal.id} data-testid="proposal-review">
                   <td>
                     <strong>
                       {field?.data["Field (label)"] || proposal.field_id}
                     </strong>
+                    <p className="muted">{dataPointFormat(field)}</p>
+                    {!!field?.rules?.options?.length && (
+                      <p>Allowed answers: {field.rules.options.join(", ")}</p>
+                    )}
                     <p className="muted">
-                      {proposal.field_id} · Version {proposal.version}
-                    </p>
-                    <p className="muted">
-                      {unchanged
+                      {proposal.field_id} ·{" "}
+                      {proposal.old_value === proposal.value
                         ? "Unchanged confirmation"
                         : proposal.old_value
                           ? "Changed value"
@@ -311,7 +370,7 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
                       <p>{proposal.rationale}</p>
                       <blockquote>{proposal.evidence?.quote}</blockquote>
                       <p className="muted">
-                        Evidence: {proposal.evidence?.source_id}
+                        Source: {proposal.evidence?.source_id}
                         {proposal.evidence?.page
                           ? ` · Page ${proposal.evidence.page}`
                           : ""}
@@ -320,78 +379,80 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
                         <a
                           href={`/api/documents/${proposal.evidence.document_id}`}
                         >
-                          Download source attachment
+                          Open evidence document
                         </a>
                       )}
                     </details>
                   </td>
                   <td>
-                    <p>{field?.data["Value submitted"] || "(empty)"}</p>
-                    {proposal.old_value !== field?.data["Value submitted"] && (
-                      <p className="muted">
-                        Before this reply: {proposal.old_value || "(empty)"}
+                    <textarea
+                      aria-label="Received value"
+                      rows={3}
+                      value={proposal.value}
+                      readOnly
+                    />
+                    {!!proposal.validation_errors?.length && (
+                      <p className="validation-note">
+                        {proposal.validation_errors.join("; ")} Request a
+                        correction with Reject.
+                      </p>
+                    )}
+                    {proposal.evidence?.spelling_correction && (
+                      <p>
+                        Possible spelling correction:{" "}
+                        {proposal.evidence.spelling_correction.value}. Request a
+                        correction with Reject.
                       </p>
                     )}
                   </td>
                   <td>
-                    <textarea
-                      aria-label="Proposed value"
-                      rows={3}
-                      value={entry?.value ?? proposal.value}
-                      disabled={!entry || busy}
-                      onChange={(e) =>
-                        update(proposal.id, { value: e.target.value })
-                      }
-                    />
-                    {correction && (
-                      <aside data-testid="spelling-suggestion">
-                        <strong>Suggested spelling correction</strong>
-                        <p>As extracted: {correction.original_value}</p>
-                        <p>Suggestion: {correction.value}</p>
-                        <p className="muted">
-                          {correction.reason} The original reply stays
-                          unchanged.
-                        </p>
-                        {entry && (
-                          <button
-                            type="button"
-                            className="secondary-btn"
-                            disabled={
-                              busy ||
-                              entry.value === correction.value ||
-                              !!correction.validation_errors?.length
-                            }
-                            onClick={() =>
-                              update(proposal.id, { value: correction.value })
-                            }
-                          >
-                            Use suggested correction
-                          </button>
-                        )}
-                      </aside>
-                    )}
-                    {!!proposal.validation_errors?.length && (
-                      <Notice error>
-                        {proposal.validation_errors.join("; ")} Edit the value
-                        or reject it before submitting.
-                      </Notice>
-                    )}
+                    <span
+                      className={`badge ${proposal.confidence > 0.9 && !proposal.validation_errors?.length ? "green" : "amber"}`}
+                    >
+                      {proposal.confidence == null
+                        ? "Unknown"
+                        : `${Math.round(proposal.confidence * 1000) / 10}%`}
+                    </span>
                   </td>
                   <td>
                     {entry ? (
-                      <select
-                        aria-label="Field decision"
-                        value={entry.action}
-                        disabled={busy}
-                        onChange={(e) =>
-                          update(proposal.id, { action: e.target.value })
-                        }
-                      >
-                        <option value="approve">Approve</option>
-                        <option value="reject">Reject</option>
-                      </select>
+                      <>
+                        <select
+                          aria-label="Data point decision"
+                          value={entry.action}
+                          disabled={busy}
+                          onChange={(e) =>
+                            update(proposal.id, { action: e.target.value })
+                          }
+                        >
+                          <option value="approve">Approve</option>
+                          <option value="reject">Reject</option>
+                        </select>
+                        {entry.action === "reject" && (
+                          <label className="field-label">
+                            Reason for supplier
+                            <textarea
+                              aria-label="Rejection reason"
+                              required
+                              maxLength={2000}
+                              rows={3}
+                              disabled={busy}
+                              value={entry.reason}
+                              placeholder="Explain what needs correcting…"
+                              onChange={(e) =>
+                                update(proposal.id, { reason: e.target.value })
+                              }
+                            />
+                          </label>
+                        )}
+                      </>
                     ) : (
-                      <StatusBadge status={proposal.status} />
+                      <>
+                        <StatusBadge status={proposal.status} />
+                        {proposal.rejection_reason && (
+                          <p>{proposal.rejection_reason}</p>
+                        )}
+                      </>
                     )}
                   </td>
                 </tr>
@@ -401,26 +462,19 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
         </table>
       </div>
       {!!pending.length && (
-        <>
-          <p className="muted">
-            Review every value and all original inputs above. Edit values or
-            select Reject, then submit this reply once. All decisions are saved
-            together.
-          </p>
-          <button
-            className="primary-btn"
-            disabled={
-              busy ||
-              pending.some(
-                (p) =>
-                  entries[p.id].action === "approve" &&
-                  !entries[p.id].value.trim(),
-              )
-            }
-          >
-            Submit reply review
-          </button>
-        </>
+        <button
+          className="primary-btn"
+          disabled={
+            busy ||
+            pending.some(
+              (p) =>
+                entries[p.id].action === "reject" &&
+                !entries[p.id].reason.trim(),
+            )
+          }
+        >
+          Submit reply review
+        </button>
       )}
     </form>
   );
@@ -466,7 +520,7 @@ function SupplierReplyReview({
             <p className="muted">
               No extracted values are available for this reply. Review the full
               text and every attachment, including information that could not be
-              matched to a field.
+              matched to a data point.
             </p>
           )}
           {!!proposals.length && (
@@ -516,6 +570,7 @@ export default function CaseDrawer({
   caseId,
   config,
   initialTab,
+  backLabel,
   onClose,
   onChanged,
 }) {
@@ -597,6 +652,7 @@ export default function CaseDrawer({
   );
   return (
     <Modal
+      backLabel={backLabel}
       title={detail?.supplier_name || "Loading case…"}
       subtitle={detail ? `Article ${detail.nart} · ${detail.id}` : caseId}
       onClose={onClose}
@@ -673,8 +729,17 @@ export default function CaseDrawer({
                     busy || !recipient || recipient === detail.recipient
                   }
                 >
-                  Approve contact
+                  {recipient === detail.recipient
+                    ? "Contact saved"
+                    : "Save supplier email"}
                 </button>
+                <p className="muted">
+                  {recipient === detail.recipient && recipient
+                    ? "This email is saved. Change the address to save a new contact."
+                    : !recipient
+                      ? "Enter a supplier email address to continue."
+                      : "Save this address before preparing an email."}
+                </p>
               </form>
               {!detail.recipient && (
                 <Notice>
@@ -734,10 +799,9 @@ export default function CaseDrawer({
           {tab === "data" && (
             <>
               <Notice>
-                Review every supplier reply and attachment, including unchanged
-                confirmations and information without an extracted value. Edit
-                and approve or reject extracted values in one submission per
-                reply. Initial email sending is approved separately.
+                Review the complete supplier reply and attachments. Received
+                values stay unchanged; reject an answer with a reason to request
+                a correction.
               </Notice>
               {config.auto_followup_enabled && config.auto_send_followups && (
                 <Notice>
@@ -771,13 +835,14 @@ export default function CaseDrawer({
               ))}
               <details className="review-card">
                 <summary>
-                  Accepted supplier fields ({detail.fields.length})
+                  Saved supplier data points ({detail.fields.length})
                 </summary>
                 <div className="field-list">
                   {detail.fields.map((f) => (
                     <div key={f.id}>
                       <strong>{f.data["Field (label)"]}</strong>
                       <span>{f.data.Status}</span>
+                      <p className="muted">{dataPointFormat(f)}</p>
                       <p>{f.data["Value submitted"] || "(empty)"}</p>
                     </div>
                   ))}

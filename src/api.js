@@ -59,27 +59,48 @@ export function dateLabel(value) {
 export const statusMeta = {
   open: ["Open", "blue"],
   closed: ["Completed", "green"],
-  email_review: ["Email approval", "amber"],
-  data_review: ["Supplier review", "amber"],
-  awaiting_reply: ["Waiting for supplier", "amber"],
+  email_review: ["Initiation pending", "purple"],
+  data_review: ["Review needed", "amber"],
+  awaiting_reply: ["Pending supplier", "blue"],
   processing_reply: ["Processing reply", "blue"],
   paused: ["Paused", "gray"],
-  escalated: ["Needs attention", "red"],
+  escalated: ["Needs attention", "amber"],
   pending: ["Awaiting approval", "amber"],
   approved: ["Approved", "blue"],
   sending: ["Sending", "blue"],
   sent: ["Sent", "green"],
   simulated: ["Simulated", "gray"],
-  uncertain: ["Check delivery", "red"],
-  rejected: ["Rejected", "gray"],
+  uncertain: ["Check delivery", "amber"],
+  rejected: ["Rejected", "orange"],
   superseded: ["Superseded", "gray"],
   queued: ["Queued", "blue"],
   running: ["Running", "blue"],
   done: ["Completed", "green"],
-  failed: ["Failed", "red"],
+  failed: ["Failed", "amber"],
   cancelled: ["Cancelled", "gray"],
   processing: ["Processing", "blue"],
   evaluated: ["Ready for review", "amber"],
   reviewed: ["Reviewed", "green"],
   needs_review: ["Review required", "amber"],
 };
+
+export function supplierName(name) {
+  return (
+    name
+      .replace(/\bDemo\b/gi, "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .replace(/^[- ]+|[- ]+$/g, "") || name
+  );
+}
+export function dataPointFormat(field) {
+  const data = field?.data || {};
+  const raw = data["Required @ go-live"]?.trim();
+  const requirement =
+    raw?.toLowerCase() === "yes"
+      ? "Required"
+      : raw?.toLowerCase() === "no"
+        ? "Optional"
+        : raw || "Requirement unspecified";
+  return `${requirement} · ${data["Field Type"] || "Type unspecified"}${data["Field Type"] === "Date" ? " · YYYY-MM-DD" : ""}`;
+}

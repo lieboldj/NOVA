@@ -134,6 +134,7 @@ class Gemini:
                             "Use exact field_id and source_id values. Evidence quote must be a verbatim substring of "
                             "that source. Preserve identity placeholders. Do not invent missing answers or declare "
                             "legal compliance yourself. Conflicting, vague, missing or unrelated answers must be omitted. "
+                            "Include confidence from 0 to 1 for each extraction, reflecting evidence quality and ambiguity. "
                             "For dates use YYYY-MM-DD. Respect allowed options. A renewed explicit confirmation can "
                             "resolve an outdated value even when the value is unchanged. For free-text answers, "
                             "preserve the supplier's spelling in value. If there is an obvious spelling mistake, "
@@ -190,6 +191,7 @@ class FixtureEvaluator:
                                     "value": value,
                                     "evidence": {"source_id": source["source_id"], "quote": line},
                                     "rationale": "Explicit answer in offline fixture.",
+                                    "confidence": 0.99,
                                 }
                             )
             if matches and len({m["value"] for m in matches}) == 1:

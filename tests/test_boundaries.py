@@ -109,7 +109,11 @@ def test_rejection_keeps_original_value(env):
     run_once(factory, settings)
     proposal = client.get("/proposals", headers=REVIEW).json()[0]
     assert (
-        client.post(f"/proposals/{proposal['id']}/reject", headers=REVIEW, json={"version": 1}).status_code
+        client.post(
+            f"/proposals/{proposal['id']}/reject",
+            headers=REVIEW,
+            json={"version": 1, "reason": "Please provide evidence"},
+        ).status_code
         == 200
     )
     assert (

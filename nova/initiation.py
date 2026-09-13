@@ -19,6 +19,7 @@ from nova.workflow import (
     fail,
     locked,
     pending_review,
+    supplier_display_name,
 )
 
 
@@ -65,7 +66,7 @@ def parse_command(command, cases, fields):
     # Longest names first so a shorter supplier name cannot consume part of another.
     supplier_names = {}
     for case in cases:
-        for value in (case.supplier_id, case.supplier_name):
+        for value in (case.supplier_id, case.supplier_name, supplier_display_name(case.supplier_name)):
             supplier_names.setdefault(normalized(value), set()).add(case.supplier_id)
     values = [(value, key, None) for key, items in vocab.items() for value in items]
     values += [(value, "supplier_ids", ids) for value, ids in supplier_names.items()]
@@ -114,7 +115,7 @@ def candidate(db, case, fields, criteria, settings):
     ]
     reason = None
     if not requested:
-        reason = "No outstanding MDF fields"
+        reason = "No outstanding MDF data points"
     elif not case.recipient:
         reason = "Approve a supplier email contact first"
     elif settings.mail_mode == "gmail" and case.recipient.casefold() != settings.gmail_supplier.casefold():
@@ -130,7 +131,7 @@ def candidate(db, case, fields, criteria, settings):
     return {
         "id": case.id,
         "supplier_id": case.supplier_id,
-        "supplier_name": case.supplier_name,
+        "supplier_name": supplier_display_name(case.supplier_name),
         "nart": case.nart,
         "recipient": case.recipient,
         **attrs,

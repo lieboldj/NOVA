@@ -36,6 +36,7 @@ from nova.schemas import (
     ImportApproval,
     ProposalDecision,
     ProposalEdit,
+    Rejection,
     SendReconciliation,
 )
 from nova.storage import read_document
@@ -57,6 +58,7 @@ from nova.workflow import (
     parse_csv,
     pending_review,
     rules_catalog,
+    supplier_display_name,
     tick,
     validate_value,
 )
@@ -65,7 +67,13 @@ bearer = HTTPBearer(auto_error=False)
 
 
 def record(obj):
-    return {c.key: getattr(obj, c.key) for c in inspect(type(obj)).column_attrs}
+    result = {c.key: getattr(obj, c.key) for c in inspect(type(obj)).column_attrs}
+    if isinstance(obj, Case):
+        result["supplier_name"] = supplier_display_name(obj.supplier_name)
+    if isinstance(obj, Proposal):
+        result["confidence"] = obj.evidence.get("confidence")
+        result["rejection_reason"] = obj.evidence.get("rejection_reason", "")
+    return result
 
 
 def authorize(request: Request, credentials: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer)]):
@@ -106,7 +114,15 @@ def finish_review(db, case):
     if pending_review(db, case.id) or blocking_message(db, case.id):
         case.status, case.next_action_at = "data_review", None
     else:
-        if outstanding(db, case.id):
+        active = db.scalar(
+            select(Draft).where(
+                Draft.case_id == case.id, Draft.status.in_(["pending", "approved", "sending", "uncertain"])
+            )
+        )
+        if active:
+            case.status = "email_review" if active.status == "pending" else "awaiting_reply"
+            case.next_action_at = None
+        elif outstanding(db, case.id):
             case.status, case.next_action_at = "open", now()
         else:
             case.status, case.next_action_at = "closed", None
@@ -366,6 +382,7 @@ def create_app(settings=None, engine=None):
         draft.status, draft.approved_by, draft.approved_at = "approved", actor, now()
         draft.approved_digest = draft_digest(draft)
         enqueue(db, "send", draft.id, f"send:{draft.id}:{draft.version}")
+        case.status, case.next_action_at = "awaiting_reply", None
         audit(db, actor, "email.approved", draft.id, version=draft.version, digest=draft.approved_digest)
         return record(draft)
 
@@ -469,6 +486,10 @@ def create_app(settings=None, engine=None):
             if entry.version is not None and entry.version != proposal.version:
                 fail("Proposal changed; reload and review the current version")
             field = locked(db, SupplierField, proposal.field_id)
+            if entry.action == "approve" and entry.value != proposal.value:
+                fail("Received values cannot be edited; reject with a reason to request a correction", 422)
+            if entry.action == "reject" and not entry.reason.strip():
+                fail("Add a reason for every rejected data point", 422)
             if entry.action == "approve":
                 if field.revision != proposal.field_revision:
                     fail("Underlying data changed; this proposal cannot be applied")
@@ -511,6 +532,7 @@ def create_app(settings=None, engine=None):
                 )
             else:
                 proposal.status = "rejected"
+                proposal.evidence = proposal.evidence | {"rejection_reason": entry.reason.strip()}
                 audit(
                     db,
                     actor,
@@ -518,15 +540,24 @@ def create_app(settings=None, engine=None):
                     proposal.id,
                     field_id=field.id,
                     value=proposal.value,
+                    reason=entry.reason.strip(),
                     evidence=proposal.evidence,
                 )
             proposal.reviewed_by = actor
-        if approved_fields:
-            invalidate_drafts(db, case)
         message.status = "reviewed"
         audit(db, actor, "reply.reviewed", message.id)
+        from nova.followups import send_rejection_followup
+
+        followup = send_rejection_followup(
+            db, settings, case, message, [p for p in proposals if p.status == "rejected"], actor
+        )
+        if approved_fields and not followup:
+            invalidate_drafts(db, case)
         finish_review(db, case)
-        return record(message) | {"proposals": [record(p) for p in proposals]}
+        return record(message) | {
+            "proposals": [record(p) for p in proposals],
+            "followup_id": followup.id if followup else None,
+        }
 
     @app.post("/messages/{message_id}/review-complete", tags=["Replies"])
     def review_message(message_id: str, db: DB, actor: Reviewer):
@@ -574,12 +605,7 @@ def create_app(settings=None, engine=None):
         locked(db, Case, proposal.case_id)
         if proposal.version != body.version or proposal.status != "pending":
             fail("Proposal changed or is no longer pending")
-        field = db.get(SupplierField, proposal.field_id)
-        proposal.value = body.value
-        proposal.version += 1
-        proposal.validation_errors = proposal_errors(db, proposal, field, body.value)
-        audit(db, actor, "change.edited", proposal.id, version=proposal.version)
-        return record(proposal)
+        fail("Received values cannot be edited; reject with a reason to request a correction", 422)
 
     @app.post("/proposals/{proposal_id}/approve", tags=["Data review"])
     def approve_proposal(proposal_id: str, body: Approval, db: DB, actor: Reviewer):
@@ -605,7 +631,10 @@ def create_app(settings=None, engine=None):
             field.data = field.data | {"Workflow status": "Closed"}
         field.revision += 1
         proposal.status, proposal.reviewed_by = "approved", actor
-        invalidate_drafts(db, case)
+        from nova.followups import send_rejection_followup
+
+        if not send_rejection_followup(db, settings, case, db.get(Message, proposal.message_id), [], actor):
+            invalidate_drafts(db, case)
         audit(
             db,
             actor,
@@ -620,14 +649,20 @@ def create_app(settings=None, engine=None):
         return record(proposal)
 
     @app.post("/proposals/{proposal_id}/reject", tags=["Data review"])
-    def reject_proposal(proposal_id: str, body: Approval, db: DB, actor: Reviewer):
+    def reject_proposal(proposal_id: str, body: Rejection, db: DB, actor: Reviewer):
         proposal = locked_child(db, Proposal, proposal_id)
         case = locked(db, Case, proposal.case_id)
         if proposal.version != body.version or proposal.status != "pending":
             fail("Proposal changed or is no longer pending")
+        if not body.reason.strip():
+            fail("Add a rejection reason", 422)
         proposal.status, proposal.reviewed_by = "rejected", actor
-        audit(db, actor, "change.rejected", proposal.id)
+        proposal.evidence = proposal.evidence | {"rejection_reason": body.reason.strip()}
+        audit(db, actor, "change.rejected", proposal.id, reason=body.reason.strip())
         finish_review(db, case)
+        from nova.followups import send_rejection_followup
+
+        send_rejection_followup(db, settings, case, db.get(Message, proposal.message_id), [proposal], actor)
         return record(proposal)
 
     @app.get("/exports/submissions.csv", tags=["Exports"])
@@ -653,7 +688,13 @@ def create_app(settings=None, engine=None):
             targets = list(db.scalars(select(Draft.id).where(Draft.case_id == case_id)))
             targets.extend(db.scalars(select(Message.id).where(Message.case_id == case_id)))
             query = query.where(Job.target_id.in_(targets))
-        return [record(j) for j in db.scalars(query.order_by(Job.available_at.desc()).limit(500))]
+        items = db.scalars(query.order_by(Job.available_at.desc()).limit(500)).all()
+        targets = [j.target_id for j in items]
+        related = dict(db.execute(select(Draft.id, Draft.case_id).where(Draft.id.in_(targets))).all())
+        related.update(
+            dict(db.execute(select(Message.id, Message.case_id).where(Message.id.in_(targets))).all())
+        )
+        return [record(j) | {"case_id": related.get(j.target_id)} for j in items]
 
     @app.post("/jobs/{job_id}/retry", tags=["Operations"])
     def retry_job(job_id: str, db: DB, actor: Reviewer):

@@ -10,26 +10,21 @@ import {
   ChevronDown,
   Clock3,
   Download,
-  FileCheck2,
   Filter,
   HelpCircle,
   LayoutDashboard,
   LogOut,
-  Mail,
   Moon,
   RefreshCw,
   Search,
   Sparkles,
   Sun,
-  Upload,
   UsersRound,
-  Zap,
 } from "lucide-react";
 import logo from "../logo.png";
 import { allCases, api, dateLabel, setSession, statusMeta } from "./api";
 import { Notice, StatusBadge } from "./components";
 import CaseDrawer from "./CaseDrawer";
-import ImportDialog from "./ImportDialog";
 import ProcessStarter from "./ProcessStarter";
 import "./styles.css";
 
@@ -83,9 +78,13 @@ function Login({ onLogin }) {
   );
 }
 
-function StatCard({ icon: Icon, label, value, tone, note }) {
+function StatCard({ icon: Icon, label, value, tone, note, onClick }) {
   return (
-    <div className="stat-card">
+    <button
+      type="button"
+      className={`stat-card ${onClick ? "clickable" : ""}`}
+      onClick={onClick}
+    >
       <div className={`stat-icon ${tone}`}>
         <Icon size={19} />
       </div>
@@ -94,11 +93,11 @@ function StatCard({ icon: Icon, label, value, tone, note }) {
         <div className="stat-value">{value}</div>
         <div className="stat-note">{note}</div>
       </div>
-    </div>
+    </button>
   );
 }
 
-function Operations({ jobs }) {
+function Operations({ jobs, onOpen }) {
   return (
     <section className="workspace-page">
       <div className="page-heading">
@@ -107,7 +106,7 @@ function Operations({ jobs }) {
             <UsersRound size={14} /> AGENT OPERATIONS
           </div>
           <h1>Delivery and evaluation</h1>
-          <p>Recent backend jobs and their actual processing state.</p>
+          <p>Select an agent to see its work and the case history.</p>
         </div>
         <span className="page-count">
           {jobs.filter((j) => ["queued", "running"].includes(j.status)).length}{" "}
@@ -119,8 +118,11 @@ function Operations({ jobs }) {
       )}
       <div className="agent-grid">
         {jobs.map((j) => (
-          <article
-            className={`agent-card ${j.status === "failed" ? "needs-help" : ""}`}
+          <button
+            type="button"
+            onClick={() => onOpen(j.case_id)}
+            disabled={!j.case_id}
+            className="agent-card clickable"
             key={j.id}
           >
             <div className="agent-card-icon">
@@ -139,7 +141,7 @@ function Operations({ jobs }) {
             <div className="agent-card-footer">
               <StatusBadge status={j.status} />
             </div>
-          </article>
+          </button>
         ))}
       </div>
       {!!jobs.length && (
@@ -159,17 +161,16 @@ function Dashboard({ session, onLogout }) {
   const [busy, setBusy] = useState(false);
   const [updated, setUpdated] = useState(null);
   const [selected, setSelected] = useState(null);
-  const [importing, setImporting] = useState(false);
   const [starting, setStarting] = useState(false);
-  const [startAfterImport, setStartAfterImport] = useState(false);
   const [selectedTab, setSelectedTab] = useState(undefined);
+  const [sort, setSort] = useState({ key: "nart", direction: 1 });
+  const [reviewOnly, setReviewOnly] = useState(false);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("ALL");
   const [supplier, setSupplier] = useState("ALL");
   const [showFilters, setShowFilters] = useState(false);
   const [page, setPage] = useState("overview");
   const [darkMode, setDarkMode] = useState(false);
-  const [syncReview, setSyncReview] = useState([]);
   const fetching = useRef(false);
   const actionLock = useRef(false);
   const refresh = useCallback(async () => {
@@ -211,56 +212,54 @@ function Dashboard({ session, onLogout }) {
       actionLock.current = false;
     }
   }
-  async function runCheck() {
-    const result = await api("/automation/tick", { method: "POST" });
-    setNotice(
-      `Check completed: ${result.drafted} drafts prepared, ${result.closed} cases completed, ${result.escalated} escalated. Drafts await your approval.`,
-    );
-  }
-  async function syncInbox() {
-    let token = null,
-      received = 0,
-      duplicates = 0;
-    const reviews = [];
-    const seen = new Set();
-    try {
-      do {
-        const result = await api(
-          `/automation/gmail/sync${token ? `?page_token=${encodeURIComponent(token)}` : ""}`,
-          { method: "POST" },
-        );
-        for (const item of result.results) {
-          if (item.status === "manual_review") reviews.push(item);
-          else if (item.duplicate) duplicates++;
-          else received++;
-        }
-        token = result.next_page_token;
-        if (token && seen.has(token))
-          throw new Error("Inbox pagination repeated. Refresh and try again.");
-        if (token) seen.add(token);
-      } while (token);
-      setNotice(
-        `Inbox sync: ${received} new replies, ${duplicates} already received, ${reviews.length} need manual routing.`,
-      );
-    } finally {
-      setSyncReview(reviews);
-    }
-  }
   const cases = data?.cases || [];
   const jobs = data?.jobs || [];
+  const urgent = (c) =>
+    c.next_action_at &&
+    new Date(
+      /Z$|[+-]\d\d:\d\d$/.test(c.next_action_at)
+        ? c.next_action_at
+        : `${c.next_action_at}Z`,
+    ) <= new Date();
   const attention = cases.filter((c) =>
     ["email_review", "data_review", "escalated", "paused"].includes(c.status),
   );
   const failed = jobs.filter((j) => j.status === "failed");
-  const alertCount = attention.length + failed.length + syncReview.length;
+  const alertCases = cases
+    .filter(
+      (c) =>
+        attention.includes(c) || (c.status === "awaiting_reply" && urgent(c)),
+    )
+    .sort((a, b) => Number(!!urgent(b)) - Number(!!urgent(a)));
+  const alertCount = alertCases.length + failed.length;
   const filtered = cases.filter(
     (c) =>
+      (!reviewOnly || attention.some((item) => item.id === c.id)) &&
       (status === "ALL" || c.status === status) &&
       (supplier === "ALL" || c.supplier_id === supplier) &&
       [c.id, c.supplier_id, c.supplier_name, c.nart].some((v) =>
         v.toLowerCase().includes(query.toLowerCase()),
       ),
   );
+  const sortValue = (c) =>
+    sort.key === "updated"
+      ? c.last_reply_at || c.last_sent_at || ""
+      : sort.key === "status"
+        ? statusMeta[c.status]?.[0] || c.status
+        : c[sort.key];
+  filtered.sort(
+    (a, b) =>
+      sort.direction *
+      (typeof sortValue(a) === "number"
+        ? sortValue(a) - sortValue(b)
+        : String(sortValue(a)).localeCompare(String(sortValue(b)), undefined, {
+            numeric: true,
+          })),
+  );
+  function openActivity(id) {
+    setSelectedTab("activity");
+    setSelected(id);
+  }
   const suppliers = [
     ...new Map(
       cases.map((c) => [
@@ -294,9 +293,6 @@ function Dashboard({ session, onLogout }) {
           ))}
         </nav>
         <div className="top-actions">
-          <div className="agent-online">
-            {data && !error ? "Backend connected" : "Checking connection"}
-          </div>
           <button
             className="theme-toggle"
             aria-label="Toggle dark mode"
@@ -352,7 +348,7 @@ function Dashboard({ session, onLogout }) {
                 <div className="eyebrow">
                   <Sparkles size={14} /> AUTOMATION OVERVIEW
                 </div>
-                <h1>Request operations</h1>
+                <h1>My Dashboard</h1>
                 <p>
                   Review supplier requests, email drafts, and proposed data
                   changes.
@@ -360,55 +356,42 @@ function Dashboard({ session, onLogout }) {
               </div>
               <div className="hero-actions">
                 <button
-                  className="secondary-btn"
-                  disabled={busy}
-                  onClick={() => setImporting(true)}
-                >
-                  <Upload size={16} /> Import CSV
-                </button>
-                <a
-                  className="secondary-btn"
-                  href="/api/exports/submissions.csv"
-                >
-                  <Download size={16} /> Export CSV
-                </a>
-                <button
-                  className="secondary-btn"
-                  disabled={busy || !data.config.gmail_configured}
-                  onClick={() => action(syncInbox)}
-                >
-                  <Mail size={16} /> Sync inbox
-                </button>
-                <button
-                  className="secondary-btn"
-                  disabled={busy}
-                  onClick={() => action(runCheck)}
-                >
-                  <Zap size={16} /> {busy ? "Working…" : "Check due cases"}
-                </button>
-                <button
                   className="primary-btn"
                   disabled={busy}
                   onClick={() => setStarting(true)}
                 >
-                  <MessageSquarePlus size={16} /> Start process
+                  <MessageSquarePlus size={16} /> Talk to NOVA
                 </button>
               </div>
             </section>
             <section className="stats">
               <StatCard
-                icon={FileCheck2}
-                label="Total requests"
-                value={cases.length}
-                tone="blue"
-                note="Supplier/article cases"
+                icon={HelpCircle}
+                label="Need review"
+                value={attention.length}
+                tone="amber"
+                note={
+                  reviewOnly
+                    ? "Showing cases needing review · Click to show all"
+                    : "Open cases needing your decision"
+                }
+                onClick={() => {
+                  setReviewOnly((value) => !value);
+                  setStatus("ALL");
+                  setSupplier("ALL");
+                  setQuery("");
+                }}
               />
               <StatCard
                 icon={CheckCircle2}
                 label="Completed"
                 value={cases.filter((c) => c.status === "closed").length}
                 tone="green"
-                note="All required values complete"
+                note="All requested data points complete"
+                onClick={() => {
+                  setReviewOnly(false);
+                  setStatus("closed");
+                }}
               />
               <StatCard
                 icon={Clock3}
@@ -417,14 +400,11 @@ function Dashboard({ session, onLogout }) {
                   cases.filter((c) => c.status === "awaiting_reply").length
                 }
                 tone="amber"
-                note="Supplier response"
-              />
-              <StatCard
-                icon={HelpCircle}
-                label="Need review"
-                value={attention.length}
-                tone="red"
-                note="Approval or attention required"
+                note="Supplier response or email delivery pending"
+                onClick={() => {
+                  setReviewOnly(false);
+                  setStatus("awaiting_reply");
+                }}
               />
             </section>
             <section className="panel">
@@ -444,6 +424,12 @@ function Dashboard({ session, onLogout }) {
                 >
                   <Filter size={16} /> Filters <ChevronDown size={15} />
                 </button>
+                <a
+                  className="secondary-btn"
+                  href="/api/exports/submissions.csv"
+                >
+                  <Download size={16} /> Export CSV
+                </a>
                 <button
                   className="refresh-btn"
                   aria-label="Refresh requests"
@@ -485,6 +471,7 @@ function Dashboard({ session, onLogout }) {
                   <button
                     className="clear-btn"
                     onClick={() => {
+                      setReviewOnly(false);
                       setStatus("ALL");
                       setSupplier("ALL");
                       setQuery("");
@@ -494,12 +481,44 @@ function Dashboard({ session, onLogout }) {
                   </button>
                 </div>
               )}
+              {reviewOnly && (
+                <p className="review-filter">
+                  Showing cases that need review.{" "}
+                  <button
+                    className="clear-btn"
+                    onClick={() => setReviewOnly(false)}
+                  >
+                    Show all requests
+                  </button>
+                </p>
+              )}
               <div className="table-head">
-                <div>ARTICLE / CASE</div>
-                <div>LAST REPLY / SEND</div>
-                <div>SUPPLIER</div>
-                <div>STATUS</div>
-                <div>OUTSTANDING</div>
+                {[
+                  ["nart", "Article / Case"],
+                  ["updated", "Last reply / send"],
+                  ["supplier_name", "Supplier"],
+                  ["status", "Status"],
+                  ["outstanding_count", "Outstanding"],
+                ].map(([key, label]) => (
+                  <button
+                    key={key}
+                    className="sort-heading"
+                    onClick={() =>
+                      setSort((old) => ({
+                        key,
+                        direction: old.key === key ? -old.direction : 1,
+                      }))
+                    }
+                    aria-label={`Sort by ${label}`}
+                  >
+                    {label}{" "}
+                    {sort.key === key
+                      ? sort.direction === 1
+                        ? "↑"
+                        : "↓"
+                      : "↕"}
+                  </button>
+                ))}
                 <div />
               </div>
               <div className="rows">
@@ -523,9 +542,15 @@ function Dashboard({ session, onLogout }) {
                     </div>
                     <div className="supplier-name">{c.supplier_name}</div>
                     <div>
-                      <StatusBadge status={c.status} />
+                      <StatusBadge
+                        status={c.status}
+                        waitingSince={c.last_sent_at}
+                      />
                     </div>
-                    <div>{c.outstanding_count} fields</div>
+                    <div>
+                      {c.outstanding_count}{" "}
+                      {c.outstanding_count === 1 ? "data point" : "data points"}
+                    </div>
                     <div className="row-arrow">
                       <ArrowRight size={17} />
                     </div>
@@ -535,7 +560,7 @@ function Dashboard({ session, onLogout }) {
                   <div className="empty">
                     {cases.length
                       ? "No requests match your filters."
-                      : "No supplier cases yet. Import a CSV to get started."}
+                      : "No supplier cases yet. Supplier data will appear here when available."}
                   </div>
                 )}
               </div>
@@ -551,7 +576,7 @@ function Dashboard({ session, onLogout }) {
             </section>
           </>
         ) : page === "agents" ? (
-          <Operations jobs={jobs} />
+          <Operations jobs={jobs} onOpen={openActivity} />
         ) : (
           <section className="workspace-page">
             <div className="page-heading">
@@ -567,17 +592,28 @@ function Dashboard({ session, onLogout }) {
               <span className="page-count">{alertCount} items</span>
             </div>
             <div className="alert-list">
-              {attention.map((c) => (
-                <article className="alert-card" key={c.id}>
+              {alertCases.map((c) => (
+                <article
+                  className={`alert-card ${urgent(c) ? "urgent" : "info"}`}
+                  key={c.id}
+                >
                   <div className="alert-icon">
                     <AlertCircle size={19} />
                   </div>
                   <div>
-                    <StatusBadge status={c.status} />
+                    <StatusBadge
+                      status={c.status}
+                      waitingSince={c.last_sent_at}
+                    />
                     <h2>{c.supplier_name}</h2>
+                    {urgent(c) && (
+                      <p>
+                        Response overdue · Due {dateLabel(c.next_action_at)}
+                      </p>
+                    )}
                     <p>
-                      Article {c.nart} · {c.outstanding_count} outstanding
-                      fields
+                      Article {c.nart} · {c.outstanding_count} outstanding data
+                      points
                     </p>
                   </div>
                   <button
@@ -592,7 +628,7 @@ function Dashboard({ session, onLogout }) {
                 </article>
               ))}
               {failed.map((j) => (
-                <article className="alert-card" key={j.id}>
+                <article className="alert-card info" key={j.id}>
                   <div className="alert-icon">
                     <AlertCircle size={19} />
                   </div>
@@ -614,26 +650,6 @@ function Dashboard({ session, onLogout }) {
                   </button>
                 </article>
               ))}
-              {syncReview.map((r) => (
-                <article className="alert-card" key={r.gmail_id}>
-                  <div className="alert-icon">
-                    <Mail size={19} />
-                  </div>
-                  <div>
-                    <h2>Inbox reply needs manual routing</h2>
-                    <p>{r.reason}</p>
-                    <p>Gmail message: {r.gmail_id}</p>
-                  </div>
-                  <a
-                    className="secondary-btn"
-                    href="https://mail.google.com/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Open Gmail
-                  </a>
-                </article>
-              ))}
               {!alertCount && (
                 <div className="empty panel">No items need attention.</div>
               )}
@@ -648,38 +664,23 @@ function Dashboard({ session, onLogout }) {
           config={data.config}
           initialTab={selectedTab}
           onClose={() => setSelected(null)}
+          backLabel={starting ? "Return to search list" : undefined}
           onChanged={refresh}
         />
       )}
       {starting && data && (
-        <ProcessStarter
-          cases={cases}
-          config={data.config}
-          onClose={() => setStarting(false)}
-          onChanged={refresh}
-          onImport={() => {
-            setStarting(false);
-            setStartAfterImport(true);
-            setImporting(true);
-          }}
-          onOpenReview={(id, tab) => {
-            setStarting(false);
-            setSelectedTab(tab);
-            setSelected(id);
-          }}
-        />
-      )}
-      {importing && (
-        <ImportDialog
-          onClose={() => {
-            setImporting(false);
-            setStartAfterImport(false);
-          }}
-          onChanged={async () => {
-            await refresh();
-            if (startAfterImport) setStarting(true);
-          }}
-        />
+        <div hidden={!!selected}>
+          <ProcessStarter
+            cases={cases}
+            config={data.config}
+            onClose={() => setStarting(false)}
+            onChanged={refresh}
+            onOpenReview={(id, tab) => {
+              setSelectedTab(tab);
+              setSelected(id);
+            }}
+          />
+        </div>
       )}
     </div>
   );
