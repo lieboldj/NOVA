@@ -244,7 +244,7 @@ def create_draft(db, case, kind, use_case=None, settings=None):
         line = f"- {d['Section']} — {d['Field (label)']} ({field_guidance(field)})"
         lines.append(line)
     body = (
-        f"Hello {supplier_display_name(case.supplier_name)},\n\nLet us stay compliant together.\n\n"
+        f"Hello {supplier_display_name(case.supplier_name)},\n\nLet’s ensure compliance together.\n\n"
         f"We’re updating our supplier information and would appreciate your help with article {case.nart or '(supplier level)'}. "
         "Please share or confirm the details below by replying to this email. "
         "You’re welcome to attach supporting documents. "

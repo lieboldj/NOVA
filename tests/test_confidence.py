@@ -96,7 +96,7 @@ def test_existing_pending_scores_and_templates_refresh_idempotently(env, opening
     assert refresh(factory, settings)["email_templates_updated"] == 0
     updated = client.get("/drafts", headers=REVIEW).json()[0]
     assert updated["subject"] == "Your business partner has an information request"
-    assert updated["body"].startswith("Hello Supplier,\n\nLet us stay compliant together.")
+    assert updated["body"].startswith("Hello Supplier,\n\nLet’s ensure compliance together.")
     assert updated["status"] == "pending" and updated["version"] == 2
     approve_email(client, updated)
     run_once(factory, settings)
