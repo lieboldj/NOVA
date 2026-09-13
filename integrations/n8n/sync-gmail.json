@@ -3,7 +3,7 @@
   "nodes": [
     {
       "id": "gmail-schedule",
-      "name": "Every minute",
+      "name": "Recovery every 15 minutes",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
       "position": [
@@ -15,7 +15,7 @@
           "interval": [
             {
               "field": "minutes",
-              "minutesInterval": 1
+              "minutesInterval": 15
             }
           ]
         }
@@ -86,10 +86,51 @@
         "width": 500,
         "height": 200
       }
+    },
+    {
+      "id": "gmail-push",
+      "name": "Incoming Gmail notification",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -200
+      ],
+      "webhookId": "nova-gmail-push",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "nova-gmail-push",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "gmail-done",
+      "name": "Sync completed",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        0
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "status",
+              "name": "status",
+              "value": "synced",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
     }
   ],
   "connections": {
-    "Every minute": {
+    "Test manually": {
       "main": [
         [
           {
@@ -100,11 +141,33 @@
         ]
       ]
     },
-    "Test manually": {
+    "Recovery every 15 minutes": {
       "main": [
         [
           {
             "node": "Sync all inbox pages through NOVA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Incoming Gmail notification": {
+      "main": [
+        [
+          {
+            "node": "Sync all inbox pages through NOVA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sync all inbox pages through NOVA": {
+      "main": [
+        [
+          {
+            "node": "Sync completed",
             "type": "main",
             "index": 0
           }

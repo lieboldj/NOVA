@@ -45,7 +45,10 @@ def main():
         assert response.status_code == 200
         report["n8n_owner_login"] = True
         report["workflows"] = []
-        for name in ["check-pending-cases.json", "sync-gmail.json"]:
+        names = ["check-pending-cases.json", "sync-gmail.json"]
+        if "renew-gmail-watch.json" in state:
+            names.append("renew-gmail-watch.json")
+        for name in names:
             workflow = client.get("/rest/workflows/" + state[name]).json()["data"]
             assert workflow["active"]
             trigger = next(n for n in workflow["nodes"] if n["type"] == "n8n-nodes-base.scheduleTrigger")

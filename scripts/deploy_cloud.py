@@ -189,6 +189,8 @@ def deploy():
         "NOVA_REVIEWER_NAME": "demo-reviewer",
         "FORWARDED_ALLOW_IPS": "*",
     }
+    if (ROOT / "gmail-push.json").exists():
+        common.update(json.loads((ROOT / "gmail-push.json").read_text()))
     save(ROOT / "nova-env.json", common)
     keys = [
         "DATABASE_URL",

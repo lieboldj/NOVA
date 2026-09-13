@@ -66,13 +66,20 @@ def main():
             save(state_path, state)
         from pathlib import Path
 
-        for filename in ("check-pending-cases.json", "sync-gmail.json"):
+        filenames = ["check-pending-cases.json", "sync-gmail.json"]
+        if (ROOT / "gmail-push.json").exists():
+            filenames.append("renew-gmail-watch.json")
+        for filename in filenames:
             template = json.loads((Path("integrations/n8n") / filename).read_text())
             for node in template["nodes"]:
                 if node["type"] == "n8n-nodes-base.httpRequest":
                     node["parameters"]["url"] = node["parameters"]["url"].replace(
                         "http://api:8000", urls["nova"]
                     )
+                    node["credentials"] = {
+                        "httpHeaderAuth": {"id": state["credential_id"], "name": "NOVA automation only"}
+                    }
+                if node["type"] == "n8n-nodes-base.webhook":
                     node["credentials"] = {
                         "httpHeaderAuth": {"id": state["credential_id"], "name": "NOVA automation only"}
                     }
@@ -85,6 +92,14 @@ def main():
                 state[filename] = workflow["id"]
                 save(state_path, state)
             workflow = api("GET", f"/rest/workflows/{state[filename]}")
+            if any(workflow.get(key) != template[key] for key in ("nodes", "connections", "settings")):
+                if workflow.get("active"):
+                    api("POST", f"/rest/workflows/{workflow['id']}/deactivate")
+                workflow = api(
+                    "PATCH",
+                    f"/rest/workflows/{workflow['id']}",
+                    json={key: template[key] for key in ("name", "nodes", "connections", "settings")},
+                )
             if not workflow.get("active"):
                 api(
                     "POST",

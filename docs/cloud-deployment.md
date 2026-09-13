@@ -92,7 +92,7 @@ image references are in `.data/cloud/`; keep an encrypted backup of that operato
 
 ## Automation and a single test mailbox
 
-n8n runs `check-pending-cases.json` every 15 minutes and `sync-gmail.json` every minute. Both call NOVA using
+n8n runs `check-pending-cases.json` every 15 minutes and `sync-gmail.json` on authenticated Gmail push, with a 15-minute recovery check. Both call NOVA using
 only its automation credential. The inbox workflow follows pagination. Approval endpoints remain available
 only to the reviewer. n8n credentials/workflows/executions are persisted in PostgreSQL, with a fixed encryption
 key in Secret Manager. Binary execution data uses database storage instead of the temporary filesystem.
@@ -143,3 +143,37 @@ status check. Monitor the project's billing console while the test runs.
 To stop the demo, first pause n8n workflows and reconcile in-flight sends, then stop/remove the continuous
 Cloud Run services and stop Cloud SQL. Preserve backups and secrets if the deployment will resume. SQL
 deletion protection is enabled; deletion of databases, the bucket or secrets requires an explicit decision.
+
+
+## Gmail push delivery
+
+Gmail INBOX watch → regional Pub/Sub topic `nova-gmail-inbox` → authenticated
+NOVA `/mail/gmail/push` → header-authenticated n8n `nova-gmail-push` webhook →
+existing paginated Gmail sync. Originals stay in NOVA; n8n receives a wake-up signal.
+The receiver verifies Google's signature, token audience, service-account email,
+subscription and mailbox. It acknowledges only after n8n returns successful sync;
+failed deliveries retry. Existing Gmail IDs prevent duplicate imports.
+
+`renew-gmail-watch.json` renews the watch daily. Recovery sync runs every 15 minutes
+because Gmail notifications can be dropped. The minute-by-minute trigger is removed.
+Google documents renewal and delivery limits at
+https://developers.google.com/workspace/gmail/api/guides/push.
+
+Provision/update:
+```bash
+uv run python -m scripts.setup_gmail_push prepare
+uv run python -m scripts.deploy_cloud build
+uv run python -m scripts.setup_gmail_push deploy
+uv run python -m scripts.setup_cloud_n8n
+uv run python -m scripts.setup_gmail_push activate
+uv run python -m scripts.verify_cloud
+```
+
+The dedicated `nova-gmail-push` identity has no data-access roles. Only the Pub/Sub
+service agent can mint its push token, via a service-account-level binding.
+Push configuration is recorded in ignored `.data/cloud/gmail-push.json` and preserved
+by subsequent full deployments. Do not remove daily watch renewal while push is enabled.
+
+See [the short demo and privacy walkthrough](privacy-demo.md) for the exact boundaries.
+The operational database and evidence bucket retain originals; Gemini receives only
+Anymize's sanitized extraction bundle, whose detection is not a universal guarantee.

@@ -32,6 +32,11 @@ class Settings(BaseSettings):
     gmail_client_id: SecretStr = SecretStr("")
     gmail_client_secret: SecretStr = SecretStr("")
     gmail_refresh_token: SecretStr = SecretStr("")
+    gmail_push_topic: str = ""
+    gmail_push_audience: str = ""
+    gmail_push_service_account: str = ""
+    gmail_push_subscription: str = ""
+    gmail_push_webhook: str = ""
     smtp_host: str = ""
     smtp_port: int = 587
     smtp_username: str = ""

@@ -227,3 +227,5 @@ Live access requires local OAuth setup; outgoing mail and accepted supplier data
 Run `npm run demo`, open **http://localhost:8012/**, and sign in with **nova-demo**.
 This loads fictional data and demonstrates email approval, PDF reply review, a follow-up, and separate
 data approval without live providers or changes to the main database. See [the three-minute demo guide](docs/demo.md).
+
+See [the demo and privacy walkthrough](docs/privacy-demo.md) for a short example and the exact anonymization boundaries.

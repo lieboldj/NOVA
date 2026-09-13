@@ -595,6 +595,9 @@ def create_app(settings=None, engine=None):
         return [record(a) for a in db.scalars(select(Audit).order_by(Audit.at.desc()).limit(500))]
 
     install_gmail_routes(app, settings, Reviewer, Operator)
+    from nova.gmail_push import install_push_routes
+
+    install_push_routes(app, settings, Operator)
     install_browser(app, settings, Reviewer)
     return app
 
