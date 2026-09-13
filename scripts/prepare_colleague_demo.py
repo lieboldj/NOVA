@@ -386,7 +386,7 @@ def generate():
             }
         )
     with (DEST / "suppliers.csv").open("w", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=CSV_COLUMNS + ["Region", "Industry"])
+        writer = csv.DictWriter(f, fieldnames=CSV_COLUMNS + ["Region", "Industry"], lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     parsed = parse_csv((DEST / "suppliers.csv").read_bytes())
