@@ -668,7 +668,10 @@ test("confidence prioritizes review and rejection sends supplier reasons immedia
   await expect(
     page.getByText("Backend connected", { exact: true }),
   ).toHaveCount(0);
-  await page.getByRole("button", { name: /Need review/ }).click();
+  await page
+    .locator(".stats")
+    .getByRole("button", { name: /Review needed/ })
+    .click();
   await page.getByRole("button").filter({ hasText: "CONF-ARTICLE" }).click();
   const rowsUI = page.getByTestId("proposal-review");
   await expect(rowsUI.first()).toContainText("Unknown confidence");
@@ -757,7 +760,7 @@ test("confidence prioritizes review and rejection sends supplier reasons immedia
   ).toHaveAttribute("aria-selected", "true");
 });
 
-test("alerts reserve red for overdue cases and request columns sort", async ({
+test("request columns sort and the alerts button is removed", async ({
   page,
 }) => {
   const base = {
@@ -814,12 +817,7 @@ test("alerts reserve red for overdue cases and request columns sort", async ({
     "Beta Supplier",
     "Alpha Supplier",
   ]);
-  await page.getByRole("button", { name: /Alerts/ }).click();
-  await expect(page.locator(".alert-card.urgent")).toHaveCount(1);
-  await expect(page.locator(".alert-card.urgent")).toContainText(
-    "Alpha Supplier",
-  );
-  await expect(page.locator(".alert-card.info")).toHaveCount(2);
+  await expect(page.getByRole("button", { name: /Alerts/ })).toHaveCount(0);
 });
 
 test("two compact agent cards open paginated supplier histories without internal IDs", async ({
@@ -880,11 +878,9 @@ test("two compact agent cards open paginated supplier histories without internal
   ).toHaveCount(0);
   await expect(
     page.locator(".hero-actions").getByRole("button", { name: /Alerts/ }),
-  ).toBeVisible();
-  await expect(
-    page.locator(".stats .stat-card").first().locator(".stat-note"),
   ).toHaveCount(0);
-  await page.getByRole("button", { name: /Email agent/ }).click();
+  await expect(page.locator(".stats .stat-card .stat-note")).toHaveCount(0);
+  await page.getByRole("button", { name: /History E-mail agent/ }).click();
   await expect(
     page.getByRole("heading", { name: "Email agent", exact: true }),
   ).toBeVisible();

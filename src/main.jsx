@@ -17,7 +17,6 @@ import {
   Moon,
   RefreshCw,
   Search,
-  Sparkles,
   Sun,
   Bot,
 } from "lucide-react";
@@ -79,11 +78,11 @@ function Login({ onLogin }) {
   );
 }
 
-function StatCard({ icon: Icon, label, value, tone, note, onClick }) {
+function StatCard({ icon: Icon, label, value, tone, onClick }) {
   return (
     <button
       type="button"
-      className={`stat-card ${onClick ? "clickable" : ""}`}
+      className={`stat-card ${tone === "red" ? "review-needed" : ""} ${onClick ? "clickable" : ""}`}
       onClick={onClick}
     >
       <div className={`stat-icon ${tone}`}>
@@ -92,7 +91,6 @@ function StatCard({ icon: Icon, label, value, tone, note, onClick }) {
       <div>
         <div className="stat-label">{label}</div>
         <div className="stat-value">{value}</div>
-        {note && <div className="stat-note">{note}</div>}
       </div>
     </button>
   );
@@ -285,9 +283,6 @@ function Dashboard({ session, onLogout }) {
           <>
             <section className="hero">
               <div>
-                <div className="eyebrow">
-                  <Sparkles size={14} /> AUTOMATION OVERVIEW
-                </div>
                 <h1>My Dashboard</h1>
                 <p>
                   Review supplier requests, email drafts, and proposed data
@@ -295,13 +290,6 @@ function Dashboard({ session, onLogout }) {
                 </p>
               </div>
               <div className="hero-actions">
-                <button
-                  className="secondary-btn"
-                  onClick={() => setPage("alerts")}
-                >
-                  <Bell size={16} /> Alerts{" "}
-                  {alertCount > 0 && <span>{alertCount}</span>}
-                </button>
                 <button
                   className="primary-btn"
                   disabled={busy}
@@ -314,9 +302,9 @@ function Dashboard({ session, onLogout }) {
             <section className="stats">
               <StatCard
                 icon={HelpCircle}
-                label="Need review"
+                label="Review needed"
                 value={attention.length}
-                tone="amber"
+                tone="red"
                 onClick={() => {
                   setReviewOnly((value) => !value);
                   setStatus("ALL");
@@ -350,10 +338,13 @@ function Dashboard({ session, onLogout }) {
                 <StatCard
                   key={agent.id}
                   icon={agent.id === "email" ? Mail : Bot}
-                  label={agent.name}
+                  label={
+                    agent.id === "email"
+                      ? "History E-mail agent"
+                      : "History Reply evaluation agent"
+                  }
                   value={agent.total}
                   tone="blue"
-                  note={`${agent.suppliers} suppliers · ${agent.completed} completed`}
                   onClick={() => setPage(agent.id)}
                 />
               ))}

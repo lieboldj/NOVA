@@ -253,9 +253,16 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--blue); outline-
 .dark-mode .reply-proposal-table select { background: #102d4b; color: #e6f1ff; }
 
 /* Compact dashboard summaries and the two agent workspaces. */
+.hero { flex-direction: column; align-items: flex-start; gap: 16px; }
+.hero-actions { margin-left: 0; align-self: flex-start; }
 .stats { grid-template-columns: .8fr .8fr .8fr 1.3fr 1.3fr; gap: 12px; }
 .stat-card { padding: 16px; min-width: 0; }
 .stat-card:first-child { border: 1px solid var(--line); }
+.stat-card.review-needed { background: #fff0f0; border-color: #dc3545; }
+.stat-label { color: #000; font-size: 16px; font-weight: 700; line-height: 1.35; }
+.stat-icon { flex-shrink: 0; }
+.dark-mode .stat-label { color: #fff; }
+.dark-mode .stat-card.review-needed { background: #4e2430; border-color: var(--red); }
 .stat-card:first-child .stat-value, .stat-value { font-size: 26px; }
 .stat-note { white-space: normal; }
 .agent-history-row { display: grid; grid-template-columns: minmax(220px, 1fr) 180px 170px 20px; align-items: center; gap: 20px; width: 100%; padding: 20px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: inherit; text-align: left; }

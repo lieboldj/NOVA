@@ -135,7 +135,7 @@ def plan_followup(db, settings, case, message):
             line += "\n  Please provide a four-digit reporting year."
         lines.append(line)
     body = (
-        f"Let us stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\nThank you for your reply. We still need a complete, valid answer "
+        f"Hello {supplier_display_name(case.supplier_name)},\n\nLet us stay compliant together.\n\nThank you for your reply. We still need a complete, valid answer "
         f"to the following {len(fields)} question(s) for article {case.nart or '(supplier level)'}. "
         "Please provide missing answers or clarify entries that do not meet the requested format. "
         "You do not need to repeat information already provided in a valid format. "
@@ -229,7 +229,7 @@ def send_rejection_followup(db, settings, case, message, rejected, actor):
         recipient=case.recipient,
         subject="Your business partner has an information request",
         body=(
-            f"Let us stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\n"
+            f"Hello {supplier_display_name(case.supplier_name)},\n\nLet us stay compliant together.\n\n"
             f"Thank you for sharing your information for article {case.nart or '(supplier level)'}. "
             "We need your help to clarify a few answers before we can accept them:\n\n"
             + "\n\n".join(lines)

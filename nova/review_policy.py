@@ -32,7 +32,15 @@ def refresh_pending_email_copy(db, case):
             if body.startswith(opening):
                 body = body[len(opening) :].lstrip()
                 break
-        body = "Let us stay compliant together.\n\n" + body
+        greeting = re.match(r"Hello [^\n]+,\r?\n", body)
+        if not greeting:
+            continue  # Do not rewrite a custom greeting or an unexpected template.
+        remainder = body[greeting.end() :].lstrip()
+        for opening in ("Let's stay compliant together.", "Let us stay compliant together."):
+            if remainder.startswith(opening):
+                remainder = remainder[len(opening) :].lstrip()
+                break
+        body = greeting.group().rstrip() + "\n\nLet us stay compliant together.\n\n" + remainder
         for field in db.scalars(select(SupplierField).where(SupplierField.case_id == case.id)):
             body = re.sub(r"(?m)^- \[" + re.escape(field.id) + r"\]\s*", "- ", body)
         body = body.replace(

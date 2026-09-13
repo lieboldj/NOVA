@@ -80,20 +80,23 @@ def test_confidence_rubric_and_strict_threshold(model, mapping, value, quote, ex
     assert score == expected and reason
 
 
-def test_existing_pending_scores_and_templates_refresh_idempotently(env):
+@pytest.mark.parametrize(
+    "opening", ["", "Let us stay compliant together.\n\n", "Let's stay compliant together.\n\n"]
+)
+def test_existing_pending_scores_and_templates_refresh_idempotently(env, opening):
     client, factory, settings = env
     case = seed(client)
     draft = request_draft(client, case)
     with factory.begin() as db:
         old = db.get(Draft, draft["id"])
         old.subject = f"[NOVA:{case}] Information request"
-        old.body = "Hello Demo Supplier,\n\nPlease reply.\nSupplier Information Team"
+        old.body = opening + "Hello Demo Supplier,\n\nPlease reply.\nSupplier Information Team"
     result = refresh(factory, settings)
     assert result["email_templates_updated"] == 1
     assert refresh(factory, settings)["email_templates_updated"] == 0
     updated = client.get("/drafts", headers=REVIEW).json()[0]
     assert updated["subject"] == "Your business partner has an information request"
-    assert updated["body"].startswith("Let us stay compliant together.\n\nHello Supplier,")
+    assert updated["body"].startswith("Hello Supplier,\n\nLet us stay compliant together.")
     assert updated["status"] == "pending" and updated["version"] == 2
     approve_email(client, updated)
     run_once(factory, settings)

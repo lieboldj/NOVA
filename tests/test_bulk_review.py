@@ -177,7 +177,8 @@ def test_approval_immediately_creates_waiting_state_and_agent_link(env):
     case_id = seed(client)
     draft = request_draft(client, case_id)
     assert draft["subject"] == "Your business partner has an information request"
-    assert draft["body"].startswith("Let us stay compliant together.")
+    assert draft["body"].startswith("Hello ")
+    assert "\n\nLet us stay compliant together.\n\n" in draft["body"]
     assert "Required · Date · YYYY-MM-DD" in draft["body"]
     approve_email(client, draft)
     approve_email(client, draft)
