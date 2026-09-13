@@ -135,7 +135,12 @@ class Gemini:
                             "that source. Preserve identity placeholders. Do not invent missing answers or declare "
                             "legal compliance yourself. Conflicting, vague, missing or unrelated answers must be omitted. "
                             "For dates use YYYY-MM-DD. Respect allowed options. A renewed explicit confirmation can "
-                            "resolve an outdated value even when the value is unchanged. If a requested field requires "
+                            "resolve an outdated value even when the value is unchanged. For free-text answers, "
+                            "preserve the supplier's spelling in value. If there is an obvious spelling mistake, "
+                            "return a separate optional spelling_correction with the corrected full value and a short "
+                            "reason. Never silently fix value itself. Only fix spelling, not facts, numbers, dates, "
+                            "units, names, identifiers or identity placeholders; omit uncertain corrections. "
+                            "If a requested field requires "
                             "a file, cite the supplied attachment source_id as the value only if that document actually "
                             "satisfies the request. No web access or tools are available."
                         )

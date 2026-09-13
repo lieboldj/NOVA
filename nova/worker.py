@@ -13,7 +13,7 @@ from nova.gmail import GmailNotSent
 from nova.models import Case, Document, Draft, Job, Message, Proposal, SupplierField, now, uid
 from nova.providers import ProviderUnavailable, known_redaction, known_restore, providers, send_email
 from nova.storage import read_document
-from nova.workflow import audit, draft_digest, locked, locked_child, validate_value
+from nova.workflow import audit, draft_digest, enqueue, locked, locked_child, validate_value
 
 
 def claim_job(factory):
@@ -110,6 +110,11 @@ def send_job(factory, settings, job_id, token, target_id):
             case.reminders_sent += 1
         job.status = "done"
         audit(db, "worker", "email." + current.status, current.id, provider_id=result)
+        from nova.demo_replies import enabled_for
+
+        if enabled_for(settings, case) and current.status == "sent":
+            reply_job = enqueue(db, "demo_reply", current.id, "demo-reply:" + current.id)
+            reply_job.available_at = now() + timedelta(seconds=settings.demo_reply_delay_seconds)
 
 
 def raw_sources(db, settings, message, anonymizer):
@@ -230,6 +235,19 @@ def evaluate_job(factory, settings, job_id, token, target_id):
         quote = known_restore(anonymizer.restore(candidate.evidence.quote), case)
         for original_id, alias in aliases.items():
             quote = quote.replace(alias, original_id)
+        correction = None
+        if candidate.spelling_correction:
+            from nova.spelling import eligible_correction
+
+            suggestion = candidate.spelling_correction
+            if eligible_correction(field, candidate.value, suggestion.value, safe["text"]):
+                corrected = known_restore(anonymizer.restore(suggestion.value), case)
+                correction = {
+                    "original_value": value,
+                    "value": corrected,
+                    "reason": known_restore(anonymizer.restore(suggestion.reason), case),
+                    "validation_errors": validate_value(field, corrected),
+                }
         proposed.append(
             Proposal(
                 case_id=case.id,
@@ -244,6 +262,7 @@ def evaluate_job(factory, settings, job_id, token, target_id):
                     "document_id": src["document_id"],
                     "page": src["page"],
                     "quote": quote,
+                    **({"spelling_correction": correction} if correction else {}),
                 },
                 validation_errors=errors,
             )
@@ -271,6 +290,10 @@ def run_once(factory, settings):
             send_job(factory, settings, job_id, token, target_id)
         elif kind == "evaluate":
             evaluate_job(factory, settings, job_id, token, target_id)
+        elif kind == "demo_reply":
+            from nova.demo_replies import simulate_reply_job
+
+            simulate_reply_job(factory, settings, job_id, token, target_id)
         else:
             raise ProviderUnavailable("Unknown job kind.")
     except Exception as exc:

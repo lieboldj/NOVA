@@ -37,6 +37,8 @@ class Settings(BaseSettings):
     gmail_push_service_account: str = ""
     gmail_push_subscription: str = ""
     gmail_push_webhook: str = ""
+    demo_auto_reply: bool = False
+    demo_reply_delay_seconds: int = 5
     smtp_host: str = ""
     smtp_port: int = 587
     smtp_username: str = ""

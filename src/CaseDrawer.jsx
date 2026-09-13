@@ -221,6 +221,7 @@ function ProposalReview({ proposal, field, busy, act }) {
   const dirty = value !== proposal.value;
   const pending = proposal.status === "pending";
   const unchanged = proposal.value === proposal.old_value;
+  const correction = proposal.evidence?.spelling_correction;
   return (
     <article
       className="review-card"
@@ -261,6 +262,24 @@ function ProposalReview({ proposal, field, busy, act }) {
           onChange={(e) => setValue(e.target.value)}
         />
       </label>
+      {correction && (
+        <aside className="review-card" data-testid="spelling-suggestion">
+          <strong>Suggested spelling correction</strong>
+          <p>As extracted: {correction.original_value}</p>
+          <p>Suggestion: {correction.value}</p>
+          <p className="muted">{correction.reason} The original reply stays unchanged.</p>
+          {pending && (
+            <button
+              className="secondary-btn"
+              disabled={busy || value === correction.value || !!correction.validation_errors?.length}
+              onClick={() => setValue(correction.value)}
+            >
+              Use suggested correction
+            </button>
+          )}
+          <p className="muted">Save the proposed value, then approve it after review.</p>
+        </aside>
+      )}
       <p>{proposal.rationale}</p>
       <blockquote>{proposal.evidence?.quote}</blockquote>
       <p className="muted">
@@ -344,6 +363,9 @@ function SupplierReplyReview({
     <article className="review-card" data-testid="supplier-reply-review">
       <div className="review-heading">
         <strong>{message.sender}</strong>
+        {message.external_id?.startsWith("demo-simulated:") && (
+          <span className="muted">Simulated supplier reply</span>
+        )}
         <StatusBadge status={message.status} />
       </div>
       <p className="muted">Received {dateLabel(message.created_at)}</p>
@@ -705,7 +727,9 @@ export default function CaseDrawer({
                     <strong>
                       {j.kind === "send"
                         ? "Email delivery"
-                        : "Reply evaluation"}
+                        : j.kind === "demo_reply"
+                          ? "Simulated supplier response"
+                          : "Reply evaluation"}
                     </strong>
                     <StatusBadge status={j.status} />
                   </div>

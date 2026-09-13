@@ -209,3 +209,38 @@ There are 231 total fields, including 210 outstanding: one supplier at every cou
 1 through 20. Local transaction/idempotence checks and live API counts/draft references
 passed. All 231 prepared reply values pass the application validators. Industry-specific
 questions are seeded explicitly; NOVA's industry filter does not infer category applicability.
+
+## Supplier 4418 and optional spelling corrections — 2026-09-13
+
+The cloud demo uses `GMAIL_SUPPLIER=devstar4418@gcplab.me`. Gmail OAuth remains with
+4415, which sends the actual requests and receives genuine supplier replies. Existing
+case contacts are updated explicitly through reviewer endpoints for the DEMO20 scope.
+
+`DEMO_AUTO_REPLY=true` enables a durable demo-response job after a successfully sent,
+reviewer-approved request, restricted to the twenty fictional DEMO20 identities and the
+4418 test contact. The simulator inserts clearly labelled incoming demo evidence inside
+NOVA; it does not send or impersonate an email from the 4418 account. It skips a request
+that already has a real reply. Previous replies and audit history remain intact.
+
+Formats rotate through plain text, prose with typos, TXT attachments, PDF attachments,
+combined email/PDF answers and a scanned PDF (DEMO20-20) for OCR. The cloud worker
+runs actual Anymize and Gemini extraction on this simulated evidence. Original bodies
+and documents remain accessible in Supplier review and are labelled as simulated.
+Set `DEMO_AUTO_REPLY=false` on API and worker to stop generating future scripted replies.
+
+Spelling suggestions are optional separate Gemini output, generated only from sanitized
+sources. NOVA preserves the extracted spelling and verbatim evidence, checks suggestions
+for changes to quantities, identifiers and field types, and stores eligible suggestions
+alongside the proposal. **Use suggested correction** fills the proposal editor; **Save
+proposed value** and a subsequent human approval are still required to change accepted
+data. This is a review aid, not automatic correction or a guarantee about semantics.
+
+Deployment/send commands (sending is authorized for this demonstration):
+```bash
+uv run python -m scripts.deploy_cloud build
+uv run python -m scripts.activate_supplier_demo deploy
+uv run python -m scripts.activate_supplier_demo send
+```
+The send script skips existing approved/sending/sent requests to 4418 and stops on uncertain
+delivery. Its ignored state file records draft IDs before approval. It never approves
+supplier data proposals. No schema migration is required for correction metadata.

@@ -167,6 +167,7 @@ def create_app(settings=None, engine=None):
             "anymize_configured": bool(settings.anymize_api_key.get_secret_value()),
             "response_days": settings.response_days,
             "max_reminders": settings.max_reminders,
+            "demo_auto_reply": settings.demo_auto_reply,
         }
 
     @app.post("/imports", tags=["Imports"], status_code=201)

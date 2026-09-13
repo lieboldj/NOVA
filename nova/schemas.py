@@ -42,11 +42,17 @@ class Evidence(StrictModel):
     quote: str = Field(min_length=1)
 
 
+class SpellingCorrection(StrictModel):
+    value: str = Field(min_length=1, max_length=10000)
+    reason: str = Field(min_length=1, max_length=1000)
+
+
 class Candidate(StrictModel):
     field_id: str
     value: str = Field(min_length=1, max_length=10000)
     evidence: Evidence
     rationale: str
+    spelling_correction: SpellingCorrection | None = None
 
 
 class Evaluation(StrictModel):

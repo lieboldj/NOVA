@@ -747,6 +747,7 @@ dependencies = [
     { name = "pydantic-settings" },
     { name = "pypdf" },
     { name = "python-multipart" },
+    { name = "reportlab" },
     { name = "sqlalchemy" },
     { name = "uvicorn", extra = ["standard"] },
 ]
@@ -755,7 +756,6 @@ dependencies = [
 dev = [
     { name = "google-auth-oauthlib" },
     { name = "pytest" },
-    { name = "reportlab" },
     { name = "ruff" },
 ]
 
@@ -771,6 +771,7 @@ requires-dist = [
     { name = "pydantic-settings", specifier = ">=2.7,<3" },
     { name = "pypdf", specifier = ">=5,<7" },
     { name = "python-multipart", specifier = ">=0.0.20,<1" },
+    { name = "reportlab", specifier = ">=4,<5" },
     { name = "sqlalchemy", specifier = ">=2.0,<2.1" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.34,<1" },
 ]
@@ -779,7 +780,6 @@ requires-dist = [
 dev = [
     { name = "google-auth-oauthlib", specifier = ">=1.2,<2" },
     { name = "pytest", specifier = ">=8,<10" },
-    { name = "reportlab", specifier = ">=4,<5" },
     { name = "ruff", specifier = ">=0.11,<1" },
 ]
 
