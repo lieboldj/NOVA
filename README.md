@@ -1,4 +1,4 @@
-# NOVA supplier portal
+# NOVA
 
 NOVA emails suppliers for missing sustainability/compliance data, reads their replies and attachments,
 and proposes updates to supplier records.
