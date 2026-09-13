@@ -62,16 +62,6 @@ uv run ruff check nova tests scripts migrations
 uv run python scripts/check_gemini.py
 ```
 
-## Changelog
-
-- Added a 100-supplier fictional dataset (`DEMO100`) for scale testing.
-- Follow-up/reminder emails now send automatically after a short delay; the first email per case still
-  needs manual approval.
-- Reply review is now one editable batch per reply (`approve-all`) instead of one approval per field.
-- Verified live Gmail push delivery: a real email reaches an n8n webhook execution in ~3.8s, no manual sync.
-- Deployed and verified NOVA + n8n on Google Cloud (`aiwomen26ham-4415`, `europe-west3`).
-- Switched to `gemini-3.8-flash`; connected the React control center to live backend approvals.
-
 ---
 
 > **AI-generated code notice:** Substantial parts of this codebase, including application code, tests,
