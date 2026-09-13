@@ -168,6 +168,8 @@ def create_app(settings=None, engine=None):
             "response_days": settings.response_days,
             "max_reminders": settings.max_reminders,
             "demo_auto_reply": settings.demo_auto_reply,
+            "auto_followup_enabled": settings.auto_followup_enabled,
+            "auto_followup_max_rounds": settings.auto_followup_max_rounds,
         }
 
     @app.post("/imports", tags=["Imports"], status_code=201)
@@ -340,6 +342,8 @@ def create_app(settings=None, engine=None):
         if "\r" in body.subject or "\n" in body.subject:
             fail("Subject cannot contain line breaks", 422)
         draft.subject, draft.body = body.subject, body.body
+        if draft.kind == "auto_followup":
+            draft.kind = "followup"  # Human edits return this email to the normal approval path.
         draft.version += 1
         draft.status = "pending"
         draft.approved_by = draft.approved_digest = draft.approved_at = None

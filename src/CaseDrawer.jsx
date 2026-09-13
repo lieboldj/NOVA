@@ -19,7 +19,9 @@ function EmailReview({ draft, caseId, config, busy, act }) {
     >
       <div className="review-heading">
         <strong>
-          {draft.kind === "request"
+          {draft.kind === "auto_followup"
+            ? "Automatic follow-up"
+            : draft.kind === "request"
             ? "Information request"
             : draft.kind === "reminder"
               ? "Reminder"
@@ -33,6 +35,9 @@ function EmailReview({ draft, caseId, config, busy, act }) {
       <p className="muted">
         Version {draft.version} · {dateLabel(draft.created_at)}
       </p>
+      {draft.kind === "auto_followup" && (
+        <Notice>Generated and authorized automatically for missing or invalid answers. Supplier data still requires your review.</Notice>
+      )}
       <label className="field-label">
         Subject
         <input
@@ -648,8 +653,11 @@ export default function CaseDrawer({
                 Review every supplier reply and attachment, including unchanged
                 confirmations and information without an extracted value.
                 Approve or reject extracted values, then complete each reply
-                review. Email sending is approved separately.
+                review. Initial email sending is approved separately.
               </Notice>
+              {config.auto_followup_enabled && (
+                <Notice>Missing or invalid answers trigger automatic follow-ups, up to {config.auto_followup_max_rounds} per case. Valid answers awaiting review are not requested again.</Notice>
+              )}
               {!config.anymize_configured && config.ai_mode !== "fixture" && (
                 <Notice>
                   Extraction is waiting for Anymize setup. Complete supplier

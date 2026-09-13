@@ -262,3 +262,41 @@ Two bounded helper tasks (`nova-demo-drain`) processed the demo burst using exis
 durable job leases. They exit after the queue is idle; normal continuous processing
 remains in `nova-worker`. `scripts/check_supplier_demo.py` provides a content-free
 verification report in the ignored cloud state directory.
+
+## Automatic follow-ups for incomplete responses — 2026-09-13
+
+`AUTO_FOLLOWUP_ENABLED=true` authorizes a narrow exception to per-email human approval:
+after a successful evaluation, NOVA automatically sends a follow-up for previously
+requested fields with no valid received answer. Four valid pending answers out of six
+leave only two questions in the follow-up. Pending proposals count as received information;
+they do not update accepted supplier data. Missing answers, placeholders and invalid dates
+or configured options are unresolved. Extraction cannot establish the truth of every
+supplier statement; substantive data review remains human.
+
+Initial requests still require reviewer approval. Follow-ups are generated from known field
+references and approved supplier contacts, not arbitrary commands in reply text. They are
+recorded as `kind=auto_followup`, `approved_by=auto-followup`, with a trigger-message audit
+record. Before sending, the worker checks the policy, exact content digest, case revision
+and whether the questions are still unresolved. Failed extraction or unread evidence does
+not cause an automatic follow-up. A maximum of three rounds per case prevents loops;
+automation stops at the limit and leaves the case for review. Set the flag false on API
+and worker to stop automatic follow-up sending, including already queued automatic drafts.
+
+Each automatic follow-up ends with:
+
+```text
+Thank you,
+Supplier Information Team
+
+This email was written and sent automatically by an AI system.
+```
+
+This is an AI disclosure, not a claim of legal certification. Human edits return automatic
+drafts to the ordinary reviewer approval path. Existing messages and invalid proposals
+remain visible so the reviewer can inspect every supplier input.
+
+Three new `DEMO-AUTO` examples exercise four-of-six answers, an acknowledgement with
+no answers, and an invalid date in a PDF. Their simulated supplier replies answer the
+remaining questions after the automatic follow-up. Initial demonstration requests use
+reviewer-authorized sends; subsequent follow-ups are authorized by the enabled policy.
+Run `uv run python -m scripts.demo_auto_followups start`, then `... check` to verify.

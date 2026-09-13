@@ -74,6 +74,13 @@ def send_job(factory, settings, job_id, token, target_id):
                 draft.status = "superseded"
             job.status = "cancelled"
             return
+        if draft.kind == "auto_followup":
+            from nova.followups import still_authorized
+
+            if not still_authorized(db, settings, case, draft):
+                draft.status, job.status = "superseded", "cancelled"
+                audit(db, "worker", "email.auto_followup_cancelled", draft.id)
+                return
         draft.status = "sending"
     # Transmission is outside the DB transaction. "sending" is durable before the side effect.
     try:
@@ -105,7 +112,7 @@ def send_job(factory, settings, job_id, token, target_id):
         case.last_sent_at = now()
         if case.revision == draft.case_revision:
             case.next_action_at = now() + timedelta(days=settings.response_days)
-            case.status = "awaiting_reply"
+            case.status = "data_review" if draft.kind == "auto_followup" else "awaiting_reply"
         if draft.kind == "reminder":
             case.reminders_sent += 1
         job.status = "done"
@@ -227,6 +234,11 @@ def evaluate_job(factory, settings, job_id, token, target_id):
         field = field_by_id[candidate.field_id]
         value = known_restore(anonymizer.restore(candidate.value), case)
         errors = validate_value(field, value)
+        if field.data["Field Type"] == "Date":
+            for source_date in re.findall(r"(?<!\d)\d{4}-\d{2}-\d{2}(?!\d)", candidate.evidence.quote):
+                if validate_value(field, source_date):
+                    errors.append("Source contains an invalid calendar date; supplier clarification required.")
+                    break
         if "upload" in field.data["Field Type"].lower():
             if not src["document_id"]:
                 errors.append("A file field requires an attached evidence document.")
@@ -278,6 +290,10 @@ def evaluate_job(factory, settings, job_id, token, target_id):
         audit(
             db, "worker", "reply.evaluated", message.id, proposals=len(proposed), attachments=len(documents)
         )
+        db.flush()
+        from nova.followups import plan_followup
+
+        plan_followup(db, settings, current_case, current_message)
 
 
 def run_once(factory, settings):

@@ -185,6 +185,8 @@ def deploy():
         "GMAIL_MAILBOX": settings.gmail_mailbox,
         "GMAIL_SUPPLIER": settings.gmail_supplier,
         "DEMO_AUTO_REPLY": str(settings.demo_auto_reply).lower(),
+        "AUTO_FOLLOWUP_ENABLED": str(settings.auto_followup_enabled).lower(),
+        "AUTO_FOLLOWUP_MAX_ROUNDS": str(settings.auto_followup_max_rounds),
         "STORAGE_BUCKET": BUCKET,
         "NOVA_COOKIE_SECURE": "true",
         "NOVA_REVIEWER_NAME": "demo-reviewer",

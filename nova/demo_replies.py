@@ -32,7 +32,10 @@ def enabled_for(settings, case):
         and settings.mail_mode == "gmail"
         and settings.gmail_supplier.casefold() == DEMO_MAILBOX
         and case.recipient.casefold() == DEMO_MAILBOX
-        and re.fullmatch(r"DEMO20-(?:0[1-9]|1[0-9]|20)", case.supplier_id) is not None
+        and re.fullmatch(
+            r"(?:DEMO20-(?:0[1-9]|1[0-9]|20)|DEMO-AUTO-(?:PARTIAL|EMPTY|INVALID))", case.supplier_id
+        )
+        is not None
         and case.nart == case.supplier_id + "-ARTICLE"
         and case.supplier_name.startswith("Demo ")
     )
@@ -65,10 +68,51 @@ def pdf_document(lines, *, scanned=False):
     return stream.getvalue()
 
 
-def response_content(supplier_id):
+AUTO_ANSWERS = [
+    ("Material composition", "Freetext", "80% recycled aluminium"),
+    ("Certificate valid until", "Date", "2028-12-31"),
+    ("Electricity sourcing", "Freetext", "Renewable electricity confirmed"),
+    ("Net product weight", "Freetext", "1.25 kg"),
+    ("Reporting year", "Freetext", "2026"),
+    ("Transport mode", "Freetext", "Rail freight"),
+]
+
+
+def automatic_scenario(supplier_id, requested_fields, followup):
+    marker = "SIMULATED SUPPLIER REPLY — NOVA automatic follow-up demonstration.\n"
+    lines = [f"{supplier_id}-F{i}={value}" for i, (_, _, value) in enumerate(AUTO_ANSWERS, 1)]
+    if followup:
+        lines = [line for line in lines if line.split("=", 1)[0] in requested_fields]
+        return (
+            marker + "\nHere is the additional information you requested:\n" + "\n".join(lines),
+            [],
+            "completed follow-up",
+        )
+    if supplier_id.endswith("EMPTY"):
+        return marker + "\nThank you. We received your request and will look into it.", [], "no answers"
+    if supplier_id.endswith("PARTIAL"):
+        return (
+            marker + "\nHere are the first four answers:\n" + "\n".join(lines[:4]),
+            [],
+            "four of six answers",
+        )
+    lines[1] = supplier_id + "-F2=2028-13-40"
+    document = pdf_document(["FICTIONAL SUPPLIER ANSWERS - INCLUDES INVALID DATE", *lines])
+    return (
+        marker + "\nOur answers are attached; please use the supplied entries.",
+        [("answers-invalid-date.pdf", document)],
+        "invalid date in PDF",
+    )
+
+
+def response_content(supplier_id, requested_fields=None, followup=False):
+    if supplier_id.startswith("DEMO-AUTO-"):
+        return automatic_scenario(supplier_id, requested_fields or [], followup)
     number = int(supplier_id[-2:])
     original = (FIXTURES / f"{supplier_id}.txt").read_text()
     answers = [line for line in original.splitlines() if line.startswith(supplier_id + "-F")]
+    if followup and requested_fields is not None:
+        answers = [line for line in answers if line.split("=", 1)[0] in requested_fields]
     if not answers:
         raise ValueError("Demo response fixture is empty")
     # Alter answer spelling only; routing/field references and quantities remain intact.
@@ -144,7 +188,9 @@ def simulate_reply_job(factory, settings, job_id, token, target_id):
         ):
             job.status = "cancelled"
             return
-        body, attachments, scenario = response_content(case.supplier_id)
+        body, attachments, scenario = response_content(
+            case.supplier_id, requested_fields=draft.requested_fields, followup=draft.kind == "auto_followup"
+        )
         reply = ingest_message(
             db, settings, case.id, external_id, case.recipient, body, attachments, "demo-simulator"
         )
