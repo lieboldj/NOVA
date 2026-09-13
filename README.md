@@ -71,3 +71,11 @@ uv run python scripts/check_gemini.py
 - Verified live Gmail push delivery: a real email reaches an n8n webhook execution in ~3.8s, no manual sync.
 - Deployed and verified NOVA + n8n on Google Cloud (`aiwomen26ham-4415`, `europe-west3`).
 - Switched to `gemini-3.8-flash`; connected the React control center to live backend approvals.
+
+---
+
+> **AI-generated code notice:** Substantial parts of this codebase, including application code, tests,
+> configuration, and documentation, were generated with the assistance of AI coding tools (OpenAI Codex
+> and Anthropic Claude Code) under human direction and review. AI-generated contributions may contain
+> errors and should not be assumed correct, secure, or complete without independent review. This project
+> is provided "as is", without warranty of any kind, express or implied.
