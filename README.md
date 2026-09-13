@@ -51,7 +51,7 @@ that migration before starting the API and worker. Use PostgreSQL for concurrent
 - `MAIL_MODE=simulation`: approved messages are captured as `simulated` drafts; nothing is sent externally.
 - `AI_MODE=gemini`, `ANONYMIZER_MODE=anymize`: missing Anymize access pauses processing. It never sends raw
   supplier content to Gemini as a fallback.
-- `GEMINI_API_KEY` comes from local configuration. The default model is `gemini-3.6-flash`, verified with a
+- `GEMINI_API_KEY` comes from local configuration. The default model is `gemini-3.8-flash`, verified with a
   fictional extraction request. The API rejected Gemini 2.5 Flash for this account.
 - Set both `AI_MODE=fixture` and `ANONYMIZER_MODE=fixture` for an isolated, offline demonstration. This mode
   extracts explicit `ROW_ID=value` lines and is **not** a real anonymizer or AI evaluation. A remote model

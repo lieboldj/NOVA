@@ -185,3 +185,13 @@ receiver returned 204; anonymous receiver and n8n webhook requests were rejected
 Backend suite: 48 passed, one PostgreSQL-specific concurrency check skipped locally.
 `uv run python -m scripts.check_gmail_push` records the send before transmission and
 reuses its private result file on retry, preventing accidental repeat test emails.
+
+
+## Gemini model update — 2026-09-13
+
+NOVA API and worker use `GEMINI_MODEL=gemini-3.8-flash` through Cloud Run environment
+configuration. The existing Secret Manager API key is unchanged. Local defaults and
+example configuration match. A live check with the deployed credentials passed Anymize
+anonymization/restoration and structured extraction of `2028-12-31` from fictional,
+sanitized evidence before the cloud switch. No supplier record or email was needed.
+Official model ID: https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash.

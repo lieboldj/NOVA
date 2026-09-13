@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     ai_mode: Literal["gemini", "fixture"] = "gemini"
     anonymizer_mode: Literal["anymize", "fixture"] = "anymize"
     gemini_api_key: SecretStr = SecretStr("")
-    gemini_model: str = "gemini-3.6-flash"
+    gemini_model: str = "gemini-3.8-flash"
     anymize_api_key: SecretStr = SecretStr("")
     anymize_base_url: str = "https://app.anymize.ai/api"
     anymize_poll_seconds: float = 2
