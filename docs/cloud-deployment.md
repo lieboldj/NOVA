@@ -300,3 +300,13 @@ no answers, and an invalid date in a PDF. Their simulated supplier replies answe
 remaining questions after the automatic follow-up. Initial demonstration requests use
 reviewer-authorized sends; subsequent follow-ups are authorized by the enabled policy.
 Run `uv run python -m scripts.demo_auto_followups start`, then `... check` to verify.
+
+Live verification: `DEMO-AUTO-PARTIAL` received four of six answers and automatically
+sent only F5/F6; `DEMO-AUTO-EMPTY` automatically requested all six; `DEMO-AUTO-INVALID`
+requested only F2 after the PDF supplied `2028-13-40`. Each received its completed simulated
+response and stopped after one follow-up. All 18 valid proposals remain pending and all
+18 accepted field values remain empty. The original incomplete/invalid evidence remains
+available. Gmail Sent and the actual transmitted AI disclosure were verified for all three
+automatic follow-ups. The live browser verified their automatic-authorization label and
+question scope. Backend tests: 59 passed, one PostgreSQL-only check skipped; four browser
+tests passed. Deploy/persist the policy with `uv run python -m scripts.enable_auto_followups`.
