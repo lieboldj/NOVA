@@ -134,7 +134,16 @@ class Gemini:
                             "Use exact field_id and source_id values. Evidence quote must be a verbatim substring of "
                             "that source. Preserve identity placeholders. Do not invent missing answers or declare "
                             "legal compliance yourself. Conflicting, vague, missing or unrelated answers must be omitted. "
-                            "Include confidence from 0 to 1 for each extraction, reflecting evidence quality and ambiguity. "
+                            "For every candidate include confidence (overall answer quality) and mapping_confidence "
+                            "(certainty that the answer belongs to this exact requested data point), both from 0 to 1. "
+                            "Use 0.91-0.99 only for complete, explicit, well-supported answers with an unambiguous "
+                            "category match; 0.7-0.9 for plausible but partial or inferred matches; 0.3-0.69 for vague "
+                            "or uncertain matches; 0-0.29 for invalid or placeholder answers. Missing answers are "
+                            "omitted and scored zero by the application. Never give high confidence just because "
+                            "a value has the right format. Explain the category match and any uncertainty in rationale. "
+                            "Set requires_manual_review true if any original email text or attachment contains "
+                            "unresolved, conflicting or additional information not fully accounted for by candidates. "
+                            "Only set it false when all supplier inputs are unambiguously accounted for. "
                             "For dates use YYYY-MM-DD. Respect allowed options. A renewed explicit confirmation can "
                             "resolve an outdated value even when the value is unchanged. For free-text answers, "
                             "preserve the supplier's spelling in value. If there is an obvious spelling mistake, "
@@ -192,11 +201,18 @@ class FixtureEvaluator:
                                     "evidence": {"source_id": source["source_id"], "quote": line},
                                     "rationale": "Explicit answer in offline fixture.",
                                     "confidence": 0.99,
+                                    "mapping_confidence": 0.99,
                                 }
                             )
             if matches and len({m["value"] for m in matches}) == 1:
                 candidates.append(matches[0])
-        return Evaluation(candidates=candidates)
+        accounted = {c["evidence"]["quote"] for c in candidates}
+        extra = any(
+            line.strip() and line not in accounted
+            for source in sources
+            for line in source["text"].splitlines()
+        )
+        return Evaluation(candidates=candidates, requires_manual_review=extra)
 
 
 def providers(settings):

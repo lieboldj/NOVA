@@ -241,14 +241,14 @@ def create_draft(db, case, kind, use_case=None, settings=None):
     lines = []
     for field in fields:
         d = field.data
-        line = f"- [{field.id}] {d['Field (label)']} ({field_guidance(field)})"
+        line = f"- {d['Section']} — {d['Field (label)']} ({field_guidance(field)})"
         lines.append(line)
     body = (
-        f"Let's stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\n"
+        f"Let us stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\n"
         f"We’re updating our supplier information and would appreciate your help with article {case.nart or '(supplier level)'}. "
         "Please share or confirm the details below by replying to this email. "
         "You’re welcome to attach supporting documents. "
-        "Please include the field references shown below.\n\n"
+        "Please use the question names below when replying.\n\n"
         + "\n".join(lines)
         + "\n\nThank you,\nSupplier Information Team"
     )
@@ -301,3 +301,22 @@ def tick(db, settings):
         create_draft(db, case, kind, settings=settings)
         counts["drafted"] += 1
     return counts
+
+
+def finish_review(db, case):
+    db.flush()
+    if pending_review(db, case.id) or blocking_message(db, case.id):
+        case.status, case.next_action_at = "data_review", None
+    else:
+        active = db.scalar(
+            select(Draft).where(
+                Draft.case_id == case.id, Draft.status.in_(["pending", "approved", "sending", "uncertain"])
+            )
+        )
+        if active:
+            case.status = "email_review" if active.status == "pending" else "awaiting_reply"
+            case.next_action_at = None
+        elif outstanding(db, case.id):
+            case.status, case.next_action_at = "open", now()
+        else:
+            case.status, case.next_action_at = "closed", None

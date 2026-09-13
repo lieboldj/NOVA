@@ -20,6 +20,7 @@ with tempfile.TemporaryDirectory(prefix="nova-ui-test-") as directory:
         storage_path=root / "documents",
         nova_reviewer_token="ui-review-secret",
         nova_automation_token="ui-automation-secret",
+        auto_accept_high_confidence=False,  # Legacy manual-review scenarios are tested separately.
         ai_mode="fixture",
         anonymizer_mode="fixture",
         mail_mode="simulation",

@@ -251,3 +251,22 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--blue); outline-
 
 .reply-proposal-table select { border: 1px solid var(--line); border-radius: 6px; padding: 8px; background: white; color: #13233a; }
 .dark-mode .reply-proposal-table select { background: #102d4b; color: #e6f1ff; }
+
+/* Compact dashboard summaries and the two agent workspaces. */
+.stats { grid-template-columns: .8fr .8fr .8fr 1.3fr 1.3fr; gap: 12px; }
+.stat-card { padding: 16px; min-width: 0; }
+.stat-card:first-child { border: 1px solid var(--line); }
+.stat-card:first-child .stat-value, .stat-value { font-size: 26px; }
+.stat-note { white-space: normal; }
+.agent-history-row { display: grid; grid-template-columns: minmax(220px, 1fr) 180px 170px 20px; align-items: center; gap: 20px; width: 100%; padding: 20px; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: inherit; text-align: left; }
+.agent-history-row:hover { background: var(--blue-soft); }
+.agent-history-row p { margin: 6px 0 0; font-size: 13px; }
+.agent-history-row time { font-size: 13px; }
+.confidence-reason { font-size: 12px; line-height: 1.45; }
+.reply-proposal-table th:nth-child(1) { width: 27%; }
+.reply-proposal-table th:nth-child(2) { width: 25%; }
+.reply-proposal-table th:nth-child(3) { width: 23%; }
+.reply-proposal-table th:nth-child(4) { width: 25%; }
+.detail-status { display: flex; }
+@media(max-width: 1100px) { .stats { grid-template-columns: repeat(3, 1fr); } .stat-card:first-child { grid-column: auto; } }
+@media(max-width: 650px) { .stats { grid-template-columns: 1fr 1fr; } .agent-history-row { grid-template-columns: 1fr auto; gap: 12px; } .agent-history-row time { grid-column: 1; } .agent-history-row > svg { display: none; } }

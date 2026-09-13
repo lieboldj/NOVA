@@ -71,4 +71,5 @@ def test_correction_requires_supplier_clarification_and_preserves_received_value
     original = client.get("/proposals", headers=REVIEW).json()[0]
     assert original["value"] == "80% recylced aluminium"
     assert original["evidence"]["quote"] == "80% recylced aluminium"
-    assert original["confidence"] is None
+    assert original["confidence"] == 0.80
+    assert "spelling" in original["confidence_reason"]

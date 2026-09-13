@@ -31,9 +31,7 @@ function EmailReview({ draft, caseId, config, busy, act, sendJob }) {
       <p className="muted">
         From: {config.gmail_mailbox} · To: <strong>{draft.recipient}</strong>
       </p>
-      <p className="muted">
-        Version {draft.version} · {dateLabel(draft.created_at)}
-      </p>
+      <p className="muted">Created {dateLabel(draft.created_at)}</p>
       {draft.kind === "auto_followup" && (
         <Notice>
           Generated and authorized automatically for missing or invalid answers.
@@ -138,9 +136,6 @@ function EmailReview({ draft, caseId, config, busy, act, sendJob }) {
       {draft.status === "uncertain" && (
         <Reconcile draft={draft} act={act} busy={busy} />
       )}
-      {draft.provider_id && (
-        <p className="muted">Delivery reference: {draft.provider_id}</p>
-      )}
     </article>
   );
 }
@@ -222,7 +217,14 @@ function Reconcile({ draft, busy, act }) {
   );
 }
 
-function ReplyProposalTable({ message, proposals, fields, busy, act }) {
+function ReplyProposalTable({
+  message,
+  proposals,
+  fields,
+  busy,
+  act,
+  autoAccept,
+}) {
   const pending = proposals.filter((p) => p.status === "pending");
   const recommendation = (p) =>
     p.confidence > 0.9 && !p.validation_errors?.length ? "approve" : "reject";
@@ -262,7 +264,17 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
         : sort.key === "confidence"
           ? (p.confidence ?? -1)
           : p.value;
-  const sorted = [...proposals].sort(
+  const missing = (message.missing_data_points || []).map((field) => ({
+    id: `missing:${field.field_id}`,
+    field_id: field.field_id,
+    value: "",
+    status: "missing",
+    confidence: 0,
+    confidence_reason: field.confidence_reason,
+    evidence: {},
+    missing: true,
+  }));
+  const sorted = [...proposals, ...missing].sort(
     (a, b) =>
       sort.direction *
       (sort.key === "confidence"
@@ -295,9 +307,10 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
         the supplier.
       </p>
       <p className="muted">
-        NOVA suggests Approve above 90% confidence when format checks pass;
-        otherwise Reject. You confirm the decisions below. Unknown confidence
-        appears first.
+        {autoAccept
+          ? "Clear, valid answers above 90% are accepted automatically."
+          : "NOVA suggests Approve for clear, valid answers above 90%."}{" "}
+        Missing answers score 0%. Review the remaining answers below.
       </p>
       <div className="reply-table-scroll">
         <table
@@ -348,29 +361,38 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
               const field = fields.find((f) => f.id === proposal.field_id);
               const entry = entries[proposal.id];
               return (
-                <tr key={proposal.id} data-testid="proposal-review">
+                <tr
+                  key={proposal.id}
+                  data-testid={
+                    proposal.missing ? "missing-answer" : "proposal-review"
+                  }
+                  data-field-id={proposal.field_id}
+                >
                   <td>
                     <strong>
-                      {field?.data["Field (label)"] || proposal.field_id}
+                      {field?.data["Field (label)"] || "Unmatched data point"}
                     </strong>
                     <p className="muted">{dataPointFormat(field)}</p>
                     {!!field?.rules?.options?.length && (
                       <p>Allowed answers: {field.rules.options.join(", ")}</p>
                     )}
                     <p className="muted">
-                      {proposal.field_id} ·{" "}
-                      {proposal.old_value === proposal.value
-                        ? "Unchanged confirmation"
-                        : proposal.old_value
-                          ? "Changed value"
-                          : "New value"}
+                      {proposal.missing
+                        ? "Requested information"
+                        : proposal.old_value === proposal.value
+                          ? "Unchanged confirmation"
+                          : proposal.old_value
+                            ? "Changed value"
+                            : "New value"}
                     </p>
                     <details>
                       <summary>Evidence and extraction notes</summary>
                       <p>{proposal.rationale}</p>
                       <blockquote>{proposal.evidence?.quote}</blockquote>
                       <p className="muted">
-                        Source: {proposal.evidence?.source_id}
+                        {proposal.evidence?.document_id
+                          ? "Supplier attachment"
+                          : "Supplier email"}
                         {proposal.evidence?.page
                           ? ` · Page ${proposal.evidence.page}`
                           : ""}
@@ -385,12 +407,23 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
                     </details>
                   </td>
                   <td>
-                    <textarea
-                      aria-label="Received value"
-                      rows={3}
-                      value={proposal.value}
-                      readOnly
-                    />
+                    {proposal.missing ? (
+                      <p>No answer received</p>
+                    ) : proposal.value.startsWith("document://") ? (
+                      <a
+                        href={`/api/documents/${proposal.evidence?.document_id}`}
+                      >
+                        View received document
+                      </a>
+                    ) : (
+                      <textarea
+                        aria-label="Received value"
+                        rows={3}
+                        value={proposal.value}
+                        readOnly
+                      />
+                    )}
+
                     {!!proposal.validation_errors?.length && (
                       <p className="validation-note">
                         {proposal.validation_errors.join("; ")} Request a
@@ -413,6 +446,11 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
                         ? "Unknown"
                         : `${Math.round(proposal.confidence * 1000) / 10}%`}
                     </span>
+                    {proposal.confidence_reason && (
+                      <p className="confidence-reason">
+                        {proposal.confidence_reason}
+                      </p>
+                    )}
                   </td>
                   <td>
                     {entry ? (
@@ -448,7 +486,13 @@ function ReplyProposalTable({ message, proposals, fields, busy, act }) {
                       </>
                     ) : (
                       <>
-                        <StatusBadge status={proposal.status} />
+                        <StatusBadge
+                          status={
+                            proposal.automatically_accepted
+                              ? "auto_accepted"
+                              : proposal.status
+                          }
+                        />
                         {proposal.rejection_reason && (
                           <p>{proposal.rejection_reason}</p>
                         )}
@@ -487,6 +531,7 @@ function SupplierReplyReview({
   busy,
   act,
   showProposals = true,
+  autoAccept = false,
 }) {
   const pending = proposals.some((p) => p.status === "pending");
   return (
@@ -523,13 +568,15 @@ function SupplierReplyReview({
               matched to a data point.
             </p>
           )}
-          {!!proposals.length && (
+          {(proposals.length > 0 ||
+            message.missing_data_points?.length > 0) && (
             <ReplyProposalTable
               key={proposals
                 .map((p) => `${p.id}:${p.version}:${p.status}`)
                 .join("|")}
               message={message}
               proposals={proposals}
+              autoAccept={autoAccept}
               fields={fields}
               busy={busy}
               act={act}
@@ -654,7 +701,7 @@ export default function CaseDrawer({
     <Modal
       backLabel={backLabel}
       title={detail?.supplier_name || "Loading case…"}
-      subtitle={detail ? `Article ${detail.nart} · ${detail.id}` : caseId}
+      subtitle={detail ? `Article ${detail.nart}` : ""}
       onClose={onClose}
       busy={busy}
     >
@@ -666,9 +713,6 @@ export default function CaseDrawer({
         <>
           <div className="detail-status">
             <StatusBadge status={detail.status} />
-            <span className="muted">
-              {detail.supplier_id} · Revision {detail.revision}
-            </span>
           </div>
           <div
             className="review-tabs"
@@ -828,6 +872,7 @@ export default function CaseDrawer({
                   proposals={data.proposals.filter(
                     (p) => p.message_id === m.id,
                   )}
+                  autoAccept={config.auto_accept_high_confidence}
                   fields={detail.fields}
                   busy={busy}
                   act={act}
@@ -870,6 +915,7 @@ export default function CaseDrawer({
                   proposals={data.proposals.filter(
                     (p) => p.message_id === m.id,
                   )}
+                  autoAccept={config.auto_accept_high_confidence}
                   fields={detail.fields}
                   busy={busy}
                   act={act}
@@ -925,7 +971,7 @@ export default function CaseDrawer({
                 <div className="activity-item" key={a.id}>
                   <span className="timeline-dot" />
                   <span>
-                    {a.action.replaceAll(".", " · ")}
+                    {a.action.replaceAll(".", " · ").replaceAll("_", " ")}
                     <small>
                       {dateLabel(a.at)} · {a.actor}
                     </small>

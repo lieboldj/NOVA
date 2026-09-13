@@ -65,8 +65,10 @@ class Candidate(StrictModel):
     evidence: Evidence
     rationale: str
     confidence: float | None = Field(default=None, ge=0, le=1)
+    mapping_confidence: float | None = Field(default=None, ge=0, le=1)
     spelling_correction: SpellingCorrection | None = None
 
 
 class Evaluation(StrictModel):
     candidates: list[Candidate]
+    requires_manual_review: bool = True

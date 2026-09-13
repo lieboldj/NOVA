@@ -23,6 +23,7 @@ def env(tmp_path):
         storage_path=tmp_path / "documents",
         nova_reviewer_token="review-secret",
         nova_automation_token="automation-secret",
+        auto_accept_high_confidence=False,  # Legacy manual-review scenarios are tested separately.
         ai_mode="fixture",
         anonymizer_mode="fixture",
         mail_mode="simulation",

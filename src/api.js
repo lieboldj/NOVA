@@ -57,6 +57,8 @@ export function dateLabel(value) {
 }
 
 export const statusMeta = {
+  auto_accepted: ["Accepted automatically", "green"],
+  missing: ["Missing answer", "amber"],
   open: ["Open", "blue"],
   closed: ["Completed", "green"],
   email_review: ["Initiation pending", "purple"],

@@ -5,7 +5,7 @@ import {
   AlertCircle,
   ArrowRight,
   Bell,
-  Bot,
+  Mail,
   CheckCircle2,
   ChevronDown,
   Clock3,
@@ -19,12 +19,13 @@ import {
   Search,
   Sparkles,
   Sun,
-  UsersRound,
+  Bot,
 } from "lucide-react";
 import logo from "../logo.png";
 import { allCases, api, dateLabel, setSession, statusMeta } from "./api";
 import { Notice, StatusBadge } from "./components";
 import CaseDrawer from "./CaseDrawer";
+import AgentActivity from "./AgentActivity";
 import ProcessStarter from "./ProcessStarter";
 import "./styles.css";
 
@@ -91,66 +92,9 @@ function StatCard({ icon: Icon, label, value, tone, note, onClick }) {
       <div>
         <div className="stat-label">{label}</div>
         <div className="stat-value">{value}</div>
-        <div className="stat-note">{note}</div>
+        {note && <div className="stat-note">{note}</div>}
       </div>
     </button>
-  );
-}
-
-function Operations({ jobs, onOpen }) {
-  return (
-    <section className="workspace-page">
-      <div className="page-heading">
-        <div>
-          <div className="eyebrow">
-            <UsersRound size={14} /> AGENT OPERATIONS
-          </div>
-          <h1>Delivery and evaluation</h1>
-          <p>Select an agent to see its work and the case history.</p>
-        </div>
-        <span className="page-count">
-          {jobs.filter((j) => ["queued", "running"].includes(j.status)).length}{" "}
-          queued or running
-        </span>
-      </div>
-      {!jobs.length && (
-        <div className="empty panel">No processing jobs yet.</div>
-      )}
-      <div className="agent-grid">
-        {jobs.map((j) => (
-          <button
-            type="button"
-            onClick={() => onOpen(j.case_id)}
-            disabled={!j.case_id}
-            className="agent-card clickable"
-            key={j.id}
-          >
-            <div className="agent-card-icon">
-              <Bot size={20} />
-            </div>
-            <div className="agent-card-copy">
-              <span>{j.id.slice(0, 8)}</span>
-              <h2>
-                {j.kind === "send"
-                  ? "Email delivery"
-                  : "Supplier reply evaluation"}
-              </h2>
-              <p>{j.error || `Attempts: ${j.attempts}`}</p>
-              <p>{dateLabel(j.available_at)}</p>
-            </div>
-            <div className="agent-card-footer">
-              <StatusBadge status={j.status} />
-            </div>
-          </button>
-        ))}
-      </div>
-      {!!jobs.length && (
-        <p className="muted">
-          Showing the most recent {jobs.length} jobs (up to 500). Open the
-          related case to review or retry a failed job.
-        </p>
-      )}
-    </section>
   );
 }
 
@@ -177,12 +121,13 @@ function Dashboard({ session, onLogout }) {
     if (fetching.current) return;
     fetching.current = true;
     try {
-      const [cases, jobs, config] = await Promise.all([
+      const [cases, jobs, config, agents] = await Promise.all([
         allCases(),
         api("/jobs"),
         api("/configuration"),
+        api("/agents"),
       ]);
-      setData({ cases, jobs, config });
+      setData({ cases, jobs, config, agents });
       setUpdated(new Date());
       setError("");
     } catch (e) {
@@ -214,6 +159,7 @@ function Dashboard({ session, onLogout }) {
   }
   const cases = data?.cases || [];
   const jobs = data?.jobs || [];
+  const agents = data?.agents || [];
   const urgent = (c) =>
     c.next_action_at &&
     new Date(
@@ -256,10 +202,6 @@ function Dashboard({ session, onLogout }) {
             numeric: true,
           })),
   );
-  function openActivity(id) {
-    setSelectedTab("activity");
-    setSelected(id);
-  }
   const suppliers = [
     ...new Map(
       cases.map((c) => [
@@ -276,21 +218,19 @@ function Dashboard({ session, onLogout }) {
           <span className="brand-label">Control Center</span>
         </div>
         <nav className="main-nav" aria-label="Main navigation">
-          {[
-            ["overview", "Overview", LayoutDashboard],
-            ["agents", "Active agents", UsersRound],
-            ["alerts", "Alerts", Bell],
-          ].map(([id, label, Icon]) => (
-            <button
-              key={id}
-              className={page === id ? "active" : ""}
-              onClick={() => setPage(id)}
-            >
-              <Icon size={16} />
-              {label}
-              {id === "alerts" && !!alertCount && <span>{alertCount}</span>}
-            </button>
-          ))}
+          {[["overview", "Overview", LayoutDashboard]].map(
+            ([id, label, Icon]) => (
+              <button
+                key={id}
+                className={page === id ? "active" : ""}
+                onClick={() => setPage(id)}
+              >
+                <Icon size={16} />
+                {label}
+                {id === "alerts" && !!alertCount && <span>{alertCount}</span>}
+              </button>
+            ),
+          )}
         </nav>
         <div className="top-actions">
           <button
@@ -356,6 +296,13 @@ function Dashboard({ session, onLogout }) {
               </div>
               <div className="hero-actions">
                 <button
+                  className="secondary-btn"
+                  onClick={() => setPage("alerts")}
+                >
+                  <Bell size={16} /> Alerts{" "}
+                  {alertCount > 0 && <span>{alertCount}</span>}
+                </button>
+                <button
                   className="primary-btn"
                   disabled={busy}
                   onClick={() => setStarting(true)}
@@ -370,11 +317,6 @@ function Dashboard({ session, onLogout }) {
                 label="Need review"
                 value={attention.length}
                 tone="amber"
-                note={
-                  reviewOnly
-                    ? "Showing cases needing review · Click to show all"
-                    : "Open cases needing your decision"
-                }
                 onClick={() => {
                   setReviewOnly((value) => !value);
                   setStatus("ALL");
@@ -387,7 +329,6 @@ function Dashboard({ session, onLogout }) {
                 label="Completed"
                 value={cases.filter((c) => c.status === "closed").length}
                 tone="green"
-                note="All requested data points complete"
                 onClick={() => {
                   setReviewOnly(false);
                   setStatus("closed");
@@ -400,12 +341,22 @@ function Dashboard({ session, onLogout }) {
                   cases.filter((c) => c.status === "awaiting_reply").length
                 }
                 tone="amber"
-                note="Supplier response or email delivery pending"
                 onClick={() => {
                   setReviewOnly(false);
                   setStatus("awaiting_reply");
                 }}
               />
+              {agents.map((agent) => (
+                <StatCard
+                  key={agent.id}
+                  icon={agent.id === "email" ? Mail : Bot}
+                  label={agent.name}
+                  value={agent.total}
+                  tone="blue"
+                  note={`${agent.suppliers} suppliers · ${agent.completed} completed`}
+                  onClick={() => setPage(agent.id)}
+                />
+              ))}
             </section>
             <section className="panel">
               <div className="toolbar">
@@ -415,7 +366,7 @@ function Dashboard({ session, onLogout }) {
                     aria-label="Search requests"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search case ID, supplier or article…"
+                    placeholder="Search supplier or article…"
                   />
                 </div>
                 <button
@@ -494,7 +445,7 @@ function Dashboard({ session, onLogout }) {
               )}
               <div className="table-head">
                 {[
-                  ["nart", "Article / Case"],
+                  ["nart", "Article"],
                   ["updated", "Last reply / send"],
                   ["supplier_name", "Supplier"],
                   ["status", "Status"],
@@ -533,9 +484,6 @@ function Dashboard({ session, onLogout }) {
                   >
                     <div className="request-cell">
                       <span className="request-id">{c.nart}</span>
-                      <span className="material" title={c.id}>
-                        {c.id.slice(0, 8)}
-                      </span>
                     </div>
                     <div className="date">
                       {dateLabel(c.last_reply_at || c.last_sent_at)}
@@ -575,10 +523,25 @@ function Dashboard({ session, onLogout }) {
               </div>
             </section>
           </>
-        ) : page === "agents" ? (
-          <Operations jobs={jobs} onOpen={openActivity} />
+        ) : ["email", "evaluation"].includes(page) ? (
+          <AgentActivity
+            key={page}
+            kind={page}
+            summary={agents.find((agent) => agent.id === page)}
+            onBack={() => setPage("overview")}
+            onOpen={(id, tab) => {
+              setSelectedTab(tab);
+              setSelected(id);
+            }}
+          />
         ) : (
           <section className="workspace-page">
+            <button
+              className="secondary-btn"
+              onClick={() => setPage("overview")}
+            >
+              My Dashboard
+            </button>
             <div className="page-heading">
               <div>
                 <div className="eyebrow">
@@ -640,13 +603,14 @@ function Dashboard({ session, onLogout }) {
                       failed
                     </h2>
                     <p>{j.error}</p>
-                    <p>{j.id}</p>
                   </div>
                   <button
                     className="secondary-btn"
-                    onClick={() => setPage("agents")}
+                    onClick={() =>
+                      setPage(j.kind === "send" ? "email" : "evaluation")
+                    }
                   >
-                    View jobs
+                    View agent activity
                   </button>
                 </article>
               ))}
@@ -664,7 +628,13 @@ function Dashboard({ session, onLogout }) {
           config={data.config}
           initialTab={selectedTab}
           onClose={() => setSelected(null)}
-          backLabel={starting ? "Return to search list" : undefined}
+          backLabel={
+            starting
+              ? "Return to search list"
+              : ["email", "evaluation"].includes(page)
+                ? "Return to agent activity"
+                : undefined
+          }
           onChanged={refresh}
         />
       )}

@@ -39,6 +39,7 @@ class Settings(BaseSettings):
     gmail_push_webhook: str = ""
     demo_auto_reply: bool = False
     demo_reply_delay_seconds: int = 5
+    auto_accept_high_confidence: bool = True
     auto_send_followups: bool = True
     auto_send_delay_minutes: int = Field(default=2, ge=0)
     auto_followup_enabled: bool = False

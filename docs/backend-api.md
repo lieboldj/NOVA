@@ -100,3 +100,14 @@ The local command parser supports one region and/or industry (`and`), named supp
 `all suppliers` — no external LLM, no disjunctions/exclusions (rejected explicitly rather than
 ignored). Optional `Region`/`Industry` CSV columns (either v1 or v2 headers) enable this; they're
 never inferred from supplier name or country.
+
+
+## Confidence acceptance and agent history
+
+`AUTO_ACCEPT_HIGH_CONFIDENCE=true` enables worker acceptance of supported, valid answers strictly above 90%. Proposals expose `confidence`, `confidence_reason`, and `automatically_accepted`; evidence records the model scores and policy version. Invalid, stale, conflicting, missing or unsupported values are never accepted automatically. Original answers remain immutable. New replies can finish automatically only when every requested answer is accepted and the evaluator reports no unaccounted-for input.
+
+`GET /cases/{id}/messages` adds `missing_data_points`, each with a 0% confidence score.
+`GET /agents` returns totals for the email and reply-evaluation agents.
+`GET /agents/{email|evaluation}/activity?offset=0&limit=50` returns supplier/article activity in descending actual-activity order (limit up to 100). Future scheduled-send dates do not move suppliers to the top.
+
+Run `python -m nova.review_policy` with the worker environment to score existing pending replies and refresh generated pending email copy. The operation is resumable and leaves prior human decisions and sent messages unchanged.

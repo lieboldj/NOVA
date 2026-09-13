@@ -95,6 +95,7 @@ def send_job(factory, settings, job_id, token, target_id):
                 audit(db, "worker", "email.auto_followup_cancelled", draft.id)
                 return
         draft.status = "sending"
+        audit(db, "worker", "email.sending", draft.id)
     # Transmission is outside the DB transaction. "sending" is durable before the side effect.
     try:
         result = send_email(settings, draft)
@@ -179,6 +180,7 @@ def evaluate_job(factory, settings, job_id, token, target_id):
         message = db.get(Message, target_id)
         case = locked(db, Case, message.case_id)
         message.status = "processing"
+        audit(db, "worker", "reply.evaluation_started", message.id)
         fields = db.scalars(
             # Suppliers can confirm accepted values or volunteer other case fields.
             # The full original reply remains reviewable even without an extracted candidate.
@@ -290,6 +292,8 @@ def evaluate_job(factory, settings, job_id, token, target_id):
                 rationale=known_restore(anonymizer.restore(candidate.rationale), case),
                 evidence={
                     "confidence": candidate.confidence,
+                    "model_confidence": candidate.confidence,
+                    "mapping_confidence": candidate.mapping_confidence,
                     "source_id": src["source_id"],
                     "document_id": src["document_id"],
                     "page": src["page"],
@@ -311,9 +315,20 @@ def evaluate_job(factory, settings, job_id, token, target_id):
             db, "worker", "reply.evaluated", message.id, proposals=len(proposed), attachments=len(documents)
         )
         db.flush()
+        from nova.confidence import apply_confidence
         from nova.followups import plan_followup
+        from nova.workflow import finish_review
 
+        apply_confidence(
+            db,
+            current_case,
+            current_message,
+            settings,
+            sources={s["source_id"]: s["text"] for s in sources},
+            complete_reply=not evaluation.requires_manual_review,
+        )
         plan_followup(db, settings, current_case, current_message)
+        finish_review(db, current_case)
 
 
 def run_once(factory, settings):
@@ -343,6 +358,7 @@ def run_once(factory, settings):
                 job.status, job.error = "failed", error
                 if kind == "evaluate":
                     db.get(Message, target_id).status = "failed"
+                    audit(db, "worker", "reply.evaluation_failed", target_id, reason=error)
                 audit(db, "worker", "job.failed", job_id, reason=error)
     return True
 

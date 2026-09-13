@@ -114,7 +114,9 @@ test("email approval and data approval remain separate across reloads", async ({
   await page
     .getByRole("button", { name: "Save email edits", exact: true })
     .click();
-  await expect(page.getByText(/Version 2 ·/)).toBeVisible();
+  await expect(page.getByLabel("Email body")).toHaveValue(
+    "Please confirm the material statement.",
+  );
   await page
     .getByRole("button", { name: "Return to search list", exact: true })
     .click();
@@ -126,7 +128,9 @@ test("email approval and data approval remain separate across reloads", async ({
     .getByRole("button")
     .filter({ hasText: "Fictional UI Supplier" })
     .click();
-  await expect(page.getByText(/Version 2 ·/)).toBeVisible();
+  await expect(page.getByLabel("Email body")).toHaveValue(
+    "Please confirm the material statement.",
+  );
   const apiHeaders = { Authorization: "Bearer ui-review-secret" };
   const cases = await (
     await request.get("/api/cases", { headers: apiHeaders })
@@ -391,6 +395,8 @@ test("supplier review shows unchanged values, all replies and unused attachments
   await expect(
     unextracted.getByText(/No extracted values are available/),
   ).toBeVisible();
+  await expect(unextracted.getByTestId("missing-answer")).toHaveCount(1);
+  await expect(unextracted.getByTestId("missing-answer")).toContainText("0%");
   const attachment = unextracted.getByRole("link", {
     name: "additional-notes.txt",
     exact: true,
@@ -409,8 +415,7 @@ test("supplier review shows unchanged values, all replies and unused attachments
   ).toBeVisible();
   await expect(
     extracted
-      .getByTestId("proposal-review")
-      .filter({ hasText: "ALL-F2" })
+      .locator('[data-testid="proposal-review"][data-field-id="ALL-F2"]')
       .getByLabel("Received value"),
   ).toHaveAttribute("readonly", "");
   await page.screenshot({
@@ -669,19 +674,27 @@ test("confidence prioritizes review and rejection sends supplier reasons immedia
   await expect(rowsUI.first()).toContainText("Unknown confidence");
   await expect(rowsUI.nth(1)).toContainText("Threshold answer");
   await expect(
-    rowsUI.filter({ hasText: "CONF-F1" }).getByLabel("Data point decision"),
+    page
+      .locator('[data-testid="proposal-review"][data-field-id="CONF-F1"]')
+      .getByLabel("Data point decision"),
   ).toHaveValue("approve");
   await expect(
-    rowsUI.filter({ hasText: "CONF-F2" }).getByLabel("Data point decision"),
-  ).toHaveValue("reject");
-  await expect(rowsUI.filter({ hasText: "CONF-F2" })).toContainText(
-    "Optional · Freetext",
-  );
-  await expect(
-    rowsUI.filter({ hasText: "CONF-F4" }).getByLabel("Data point decision"),
+    page
+      .locator('[data-testid="proposal-review"][data-field-id="CONF-F2"]')
+      .getByLabel("Data point decision"),
   ).toHaveValue("reject");
   await expect(
-    rowsUI.filter({ hasText: "CONF-F4" }).getByLabel("Rejection reason"),
+    page.locator('[data-testid="proposal-review"][data-field-id="CONF-F2"]'),
+  ).toContainText("Optional · Freetext");
+  await expect(
+    page
+      .locator('[data-testid="proposal-review"][data-field-id="CONF-F4"]')
+      .getByLabel("Data point decision"),
+  ).toHaveValue("reject");
+  await expect(
+    page
+      .locator('[data-testid="proposal-review"][data-field-id="CONF-F4"]')
+      .getByLabel("Rejection reason"),
   ).not.toHaveValue("");
   await expect(
     page.getByRole("columnheader", { name: /Accepted value/ }),
@@ -695,12 +708,12 @@ test("confidence prioritizes review and rejection sends supplier reasons immedia
     exact: true,
   });
   await expect(submit).toBeDisabled();
-  await rowsUI
-    .filter({ hasText: "CONF-F2" })
+  await page
+    .locator('[data-testid="proposal-review"][data-field-id="CONF-F2"]')
     .getByLabel("Rejection reason")
     .fill("Please clarify the material composition.");
-  await rowsUI
-    .filter({ hasText: "CONF-F3" })
+  await page
+    .locator('[data-testid="proposal-review"][data-field-id="CONF-F3"]')
     .getByLabel("Rejection reason")
     .fill("Please attach supporting evidence.");
   await page.getByRole("button", { name: /Agent confidence/ }).click();
@@ -737,12 +750,10 @@ test("confidence prioritizes review and rejection sends supplier reasons immedia
   );
   expect(followups[0].body).toContain("Please attach supporting evidence.");
   await page.getByRole("button", { name: "Close review", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Active agents", exact: true })
-    .click();
-  await page.locator(".agent-card").first().click();
+  await page.getByRole("button", { name: /Reply evaluation agent/ }).click();
+  await page.locator(".agent-history-row").first().click();
   await expect(
-    page.getByRole("tab", { name: "Activity", exact: true }),
+    page.getByRole("tab", { name: /Supplier review/ }),
   ).toHaveAttribute("aria-selected", "true");
 });
 
@@ -809,4 +820,101 @@ test("alerts reserve red for overdue cases and request columns sort", async ({
     "Alpha Supplier",
   );
   await expect(page.locator(".alert-card.info")).toHaveCount(2);
+});
+
+test("two compact agent cards open paginated supplier histories without internal IDs", async ({
+  page,
+}) => {
+  await page.route("**/api/agents", (route) =>
+    route.fulfill({
+      json: [
+        {
+          id: "email",
+          name: "Email agent",
+          total: 52,
+          suppliers: 10,
+          completed: 50,
+          active: 2,
+        },
+        {
+          id: "evaluation",
+          name: "Reply evaluation agent",
+          total: 12,
+          suppliers: 7,
+          completed: 11,
+          active: 1,
+        },
+      ],
+    }),
+  );
+  await page.route("**/api/agents/email/activity?*", (route) => {
+    const older = route.request().url().includes("offset=50");
+    return route.fulfill({
+      json: {
+        agent: "email",
+        name: "Email agent",
+        total: 52,
+        items: [
+          {
+            id: "internal-work-id",
+            case_id: "internal-case-id",
+            supplier_name: older ? "Earlier Supplier" : "Most Recent Supplier",
+            article: "Article A",
+            status: "sent",
+            work: "Information request",
+            last_touched_at: older
+              ? "2020-01-01T00:00:00"
+              : "2025-01-01T00:00:00",
+            automatically_accepted: 0,
+          },
+        ],
+      },
+    });
+  });
+  await login(page);
+  await expect(page.locator(".stats .stat-card")).toHaveCount(5);
+  await expect(
+    page
+      .getByRole("navigation")
+      .getByRole("button", { name: /Alerts|Active agents/ }),
+  ).toHaveCount(0);
+  await expect(
+    page.locator(".hero-actions").getByRole("button", { name: /Alerts/ }),
+  ).toBeVisible();
+  await expect(
+    page.locator(".stats .stat-card").first().locator(".stat-note"),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: /Email agent/ }).click();
+  await expect(
+    page.getByRole("heading", { name: "Email agent", exact: true }),
+  ).toBeVisible();
+  await expect(page.locator(".agent-history-row")).toContainText(
+    "Most Recent Supplier",
+  );
+  await expect(page.locator(".agent-history-row")).not.toContainText(
+    "internal-",
+  );
+  await expect(
+    page.getByText("52 emails · 10 suppliers", { exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Older activity", exact: true })
+    .click();
+  await expect(page.locator(".agent-history-row")).toContainText(
+    "Earlier Supplier",
+  );
+  await page
+    .getByRole("button", { name: "Newer activity", exact: true })
+    .click();
+  await expect(page.locator(".agent-history-row")).toContainText(
+    "Most Recent Supplier",
+  );
+  await page.getByRole("button", { name: "My Dashboard", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "My Dashboard", exact: true }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: ".data/screenshots/two-agent-dashboard.png",
+    fullPage: false,
+  });
 });

@@ -126,7 +126,7 @@ def plan_followup(db, settings, case, message):
     lines = []
     for field in fields:
         data = field.data
-        line = f"- [{field.id}] {data['Section']} — {data['Field (label)']}"
+        line = f"- {data['Section']} — {data['Field (label)']}"
         if data["Field Type"] == "Date":
             line += "\n  Please provide a valid calendar date in YYYY-MM-DD format."
         if field.rules.get("options"):
@@ -135,7 +135,7 @@ def plan_followup(db, settings, case, message):
             line += "\n  Please provide a four-digit reporting year."
         lines.append(line)
     body = (
-        f"Let's stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\nThank you for your reply. We still need a complete, valid answer "
+        f"Let us stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\nThank you for your reply. We still need a complete, valid answer "
         f"to the following {len(fields)} question(s) for article {case.nart or '(supplier level)'}. "
         "Please provide missing answers or clarify entries that do not meet the requested format. "
         "You do not need to repeat information already provided in a valid format. "
@@ -216,7 +216,7 @@ def send_rejection_followup(db, settings, case, message, rejected, actor):
             continue
         reason = proposal.evidence.get("rejection_reason", "Please clarify this answer.")
         lines.append(
-            f"- [{field.id}] {field.data['Field (label)']}\n"
+            f"- {field.data['Section']} — {field.data['Field (label)']}\n"
             f"  You sent: {proposal.value}\n  {reason}\n  {field_guidance(field)}"
         )
         requested.append(field.id)
@@ -229,7 +229,7 @@ def send_rejection_followup(db, settings, case, message, rejected, actor):
         recipient=case.recipient,
         subject="Your business partner has an information request",
         body=(
-            f"Let's stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\n"
+            f"Let us stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\n"
             f"Thank you for sharing your information for article {case.nart or '(supplier level)'}. "
             "We need your help to clarify a few answers before we can accept them:\n\n"
             + "\n\n".join(lines)

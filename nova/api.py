@@ -51,6 +51,7 @@ from nova.workflow import (
     draft_digest,
     enqueue,
     fail,
+    finish_review,
     invalidate_drafts,
     locked,
     locked_child,
@@ -73,6 +74,8 @@ def record(obj):
     if isinstance(obj, Proposal):
         result["confidence"] = obj.evidence.get("confidence")
         result["rejection_reason"] = obj.evidence.get("rejection_reason", "")
+        result["confidence_reason"] = obj.evidence.get("confidence_reason", "")
+        result["automatically_accepted"] = obj.reviewed_by == "confidence-agent"
     return result
 
 
@@ -107,25 +110,6 @@ def database(request: Request):
 DB = Annotated[object, Depends(database, scope="function")]
 Reviewer = Annotated[str, Depends(reviewer)]
 Operator = Annotated[str, Depends(authorize)]
-
-
-def finish_review(db, case):
-    db.flush()
-    if pending_review(db, case.id) or blocking_message(db, case.id):
-        case.status, case.next_action_at = "data_review", None
-    else:
-        active = db.scalar(
-            select(Draft).where(
-                Draft.case_id == case.id, Draft.status.in_(["pending", "approved", "sending", "uncertain"])
-            )
-        )
-        if active:
-            case.status = "email_review" if active.status == "pending" else "awaiting_reply"
-            case.next_action_at = None
-        elif outstanding(db, case.id):
-            case.status, case.next_action_at = "open", now()
-        else:
-            case.status, case.next_action_at = "closed", None
 
 
 def proposal_errors(db, proposal, field, value):
@@ -185,6 +169,8 @@ def create_app(settings=None, engine=None):
             "response_days": settings.response_days,
             "max_reminders": settings.max_reminders,
             "demo_auto_reply": settings.demo_auto_reply,
+            "auto_accept_high_confidence": settings.auto_accept_high_confidence,
+            "auto_accept_threshold": 0.9,
             "auto_send_followups": settings.auto_send_followups,
             "auto_send_delay_minutes": settings.auto_send_delay_minutes,
             "auto_followup_enabled": settings.auto_followup_enabled,
@@ -287,6 +273,8 @@ def create_app(settings=None, engine=None):
 
     @app.get("/cases/{case_id}/messages", tags=["Replies"])
     def case_messages(case_id: str, db: DB, actor: Reviewer):
+        from nova.confidence import missing_answers
+
         locked(db, Case, case_id)
         messages = db.scalars(
             select(Message).where(Message.case_id == case_id).order_by(Message.created_at.desc())
@@ -296,7 +284,8 @@ def create_app(settings=None, engine=None):
             | {
                 "documents": [
                     record(d) for d in db.scalars(select(Document).where(Document.message_id == m.id))
-                ]
+                ],
+                "missing_data_points": missing_answers(db, m),
             }
             for m in messages
         ]
@@ -725,6 +714,9 @@ def create_app(settings=None, engine=None):
     def audit_events(db: DB, actor: Reviewer):
         return [record(a) for a in db.scalars(select(Audit).order_by(Audit.at.desc()).limit(500))]
 
+    from nova.agents import install_agent_routes
+
+    install_agent_routes(app, DB, Reviewer)
     install_gmail_routes(app, settings, Reviewer, Operator)
     from nova.gmail_push import install_push_routes
 
