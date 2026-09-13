@@ -1,8 +1,11 @@
 # Gmail test integration
 
-The deployed Google Cloud demo uses `devstar4415@gcplab.me` for both sender and supplier simulation.
-Outgoing NOVA requests are stamped and excluded from inbox ingestion. The two-account local setup below
-remains supported; change `GMAIL_SUPPLIER` on the cloud API and worker to use another supplier mailbox.
+Current hosted configuration: **4415 sends to devstar4418@gcplab.me**. DEMO20 requests
+have a clearly labelled internal response simulator enabled; it does not send mail from
+4418. Set `DEMO_AUTO_REPLY=false` on API and worker to test genuine replies from 4418.
+Outgoing NOVA requests are stamped and excluded from inbox ingestion.
+The former single-mailbox setup remains available by changing `GMAIL_SUPPLIER` and
+approving the corresponding case contacts; internal demo responses require the 4418 test contact.
 See [cloud verification and operation](cloud-deployment.md).
 
 NOVA's internal mailbox is **devstar4415@gcplab.me**. The supplier test mailbox is

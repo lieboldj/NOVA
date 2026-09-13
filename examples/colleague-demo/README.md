@@ -6,19 +6,22 @@ with existing values to demonstrate unchanged confirmations.
 
 ## Five-minute walkthrough
 
-1. Show the supplier list, then open **Demo Alder Motion** (DEMO20-01).
-2. Review the one missing certificate expiry; compare with Demo Ember Components, which has 20 outstanding fields.
-3. Open the **Email** tab. The request is prepared for the configured test mailbox.
-   Click **Approve email & send** when ready. This sends one real demo email.
-4. In that mailbox, reply to the request, preserving the entire subject.
-   Paste [the prepared reply](replies/DEMO20-01.txt). Sending and receiving use the same test mailbox.
-5. Gmail push triggers n8n and NOVA. Refresh NOVA after extraction completes.
-6. Open **Supplier review**: show the original reply and all three proposals.
-   Expected expiry: **2028-12-31**; the product family is an unchanged confirmation.
-7. Approve the values, then mark the entire reply reviewed to complete the case.
+1. Show the DEMO20 list and compare suppliers with 1, 5, 12 and 20 outstanding fields.
+2. Open **Demo Birch Packaging** (DEMO20-02), then **Email** to show the real request sent to devstar4418@gcplab.me.
+3. Open **Supplier review**. The reply is clearly labelled as simulated; Gemini extraction is real.
+4. Show the original spelling and the separate **Suggested spelling correction**. To use it, click
+   **Use suggested correction**, then **Save proposed value**, then approve after review.
+5. Compare Demo Dune Fabrics (DEMO20-04) for PDF evidence and Demo Willow Systems (DEMO20-20) for scanned PDF/OCR.
+6. Show all received input, including unchanged confirmations, and approve/reject proposals before completing reply review.
 
-All 20 request drafts await human approval. Preparing this dataset does not send emails.
-Use each supplier's reply file for the corresponding email; the subject routes it to the right case.
+## Automatic and manual replies
+
+The hosted run sends real requests to 4418 and generates fictional replies internally with DEMO_AUTO_REPLY enabled.
+The simulator does not send an email from the supplier mailbox. Responses rotate through plain text, prose, TXT, PDF,
+mixed email/PDF and scanned PDF; most include intentional spelling mistakes. Anymize and Gemini process them live.
+To test genuine supplier email replies instead, disable DEMO_AUTO_REPLY on API and worker, then reply from 4418
+to a newly approved request, preserving its subject. Each supplier's reply text file supplies its correct values.
+Existing requests in this hosted demo were sent on the user's instruction; no supplier data approvals were automated.
 Original supplier records and replies remain in Cloud SQL; Anymize runs before Gemini extraction.
 
 ## Supplier list

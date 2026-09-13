@@ -244,3 +244,21 @@ uv run python -m scripts.activate_supplier_demo send
 The send script skips existing approved/sending/sent requests to 4418 and stops on uncertain
 delivery. Its ignored state file records draft IDs before approval. It never approves
 supplier data proposals. No schema migration is required for correction metadata.
+
+Verified live after deployment: Gmail metadata confirms all 20 requests were sent to
+`devstar4418@gcplab.me`. All 20 labelled simulated replies completed cloud extraction,
+producing 231 pending proposals, 41 optional spelling corrections and 12 attachments.
+The scanned PDF was stored privately, downloaded through reviewer auth and extracted
+successfully. All 231 previously accepted field values, statuses and revisions remained
+unchanged. Earlier email history for DEMO20-07 and DEMO20-20 was preserved.
+
+The live browser verified the simulator label and **Use suggested correction** control:
+it fills an unsaved proposal edit and requires subsequent saving and approval. A live
+Anymize → Gemini check preserved `80% recylced aluminium` as the proposed source value
+and returned `80% recycled aluminium` separately. Backend tests: 54 passed, one dedicated
+PostgreSQL test skipped locally; four browser regression tests passed.
+
+Two bounded helper tasks (`nova-demo-drain`) processed the demo burst using existing
+durable job leases. They exit after the queue is idle; normal continuous processing
+remains in `nova-worker`. `scripts/check_supplier_demo.py` provides a content-free
+verification report in the ignored cloud state directory.
