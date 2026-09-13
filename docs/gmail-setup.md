@@ -93,3 +93,24 @@ reconciliation against Gmail before another attempt. Every reminder and follow-u
 The automated Gmail tests mock Google's HTTP API: they verify approval gates, exact email content,
 account and recipient restrictions, ingestion, attachment fetching, pagination, deduplication, and
 ambiguous send handling. They do not establish live OAuth access or prove delivery into a real mailbox.
+
+## Authorize a second mailbox with a new OAuth JSON
+
+A downloaded Desktop OAuth client JSON identifies the app; it does not itself authorize
+a Gmail mailbox. The selected Google account must grant access once. To obtain separate
+supplier credentials without overwriting NOVA's internal sender configuration:
+
+```bash
+uv run python -m scripts.connect_gmail \
+  --client /path/to/new-client.json \
+  --mailbox devstar4418@gcplab.me \
+  --output .data/gmail-supplier-credentials.json
+```
+
+The connection verifies the actual Gmail profile and required permissions before saving
+the authorization with mode 0600. Never commit either credential file. This connection
+alone does not send email, deploy credentials or replace the internal demo simulator.
+
+If the new client is used for NOVA's watched internal mailbox, Gmail's Pub/Sub topic must
+belong to the same Google project as that OAuth client. Check that before switching
+Cloud Run secrets; supplier-only send credentials do not change the existing internal watch.

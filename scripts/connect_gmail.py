@@ -17,6 +17,11 @@ def main():
     parser.add_argument("--client", type=Path, default=Path(".data/gmail-client.json"))
     parser.add_argument("--mailbox", default="devstar4415@gcplab.me")
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        help="Save a separate authorized-user JSON instead of changing NOVA's .env sender credentials.",
+    )
     args = parser.parse_args()
     if not args.client.is_file():
         parser.exit(1, "Save a Google Desktop OAuth client JSON in .data/gmail-client.json first.\n")
@@ -45,6 +50,15 @@ def main():
             parser.exit(1, "Wrong Google account; no credentials saved. Retry with the internal mailbox.\n")
         if not credentials.refresh_token or not credentials.has_scopes(SCOPES):
             parser.exit(1, "Offline access and both Gmail permissions are required; no credentials saved.\n")
+        if args.output:
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            # Create with restricted permissions before writing OAuth tokens.
+            fd = os.open(args.output, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+            os.fchmod(fd, 0o600)
+            with os.fdopen(fd, "w") as output:
+                output.write(credentials.to_json() + "\n")
+            print("Gmail account verified; separate authorization saved privately. NOVA sender unchanged.")
+            return
         env = Path(".env")
         env.touch(mode=0o600, exist_ok=True)
         os.chmod(env, 0o600)
