@@ -124,7 +124,7 @@ def parse_csv(content: bytes):
 
 
 def rules_catalog():
-    path = Path(__file__).resolve().parent.parent / "Data_Collection.csv"
+    path = Path(__file__).resolve().parent.parent / "data" / "Data_Collection.csv"
     if not path.exists():
         return {}
     with path.open(encoding="utf-8-sig", newline="") as f:
@@ -244,7 +244,7 @@ def create_draft(db, case, kind, use_case=None, settings=None):
         line = f"- {d['Section']} — {d['Field (label)']} ({field_guidance(field)})"
         lines.append(line)
     body = (
-        f"Let us stay compliant together.\n\nHello {supplier_display_name(case.supplier_name)},\n\n"
+        f"Hello {supplier_display_name(case.supplier_name)},\n\nLet us stay compliant together.\n\n"
         f"We’re updating our supplier information and would appreciate your help with article {case.nart or '(supplier level)'}. "
         "Please share or confirm the details below by replying to this email. "
         "You’re welcome to attach supporting documents. "
