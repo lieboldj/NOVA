@@ -85,7 +85,7 @@ def main():
             print("Verified n8n execution:", workflow["name"], flush=True)
     report["cloud_email_test_passed"] = json.loads((ROOT / "smoke-result.json").read_text())["passed"]
     save(ROOT / "verification.json", report)
-    print("Cloud authentication, worker privacy, Gmail and both n8n workflows: PASS", flush=True)
+    print("Cloud authentication, worker privacy, Gmail and all configured n8n workflows: PASS", flush=True)
     print("Main database case count:", report["main_case_count"], flush=True)
 
 

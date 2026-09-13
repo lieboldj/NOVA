@@ -39,14 +39,14 @@ def prepare():
     )
     if gc("iam", "service-accounts", "describe", ACCOUNT, required=False).returncode:
         gc("iam", "service-accounts", "create", "nova-gmail-push")
-    gc(
-        "iam",
-        "service-accounts",
-        "add-iam-policy-binding",
-        ACCOUNT,
-        f"--member=serviceAccount:service-{number}@gcp-sa-pubsub.iam.gserviceaccount.com",
-        "--role=roles/iam.serviceAccountTokenCreator",
-    )
+    # Modern projects automatically grant the Pub/Sub service agent token minting.
+    # Verify that existing authorization; no additional project/SA IAM grant is needed.
+    policy = json.loads(gc("projects", "get-iam-policy", PROJECT, "--format=json").stdout)
+    member = f"serviceAccount:service-{number}@gcp-sa-pubsub.iam.gserviceaccount.com"
+    if not any(
+        b["role"] == "roles/pubsub.serviceAgent" and member in b["members"] for b in policy["bindings"]
+    ):
+        raise RuntimeError("Project administrator must restore the Pub/Sub service agent role")
     urls = json.loads((ROOT / "urls.json").read_text())
     save(
         ROOT / "gmail-push.json",

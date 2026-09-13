@@ -169,11 +169,19 @@ uv run python -m scripts.setup_gmail_push activate
 uv run python -m scripts.verify_cloud
 ```
 
-The dedicated `nova-gmail-push` identity has no data-access roles. Only the Pub/Sub
-service agent can mint its push token, via a service-account-level binding.
+The dedicated `nova-gmail-push` identity has no data-access roles. Pub/Sub mints its push token using its existing Google-managed service agent role;
+no additional project or service-account IAM binding is required.
 Push configuration is recorded in ignored `.data/cloud/gmail-push.json` and preserved
 by subsequent full deployments. Do not remove daily watch renewal while push is enabled.
 
 See [the short demo and privacy walkthrough](privacy-demo.md) for the exact boundaries.
 The operational database and evidence bucket retain originals; Gemini receives only
 Anymize's sanitized extraction bundle, whose detection is not a universal guarantee.
+
+
+Verified 2026-09-13: a fictional self-mail caused a production n8n webhook execution
+containing its Gmail message ID within 3.8 seconds, without manual sync. The Pub/Sub
+receiver returned 204; anonymous receiver and n8n webhook requests were rejected.
+Backend suite: 48 passed, one PostgreSQL-specific concurrency check skipped locally.
+`uv run python -m scripts.check_gmail_push` records the send before transmission and
+reuses its private result file on retry, preventing accidental repeat test emails.
