@@ -1,0 +1,12 @@
+Hello NOVA team,
+
+Here are the answers from Demo Linden Cartons:
+
+DEMO20-12-F1=95% paperboard and 5% paper adhesive
+DEMO20-12-F2=Fictional demo evidence DEMO20-12, reporting period 2026
+DEMO20-12-F3=Demo product family 12
+
+These are fictional demonstration values.
+Kind regards,
+Alex Example
+Demo supplier representative

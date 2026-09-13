@@ -1,0 +1,12 @@
+Hello NOVA team,
+
+Here are the answers from Demo Reed Controls:
+
+DEMO20-18-F1=2028-09-30
+DEMO20-18-F2=Fictional demo evidence DEMO20-18, reporting period 2026
+DEMO20-18-F3=Demo product family 18
+
+These are fictional demonstration values.
+Kind regards,
+Alex Example
+Demo supplier representative

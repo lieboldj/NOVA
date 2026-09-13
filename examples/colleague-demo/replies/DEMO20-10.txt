@@ -1,0 +1,12 @@
+Hello NOVA team,
+
+Here are the answers from Demo Juniper Tools:
+
+DEMO20-10-F1=2026
+DEMO20-10-F2=Fictional demo evidence DEMO20-10, reporting period 2026
+DEMO20-10-F3=Demo product family 10
+
+These are fictional demonstration values.
+Kind regards,
+Alex Example
+Demo supplier representative

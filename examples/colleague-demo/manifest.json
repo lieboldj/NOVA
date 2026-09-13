@@ -1,0 +1,162 @@
+[
+  {
+    "supplier_id": "DEMO20-01",
+    "name": "Demo Alder Motion",
+    "reason": "Missing quality certificate expiry",
+    "region": "EMEA",
+    "industry": "Automotive",
+    "expected_primary_value": "2028-12-31"
+  },
+  {
+    "supplier_id": "DEMO20-02",
+    "name": "Demo Birch Packaging",
+    "reason": "Outdated recycled content",
+    "region": "EMEA",
+    "industry": "Packaging",
+    "expected_primary_value": "75% recycled paper"
+  },
+  {
+    "supplier_id": "DEMO20-03",
+    "name": "Demo Cedar Circuits",
+    "reason": "Conflicting material composition",
+    "region": "APAC",
+    "industry": "Electronics",
+    "expected_primary_value": "60% copper and 40% polymer"
+  },
+  {
+    "supplier_id": "DEMO20-04",
+    "name": "Demo Dune Fabrics",
+    "reason": "Missing country of manufacture",
+    "region": "APAC",
+    "industry": "Textiles",
+    "expected_primary_value": "Portugal"
+  },
+  {
+    "supplier_id": "DEMO20-05",
+    "name": "Demo Ember Components",
+    "reason": "Outdated energy sourcing statement",
+    "region": "AMER",
+    "industry": "Industrial",
+    "expected_primary_value": "2026 electricity supplied from renewable sources"
+  },
+  {
+    "supplier_id": "DEMO20-06",
+    "name": "Demo Fern Motors",
+    "reason": "Missing product weight",
+    "region": "APAC",
+    "industry": "Automotive",
+    "expected_primary_value": "1.25 kg per unit"
+  },
+  {
+    "supplier_id": "DEMO20-07",
+    "name": "Demo Grove Packs",
+    "reason": "Packaging weight needs confirmation",
+    "region": "AMER",
+    "industry": "Packaging",
+    "expected_primary_value": "120 g per unit"
+  },
+  {
+    "supplier_id": "DEMO20-08",
+    "name": "Demo Harbor Sensors",
+    "reason": "Expired calibration evidence",
+    "region": "EMEA",
+    "industry": "Electronics",
+    "expected_primary_value": "2028-06-30"
+  },
+  {
+    "supplier_id": "DEMO20-09",
+    "name": "Demo Iris Weaving",
+    "reason": "Missing fibre composition",
+    "region": "LATAM",
+    "industry": "Textiles",
+    "expected_primary_value": "80% cotton and 20% polyester"
+  },
+  {
+    "supplier_id": "DEMO20-10",
+    "name": "Demo Juniper Tools",
+    "reason": "Reporting period needs confirmation",
+    "region": "EMEA",
+    "industry": "Industrial",
+    "expected_primary_value": "2026"
+  },
+  {
+    "supplier_id": "DEMO20-11",
+    "name": "Demo Kestrel Mobility",
+    "reason": "Missing manufacturing site",
+    "region": "AMER",
+    "industry": "Automotive",
+    "expected_primary_value": "Fictional Demonstration Plant A"
+  },
+  {
+    "supplier_id": "DEMO20-12",
+    "name": "Demo Linden Cartons",
+    "reason": "Outdated packaging composition",
+    "region": "LATAM",
+    "industry": "Packaging",
+    "expected_primary_value": "95% paperboard and 5% paper adhesive"
+  },
+  {
+    "supplier_id": "DEMO20-13",
+    "name": "Demo Maple Devices",
+    "reason": "Product lifetime needs clarification",
+    "region": "AMER",
+    "industry": "Electronics",
+    "expected_primary_value": "5 years under normal operating conditions"
+  },
+  {
+    "supplier_id": "DEMO20-14",
+    "name": "Demo Nacre Textiles",
+    "reason": "Missing water consumption data",
+    "region": "EMEA",
+    "industry": "Textiles",
+    "expected_primary_value": "12 litres per product"
+  },
+  {
+    "supplier_id": "DEMO20-15",
+    "name": "Demo Orchard Machines",
+    "reason": "Outdated transport information",
+    "region": "LATAM",
+    "industry": "Industrial",
+    "expected_primary_value": "Rail freight for the main delivery route"
+  },
+  {
+    "supplier_id": "DEMO20-16",
+    "name": "Demo Pine Drive",
+    "reason": "Recycled metal claim needs confirmation",
+    "region": "LATAM",
+    "industry": "Automotive",
+    "expected_primary_value": "80% recycled aluminium by mass"
+  },
+  {
+    "supplier_id": "DEMO20-17",
+    "name": "Demo Quartz Wrapping",
+    "reason": "Missing end-of-life guidance",
+    "region": "APAC",
+    "industry": "Packaging",
+    "expected_primary_value": "Separate paper sleeve from plastic insert before recycling"
+  },
+  {
+    "supplier_id": "DEMO20-18",
+    "name": "Demo Reed Controls",
+    "reason": "Outdated certificate expiry",
+    "region": "LATAM",
+    "industry": "Electronics",
+    "expected_primary_value": "2028-09-30"
+  },
+  {
+    "supplier_id": "DEMO20-19",
+    "name": "Demo Spruce Fibres",
+    "reason": "Origin claim needs clarification",
+    "region": "AMER",
+    "industry": "Textiles",
+    "expected_primary_value": "Cotton sourced from Portugal for this demonstration batch"
+  },
+  {
+    "supplier_id": "DEMO20-20",
+    "name": "Demo Willow Systems",
+    "reason": "Missing maintenance instructions",
+    "region": "APAC",
+    "industry": "Industrial",
+    "expected_primary_value": "Inspect every 6 months and replace the filter annually"
+  }
+]

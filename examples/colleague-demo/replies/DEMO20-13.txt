@@ -1,0 +1,12 @@
+Hello NOVA team,
+
+Here are the answers from Demo Maple Devices:
+
+DEMO20-13-F1=5 years under normal operating conditions
+DEMO20-13-F2=Fictional demo evidence DEMO20-13, reporting period 2026
+DEMO20-13-F3=Demo product family 13
+
+These are fictional demonstration values.
+Kind regards,
+Alex Example
+Demo supplier representative

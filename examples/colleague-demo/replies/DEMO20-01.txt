@@ -1,0 +1,12 @@
+Hello NOVA team,
+
+Here are the answers from Demo Alder Motion:
+
+DEMO20-01-F1=2028-12-31
+DEMO20-01-F2=Fictional demo evidence DEMO20-01, reporting period 2026
+DEMO20-01-F3=Demo product family 01
+
+These are fictional demonstration values.
+Kind regards,
+Alex Example
+Demo supplier representative

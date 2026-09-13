@@ -229,3 +229,5 @@ This loads fictional data and demonstrates email approval, PDF reply review, a f
 data approval without live providers or changes to the main database. See [the three-minute demo guide](docs/demo.md).
 
 See [the demo and privacy walkthrough](docs/privacy-demo.md) for a short example and the exact anonymization boundaries.
+
+A [20-supplier colleague demo](examples/colleague-demo/README.md) is loaded in the hosted app. Search `DEMO20`; request drafts await approval. The kit includes the import CSV and a matching reply for each supplier.

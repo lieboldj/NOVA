@@ -1,0 +1,12 @@
+Hello NOVA team,
+
+Here are the answers from Demo Willow Systems:
+
+DEMO20-20-F1=Inspect every 6 months and replace the filter annually
+DEMO20-20-F2=Fictional demo evidence DEMO20-20, reporting period 2026
+DEMO20-20-F3=Demo product family 20
+
+These are fictional demonstration values.
+Kind regards,
+Alex Example
+Demo supplier representative

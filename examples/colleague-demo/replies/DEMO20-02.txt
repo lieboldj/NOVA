@@ -1,0 +1,12 @@
+Hello NOVA team,
+
+Here are the answers from Demo Birch Packaging:
+
+DEMO20-02-F1=75% recycled paper
+DEMO20-02-F2=Fictional demo evidence DEMO20-02, reporting period 2026
+DEMO20-02-F3=Demo product family 02
+
+These are fictional demonstration values.
+Kind regards,
+Alex Example
+Demo supplier representative

@@ -1,0 +1,12 @@
+Hello NOVA team,
+
+Here are the answers from Demo Kestrel Mobility:
+
+DEMO20-11-F1=Fictional Demonstration Plant A
+DEMO20-11-F2=Fictional demo evidence DEMO20-11, reporting period 2026
+DEMO20-11-F3=Demo product family 11
+
+These are fictional demonstration values.
+Kind regards,
+Alex Example
+Demo supplier representative

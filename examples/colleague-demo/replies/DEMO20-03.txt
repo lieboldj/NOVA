@@ -1,0 +1,12 @@
+Hello NOVA team,
+
+Here are the answers from Demo Cedar Circuits:
+
+DEMO20-03-F1=60% copper and 40% polymer
+DEMO20-03-F2=Fictional demo evidence DEMO20-03, reporting period 2026
+DEMO20-03-F3=Demo product family 03
+
+These are fictional demonstration values.
+Kind regards,
+Alex Example
+Demo supplier representative
