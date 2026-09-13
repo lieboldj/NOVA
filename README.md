@@ -62,6 +62,11 @@ uv run ruff check nova tests scripts migrations
 uv run python scripts/check_gemini.py
 ```
 
+## Team
+
+Built by Samira Jalilian, Wiebke Bastrich, Birgit Depping, Johanna Reichert, and Jeanine Liebold
+at the AI Women Hackathon 2026 in Hamburg.
+
 ---
 
 > **AI-generated code notice:** Substantial parts of this codebase, including application code, tests,
