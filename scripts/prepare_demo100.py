@@ -185,12 +185,12 @@ def generate():
                 }
             )
     with (DEST / "suppliers.csv").open("w", encoding="utf-8", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=V2_COLUMNS + ["Region", "Industry"])
+        writer = csv.DictWriter(stream, fieldnames=V2_COLUMNS + ["Region", "Industry"], lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     parse_csv((DEST / "suppliers.csv").read_bytes())
     with (DEST / "article-index.csv").open("w", encoding="utf-8", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(manifest[0]))
+        writer = csv.DictWriter(stream, fieldnames=list(manifest[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(manifest)
     print(
