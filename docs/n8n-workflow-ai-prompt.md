@@ -1,7 +1,7 @@
 # Prompt for the n8n workflow AI
 
-Paste the following into n8n's workflow AI. It describes existing NOVA endpoints and keeps all approvals in
-the backend. For an n8n instance outside the local Docker network, supply a reachable NOVA URL first.
+Paste as-is into n8n's workflow AI (it's a functional prompt, not prose — shortening it would change
+what gets generated). Supply a reachable NOVA URL first if the n8n instance isn't on the local network.
 
 ```text
 Build two n8n workflows for NOVA, an internal supplier information follow-up system.

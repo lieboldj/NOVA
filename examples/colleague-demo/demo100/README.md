@@ -1,33 +1,41 @@
 # DEMO100 — fictional supplier scale fixture
 
-All names, IDs, products, declarations and historical dates are synthetic. Any resemblance to a real company is coincidental. This set is separate from the existing DEMO20 fixtures.
+All names, IDs and dates are synthetic. Separate from DEMO20.
 
-- `suppliers.csv`: import file with the exact V2_COLUMNS order plus the supported Region and Industry columns; 100 suppliers, 300 article cases (three NARTs each), 6,600 field rows.
-- `article-index.csv`: a convenient list of suppliers, articles, countries, industries and outstanding counts. This index is **not** an import file.
-- Five industries: automotive, packaging, electronics, textiles and industrial equipment. Twenty countries across EMEA, AMER, LATAM and APAC.
-- Each article has 22 fields, with 1–20 outstanding (3,150 total), at least one Complete field and an informational N/A field. Outstanding entries mix Missing, Outdated and Flagged (needs supplier confirmation).
-- MDF covers industry questions and quality evidence; PCF covers footprint, energy and logistics. Three DEMO100 module IDs intentionally avoid claiming these fictional questionnaires are an official compliance catalogue. Categories are seeded for the industry; the agent does not infer legal applicability.
+- `suppliers.csv` — V2_COLUMNS + Region/Industry; 100 suppliers, 300 article cases (3 NARTs each),
+  6,600 fields.
+- `article-index.csv` — a convenience index (not an import file).
+- 5 industries, 20 countries across EMEA/AMER/LATAM/APAC. 22 fields/article, 1–20 outstanding
+  (3,150 total), mixing Missing/Outdated/Flagged, plus one Complete and one N/A field each.
+- MDF (industry + quality evidence) and PCF (footprint/energy/logistics) — fictional, not an
+  official compliance catalogue; categories are seeded per industry, never legally inferred.
 
-Regenerate deterministically from the repository root:
+Regenerate: `uv run python -m scripts.prepare_demo100`
 
-```sh
-uv run python -m scripts.prepare_demo100
-```
+## Offline testing
 
-For offline testing, use a separate database with `AI_MODE=fixture`, `ANONYMIZER_MODE=fixture`, `MAIL_MODE=simulation` and `DEMO_AUTO_REPLY=false`. Import `suppliers.csv`, preview it, then approve the import. Approve a test contact on selected cases and prepare their initial drafts. Initial requests remain manually approved; no send jobs are created simply by importing this dataset.
+With `AI_MODE=fixture`, `ANONYMIZER_MODE=fixture`, `MAIL_MODE=simulation`, `DEMO_AUTO_REPLY=false`:
+import → approve → approve test contacts → prepare drafts (initial requests still need manual
+approval). Reply via `/cases/{id}/messages` with `field-id=value` lines, e.g.
+`DEMO100-001-A01-F01=Drawing DEMO100 revision 4` — omit fields or use an invalid date to test
+incomplete/invalid handling in the bulk review table.
 
-After simulated sending, submit replies through `/cases/{id}/messages` with the approved sender and exact field references, for example `DEMO100-001-A01-F01=Drawing DEMO100 revision 4`. The fixture extractor accepts `field-id=value` lines in email text or TXT/PDF evidence. Include only some requested fields to test incomplete replies; use an invalid date to test correction or rejection in the bulk review table.
+`AUTO_FOLLOWUP_ENABLED=true` + `AUTO_SEND_FOLLOWUPS=true` (`AUTO_SEND_DELAY_MINUTES` for the
+reviewer window) exercise the automatic follow-up/reminder path. `uv run pytest
+tests/test_demo100.py` covers import, approval, reminders, extraction, and bulk approval — no
+Gmail/Anymize/Gemini calls, no bundled credentials.
 
-Enable `AUTO_FOLLOWUP_ENABLED=true` for incomplete-answer automation. `AUTO_SEND_FOLLOWUPS=true` enables delayed follow-ups/reminders; `AUTO_SEND_DELAY_MINUTES=2` supplies the reviewer window. To exercise reminder cadence offline without waiting days, set a **test database** case's `next_action_at` into the past after initial simulated delivery, call `/automation/tick`, and advance the queued job's `available_at` in that test database. Repeat to verify `MAX_REMINDERS` escalation. Historical CSV contact dates are field metadata: importing them does not fabricate sent emails or overdue case timers.
+## Live/hosted use
 
-`uv run pytest tests/test_demo100.py` exercises import, selected initial approval, delayed reminder, evidence extraction and bulk approval without remote services. The generator and tests never contact Gmail, Anymize or Gemini. No contacts, credentials or live-send approvals are bundled. For a later live exercise, configure the providers and approved test mailbox separately and approve only the selected initial emails. DEMO100 now supports the same internal reply simulator as DEMO20. With `DEMO_AUTO_REPLY=true`, a human-approved Gmail send to the configured demo test mailbox queues a labelled fictional response for that article. Formats include email text, prose with spelling mistakes, TXT, PDF, mixed text/PDF and scanned PDF. Some initial replies omit answers or contain a placeholder/invalid date; follow-up replies provide corrected answers. Only requested field references for that article are included. Accepted supplier values still require review.
-
-For the current hosted demonstration, keep `AUTO_SEND_FOLLOWUPS=false` on both API and worker: **all outgoing emails require human approval**, while incoming demo replies are simulated automatically. `answers.json` contains the synthetic answers for each article and is regenerated with the CSV.
-
-After importing all 100 suppliers, an authorized operator can prepare the existing test contacts and unsent drafts with:
+DEMO100 supports the same reply simulator as DEMO20: with `DEMO_AUTO_REPLY=true`, an approved,
+sent request queues a labelled fictional reply (text/TXT/PDF/mixed/scanned formats, some
+incomplete/invalid) through real Anymize/Gemini — still subject to normal review. Keep
+`AUTO_SEND_FOLLOWUPS=false` on the hosted demo so every outgoing email stays manually approved.
+`answers.json` holds the synthetic answers (regenerated with the CSV).
 
 ```sh
 uv run python -m scripts.prepare_demo100_cloud
 ```
 
-This uses the existing ignored cloud connection settings, checks that automatic sending is disabled, assigns only the existing demo mailbox to blank DEMO100 contacts, and prepares initial drafts. It never approves or sends an email and never overwrites a different contact. In NOVA, open a DEMO100 case, review its email, and choose **Approve email & send**. NOVA then sends the real test email and creates the simulated reply internally; the reply does not come from a Gmail supplier inbox.
+Assigns the existing demo mailbox to blank contacts and prepares drafts — never approves, sends,
+or overwrites a different contact. Then in NOVA: open a case, review, **Approve email & send**.

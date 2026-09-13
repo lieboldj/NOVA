@@ -1,30 +1,25 @@
 # Colleague demonstration: 20 fictional suppliers
 
-Open https://nova-bnw6dmyvva-ey.a.run.app and sign in using the reviewer access key.
-Search **DEMO20** to show exactly these 20 suppliers. Outstanding workloads range from 1 to 20 fields
-with existing values to demonstrate unchanged confirmations.
+Open https://nova-bnw6dmyvva-ey.a.run.app, sign in, search **DEMO20** for these 20 suppliers
+(1–20 outstanding fields each, including some unchanged-confirmation cases).
 
 ## Five-minute walkthrough
 
-1. Show the DEMO20 list and compare suppliers with 1, 5, 12 and 20 outstanding fields.
-2. Open **Demo Birch Packaging** (DEMO20-02), then **Email** to show the real request sent to devstar4418@gcplab.me.
-3. Open **Supplier review**. The reply is clearly labelled as simulated; Gemini extraction is real.
-4. Show the original spelling and the separate **Suggested spelling correction**. To use it, click
-   **Use suggested correction**, then **Save proposed value**, then approve after review.
-5. Compare Demo Dune Fabrics (DEMO20-04) for PDF evidence and Demo Willow Systems (DEMO20-20) for scanned PDF/OCR.
-6. Show all received input, including unchanged confirmations, and approve/reject proposals before completing reply review.
+1. Compare suppliers with 1, 5, 12 and 20 outstanding fields.
+2. Open **Demo Birch Packaging** (DEMO20-02) → **Email** to see the real request sent to 4418.
+3. **Supplier review** — the reply is labelled simulated, but Gemini's extraction is real.
+4. Try **Suggested spelling correction** → **Use suggested correction** → **Save proposed value** → approve.
+5. Compare DEMO20-04 (PDF evidence) and DEMO20-20 (scanned PDF/OCR).
+6. Approve/reject proposals (incl. unchanged confirmations), then complete the reply review.
 
-## Automatic and manual replies
+## How the replies work
 
-The hosted run sends real requests to 4418 and generates fictional replies internally with DEMO_AUTO_REPLY enabled.
-The simulator does not send an email from the supplier mailbox. Responses rotate through plain text, prose, TXT, PDF,
-mixed email/PDF and scanned PDF; most include intentional spelling mistakes. Anymize and Gemini process them live.
-To test genuine supplier email replies instead, disable DEMO_AUTO_REPLY on API and worker, then reply from 4418
-to a newly approved request, preserving its subject. Each supplier's reply text file supplies its correct values.
-Existing requests in this hosted demo were sent on the user's instruction; no supplier data approvals were automated.
-Original supplier records and replies remain in Cloud SQL; Anymize runs before Gemini extraction.
+Requests are real (sent to 4418); replies are generated internally (`DEMO_AUTO_REPLY=true`) — never
+sent from the supplier mailbox — rotating through plain text, TXT, PDF, mixed, and scanned-PDF/OCR
+formats, several with intentional typos, all processed live through Anymize + Gemini. To test genuine
+replies instead, disable `DEMO_AUTO_REPLY` and reply from 4418 yourself, keeping the subject.
 
-## Supplier list
+## Suppliers
 
 | ID | Supplier | Region / industry | Outstanding | Reason to contact |
 |---|---|---|---|---|
@@ -49,15 +44,13 @@ Original supplier records and replies remain in Cloud SQL; Anymize runs before G
 | DEMO20-19 | Demo Spruce Fibres | AMER / Textiles | 13 | Origin claim needs clarification |
 | DEMO20-20 | Demo Willow Systems | APAC / Industrial | 17 | Missing maintenance instructions |
 
-## Industry and categories
-
-Industry and region filter suppliers using imported metadata. Category applicability is not inferred by the agent.
-This demo explicitly seeds industry-specific questions plus shared product, evidence, energy and logistics categories.
-For example, electronics includes standby power and circuit boards; textiles includes fabric and dyeing questions.
+Region/industry filter on imported metadata only — category applicability is never inferred.
 
 ## Reuse
 
-Run `uv run python -m scripts.prepare_colleague_demo --load` from the configured project workspace.
-The loader preserves existing cases, records its import ID before approval, and never approves email sending.
-It skips already existing demo suppliers; it does not reset completed cases.
-The CSV, manifest and 20 reply files are versioned together. All names and values are fictional.
+```bash
+uv run python -m scripts.prepare_colleague_demo --load
+```
+
+Preserves existing cases, skips suppliers already loaded, never approves sending. All names/values
+are fictional.
