@@ -328,3 +328,15 @@ confirmations and suggested spelling corrections remain available. No database m
 The separate [DEMO100 fixture](../examples/colleague-demo/demo100/README.md) contains 100 fictional
 suppliers, 300 article cases and 6,600 fields. It is packaged for optional import and tested offline;
 it does not seed the hosted database or send emails as part of deployment.
+
+
+## DEMO100 interactive workflow
+
+The imported DEMO100 fixture needs test contacts before drafting, just like any import.
+`scripts.prepare_demo100_cloud` connects blank contacts to the existing restricted demo mailbox
+and prepares pending initial drafts without approving or sending them. The runtime simulator
+now recognizes all 300 DEMO100 article cases and uses their generated `answers.json` fixture.
+Human-approved real Gmail delivery triggers one labelled internal supplier reply, followed by
+the existing Anymize → Gemini extraction and human data review. Formats and incomplete/invalid
+answers vary across articles. `AUTO_SEND_FOLLOWUPS=false` remains the hosted policy: every
+outgoing email is manually approved, while `DEMO_AUTO_REPLY=true` controls simulated replies independently.

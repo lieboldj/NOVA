@@ -1,6 +1,7 @@
 """Generate a deterministic, entirely fictional scale fixture. No API calls or imports."""
 
 import csv
+import json
 from collections import Counter
 from pathlib import Path
 
@@ -58,7 +59,7 @@ LOCATIONS = [
 
 def generate():
     DEST.mkdir(parents=True, exist_ok=True)
-    rows, manifest = [], []
+    rows, manifest, answers = [], [], {}
     for index in range(100):
         sid = f"DEMO100-{index + 1:03d}"
         suffix, industry = BUSINESSES[index % 10]
@@ -110,6 +111,9 @@ def generate():
         )
         for article in range(1, 4):
             nart = f"{sid}-A{article:02d}"
+            answers[nart] = {
+                f"{nart}-F{q + 1:02d}": answer for q, (_, answer, *_) in enumerate(questions[:-1])
+            }
             count = (index * 7 + (article - 1) * 9) % 20 + 1
             for q, (label, answer, section, use_case, module, category) in enumerate(questions):
                 field_type = (
@@ -189,6 +193,7 @@ def generate():
         writer.writeheader()
         writer.writerows(rows)
     parse_csv((DEST / "suppliers.csv").read_bytes())
+    (DEST / "answers.json").write_text(json.dumps(answers, indent=2) + "\n")
     with (DEST / "article-index.csv").open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=list(manifest[0]), lineterminator="\n")
         writer.writeheader()

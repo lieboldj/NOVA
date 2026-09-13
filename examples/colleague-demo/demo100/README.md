@@ -20,4 +20,14 @@ After simulated sending, submit replies through `/cases/{id}/messages` with the 
 
 Enable `AUTO_FOLLOWUP_ENABLED=true` for incomplete-answer automation. `AUTO_SEND_FOLLOWUPS=true` enables delayed follow-ups/reminders; `AUTO_SEND_DELAY_MINUTES=2` supplies the reviewer window. To exercise reminder cadence offline without waiting days, set a **test database** case's `next_action_at` into the past after initial simulated delivery, call `/automation/tick`, and advance the queued job's `available_at` in that test database. Repeat to verify `MAX_REMINDERS` escalation. Historical CSV contact dates are field metadata: importing them does not fabricate sent emails or overdue case timers.
 
-`uv run pytest tests/test_demo100.py` exercises import, selected initial approval, delayed reminder, evidence extraction and bulk approval without remote services. The generator and tests never contact Gmail, Anymize or Gemini. No contacts, credentials or live-send approvals are bundled. For a later live exercise, configure the providers and approved test mailbox separately and approve only the selected initial emails. The existing DEMO20 reply simulator does not automatically run for DEMO100.
+`uv run pytest tests/test_demo100.py` exercises import, selected initial approval, delayed reminder, evidence extraction and bulk approval without remote services. The generator and tests never contact Gmail, Anymize or Gemini. No contacts, credentials or live-send approvals are bundled. For a later live exercise, configure the providers and approved test mailbox separately and approve only the selected initial emails. DEMO100 now supports the same internal reply simulator as DEMO20. With `DEMO_AUTO_REPLY=true`, a human-approved Gmail send to the configured demo test mailbox queues a labelled fictional response for that article. Formats include email text, prose with spelling mistakes, TXT, PDF, mixed text/PDF and scanned PDF. Some initial replies omit answers or contain a placeholder/invalid date; follow-up replies provide corrected answers. Only requested field references for that article are included. Accepted supplier values still require review.
+
+For the current hosted demonstration, keep `AUTO_SEND_FOLLOWUPS=false` on both API and worker: **all outgoing emails require human approval**, while incoming demo replies are simulated automatically. `answers.json` contains the synthetic answers for each article and is regenerated with the CSV.
+
+After importing all 100 suppliers, an authorized operator can prepare the existing test contacts and unsent drafts with:
+
+```sh
+uv run python -m scripts.prepare_demo100_cloud
+```
+
+This uses the existing ignored cloud connection settings, checks that automatic sending is disabled, assigns only the existing demo mailbox to blank DEMO100 contacts, and prepares initial drafts. It never approves or sends an email and never overwrites a different contact. In NOVA, open a DEMO100 case, review its email, and choose **Approve email & send**. NOVA then sends the real test email and creates the simulated reply internally; the reply does not come from a Gmail supplier inbox.

@@ -676,6 +676,12 @@ export default function CaseDrawer({
                   Approve contact
                 </button>
               </form>
+              {!detail.recipient && (
+                <Notice>
+                  Approve a supplier email contact above to enable email
+                  drafting.
+                </Notice>
+              )}
               {!activeDraft && detail.status !== "closed" && (
                 <div className="review-card">
                   <p>
