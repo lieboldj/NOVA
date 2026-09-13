@@ -5,6 +5,20 @@ Here are the answers from Demo Pine Drive:
 DEMO20-16-F1=80% recycled aluminium by mass
 DEMO20-16-F2=Fictional demo evidence DEMO20-16, reporting period 2026
 DEMO20-16-F3=Demo product family 16
+DEMO20-16-F4=Drawing DEMO-A revision 3
+DEMO20-16-F5=Fictional electric passenger vehicle
+DEMO20-16-F6=Water-based protective coating
+DEMO20-16-F7=Mechanical fasteners
+DEMO20-16-F8=Inspect after 60000 km
+DEMO20-16-F9=Housing suitable for remanufacturing
+DEMO20-16-F10=Revision B, demonstration release 2026
+DEMO20-16-F11=Fictional batch DEMO-2026-09
+DEMO20-16-F12=One finished product
+DEMO20-16-F13=January to December 2026
+DEMO20-16-F14=2.4 kWh per unit
+DEMO20-16-F15=65 percent
+DEMO20-16-F16=0.08 kg per unit
+DEMO20-16-F17=450 km
 
 These are fictional demonstration values.
 Kind regards,

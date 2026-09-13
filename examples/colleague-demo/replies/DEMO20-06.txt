@@ -5,6 +5,12 @@ Here are the answers from Demo Fern Motors:
 DEMO20-06-F1=1.25 kg per unit
 DEMO20-06-F2=Fictional demo evidence DEMO20-06, reporting period 2026
 DEMO20-06-F3=Demo product family 06
+DEMO20-06-F4=Drawing DEMO-A revision 3
+DEMO20-06-F5=Fictional electric passenger vehicle
+DEMO20-06-F6=Water-based protective coating
+DEMO20-06-F7=Mechanical fasteners
+DEMO20-06-F8=Inspect after 60000 km
+DEMO20-06-F9=Housing suitable for remanufacturing
 
 These are fictional demonstration values.
 Kind regards,

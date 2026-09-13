@@ -5,6 +5,22 @@ Here are the answers from Demo Linden Cartons:
 DEMO20-12-F1=95% paperboard and 5% paper adhesive
 DEMO20-12-F2=Fictional demo evidence DEMO20-12, reporting period 2026
 DEMO20-12-F3=Demo product family 12
+DEMO20-12-F4=1.2 mm
+DEMO20-12-F5=Three layers
+DEMO20-12-F6=Water-based ink
+DEMO20-12-F7=Starch-based adhesive
+DEMO20-12-F8=20 cycles under normal use
+DEMO20-12-F9=400 by 300 by 20 mm
+DEMO20-12-F10=Revision B, demonstration release 2026
+DEMO20-12-F11=Fictional batch DEMO-2026-09
+DEMO20-12-F12=One finished product
+DEMO20-12-F13=January to December 2026
+DEMO20-12-F14=2.4 kWh per unit
+DEMO20-12-F15=65 percent
+DEMO20-12-F16=0.08 kg per unit
+DEMO20-12-F17=450 km
+DEMO20-12-F18=80 percent load factor
+DEMO20-12-F19=Reusable crates for return shipments
 
 These are fictional demonstration values.
 Kind regards,

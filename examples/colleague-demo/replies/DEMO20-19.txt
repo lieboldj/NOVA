@@ -5,6 +5,17 @@ Here are the answers from Demo Spruce Fibres:
 DEMO20-19-F1=Cotton sourced from Portugal for this demonstration batch
 DEMO20-19-F2=Fictional demo evidence DEMO20-19, reporting period 2026
 DEMO20-19-F3=Demo product family 19
+DEMO20-19-F4=180 g per square metre
+DEMO20-19-F5=Plain weave
+DEMO20-19-F6=Low-temperature batch dyeing
+DEMO20-19-F7=Machine wash at 30 degrees Celsius
+DEMO20-19-F8=Mechanical softening
+DEMO20-19-F9=Offcuts collected for fibre recycling
+DEMO20-19-F10=Revision B, demonstration release 2026
+DEMO20-19-F11=Fictional batch DEMO-2026-09
+DEMO20-19-F12=One finished product
+DEMO20-19-F13=January to December 2026
+DEMO20-19-F14=2.4 kWh per unit
 
 These are fictional demonstration values.
 Kind regards,

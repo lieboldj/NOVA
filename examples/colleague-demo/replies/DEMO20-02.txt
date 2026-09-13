@@ -5,6 +5,9 @@ Here are the answers from Demo Birch Packaging:
 DEMO20-02-F1=75% recycled paper
 DEMO20-02-F2=Fictional demo evidence DEMO20-02, reporting period 2026
 DEMO20-02-F3=Demo product family 02
+DEMO20-02-F4=1.2 mm
+DEMO20-02-F5=Three layers
+DEMO20-02-F6=Water-based ink
 
 These are fictional demonstration values.
 Kind regards,

@@ -5,6 +5,19 @@ Here are the answers from Demo Harbor Sensors:
 DEMO20-08-F1=2028-06-30
 DEMO20-08-F2=Fictional demo evidence DEMO20-08, reporting period 2026
 DEMO20-08-F3=Demo product family 08
+DEMO20-08-F4=0.4 W
+DEMO20-08-F5=24 V DC
+DEMO20-08-F6=Four layers
+DEMO20-08-F7=Replaceable battery module
+DEMO20-08-F8=Five years after delivery
+DEMO20-08-F9=Return through dedicated electronics collection
+DEMO20-08-F10=Revision B, demonstration release 2026
+DEMO20-08-F11=Fictional batch DEMO-2026-09
+DEMO20-08-F12=One finished product
+DEMO20-08-F13=January to December 2026
+DEMO20-08-F14=2.4 kWh per unit
+DEMO20-08-F15=65 percent
+DEMO20-08-F16=0.08 kg per unit
 
 These are fictional demonstration values.
 Kind regards,

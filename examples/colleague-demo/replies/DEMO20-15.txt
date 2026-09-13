@@ -5,6 +5,13 @@ Here are the answers from Demo Orchard Machines:
 DEMO20-15-F1=Rail freight for the main delivery route
 DEMO20-15-F2=Fictional demo evidence DEMO20-15, reporting period 2026
 DEMO20-15-F3=Demo product family 15
+DEMO20-15-F4=1.5 kW
+DEMO20-15-F5=Synthetic lubricant grade DEMO-46
+DEMO20-15-F6=Seven years after delivery
+DEMO20-15-F7=5 to 40 degrees Celsius
+DEMO20-15-F8=Level indoor surface with grounded power
+DEMO20-15-F9=Remove bolted panels before separating modules
+DEMO20-15-F10=Revision B, demonstration release 2026
 
 These are fictional demonstration values.
 Kind regards,

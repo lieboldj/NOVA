@@ -5,6 +5,21 @@ Here are the answers from Demo Willow Systems:
 DEMO20-20-F1=Inspect every 6 months and replace the filter annually
 DEMO20-20-F2=Fictional demo evidence DEMO20-20, reporting period 2026
 DEMO20-20-F3=Demo product family 20
+DEMO20-20-F4=1.5 kW
+DEMO20-20-F5=Synthetic lubricant grade DEMO-46
+DEMO20-20-F6=Seven years after delivery
+DEMO20-20-F7=5 to 40 degrees Celsius
+DEMO20-20-F8=Level indoor surface with grounded power
+DEMO20-20-F9=Remove bolted panels before separating modules
+DEMO20-20-F10=Revision B, demonstration release 2026
+DEMO20-20-F11=Fictional batch DEMO-2026-09
+DEMO20-20-F12=One finished product
+DEMO20-20-F13=January to December 2026
+DEMO20-20-F14=2.4 kWh per unit
+DEMO20-20-F15=65 percent
+DEMO20-20-F16=0.08 kg per unit
+DEMO20-20-F17=450 km
+DEMO20-20-F18=80 percent load factor
 
 These are fictional demonstration values.
 Kind regards,

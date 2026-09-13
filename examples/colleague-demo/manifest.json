@@ -5,7 +5,9 @@
     "reason": "Missing quality certificate expiry",
     "region": "EMEA",
     "industry": "Automotive",
-    "expected_primary_value": "2028-12-31"
+    "expected_primary_value": "2028-12-31",
+    "outstanding_count": 1,
+    "field_count": 3
   },
   {
     "supplier_id": "DEMO20-02",
@@ -13,7 +15,9 @@
     "reason": "Outdated recycled content",
     "region": "EMEA",
     "industry": "Packaging",
-    "expected_primary_value": "75% recycled paper"
+    "expected_primary_value": "75% recycled paper",
+    "outstanding_count": 5,
+    "field_count": 6
   },
   {
     "supplier_id": "DEMO20-03",
@@ -21,7 +25,9 @@
     "reason": "Conflicting material composition",
     "region": "APAC",
     "industry": "Electronics",
-    "expected_primary_value": "60% copper and 40% polymer"
+    "expected_primary_value": "60% copper and 40% polymer",
+    "outstanding_count": 12,
+    "field_count": 13
   },
   {
     "supplier_id": "DEMO20-04",
@@ -29,7 +35,9 @@
     "reason": "Missing country of manufacture",
     "region": "APAC",
     "industry": "Textiles",
-    "expected_primary_value": "Portugal"
+    "expected_primary_value": "Portugal",
+    "outstanding_count": 3,
+    "field_count": 4
   },
   {
     "supplier_id": "DEMO20-05",
@@ -37,7 +45,9 @@
     "reason": "Outdated energy sourcing statement",
     "region": "AMER",
     "industry": "Industrial",
-    "expected_primary_value": "2026 electricity supplied from renewable sources"
+    "expected_primary_value": "2026 electricity supplied from renewable sources",
+    "outstanding_count": 20,
+    "field_count": 21
   },
   {
     "supplier_id": "DEMO20-06",
@@ -45,7 +55,9 @@
     "reason": "Missing product weight",
     "region": "APAC",
     "industry": "Automotive",
-    "expected_primary_value": "1.25 kg per unit"
+    "expected_primary_value": "1.25 kg per unit",
+    "outstanding_count": 8,
+    "field_count": 9
   },
   {
     "supplier_id": "DEMO20-07",
@@ -53,7 +65,9 @@
     "reason": "Packaging weight needs confirmation",
     "region": "AMER",
     "industry": "Packaging",
-    "expected_primary_value": "120 g per unit"
+    "expected_primary_value": "120 g per unit",
+    "outstanding_count": 2,
+    "field_count": 3
   },
   {
     "supplier_id": "DEMO20-08",
@@ -61,7 +75,9 @@
     "reason": "Expired calibration evidence",
     "region": "EMEA",
     "industry": "Electronics",
-    "expected_primary_value": "2028-06-30"
+    "expected_primary_value": "2028-06-30",
+    "outstanding_count": 15,
+    "field_count": 16
   },
   {
     "supplier_id": "DEMO20-09",
@@ -69,7 +85,9 @@
     "reason": "Missing fibre composition",
     "region": "LATAM",
     "industry": "Textiles",
-    "expected_primary_value": "80% cotton and 20% polyester"
+    "expected_primary_value": "80% cotton and 20% polyester",
+    "outstanding_count": 4,
+    "field_count": 5
   },
   {
     "supplier_id": "DEMO20-10",
@@ -77,7 +95,9 @@
     "reason": "Reporting period needs confirmation",
     "region": "EMEA",
     "industry": "Industrial",
-    "expected_primary_value": "2026"
+    "expected_primary_value": "2026",
+    "outstanding_count": 10,
+    "field_count": 11
   },
   {
     "supplier_id": "DEMO20-11",
@@ -85,7 +105,9 @@
     "reason": "Missing manufacturing site",
     "region": "AMER",
     "industry": "Automotive",
-    "expected_primary_value": "Fictional Demonstration Plant A"
+    "expected_primary_value": "Fictional Demonstration Plant A",
+    "outstanding_count": 6,
+    "field_count": 7
   },
   {
     "supplier_id": "DEMO20-12",
@@ -93,7 +115,9 @@
     "reason": "Outdated packaging composition",
     "region": "LATAM",
     "industry": "Packaging",
-    "expected_primary_value": "95% paperboard and 5% paper adhesive"
+    "expected_primary_value": "95% paperboard and 5% paper adhesive",
+    "outstanding_count": 18,
+    "field_count": 19
   },
   {
     "supplier_id": "DEMO20-13",
@@ -101,7 +125,9 @@
     "reason": "Product lifetime needs clarification",
     "region": "AMER",
     "industry": "Electronics",
-    "expected_primary_value": "5 years under normal operating conditions"
+    "expected_primary_value": "5 years under normal operating conditions",
+    "outstanding_count": 7,
+    "field_count": 8
   },
   {
     "supplier_id": "DEMO20-14",
@@ -109,7 +135,9 @@
     "reason": "Missing water consumption data",
     "region": "EMEA",
     "industry": "Textiles",
-    "expected_primary_value": "12 litres per product"
+    "expected_primary_value": "12 litres per product",
+    "outstanding_count": 14,
+    "field_count": 15
   },
   {
     "supplier_id": "DEMO20-15",
@@ -117,7 +145,9 @@
     "reason": "Outdated transport information",
     "region": "LATAM",
     "industry": "Industrial",
-    "expected_primary_value": "Rail freight for the main delivery route"
+    "expected_primary_value": "Rail freight for the main delivery route",
+    "outstanding_count": 9,
+    "field_count": 10
   },
   {
     "supplier_id": "DEMO20-16",
@@ -125,7 +155,9 @@
     "reason": "Recycled metal claim needs confirmation",
     "region": "LATAM",
     "industry": "Automotive",
-    "expected_primary_value": "80% recycled aluminium by mass"
+    "expected_primary_value": "80% recycled aluminium by mass",
+    "outstanding_count": 16,
+    "field_count": 17
   },
   {
     "supplier_id": "DEMO20-17",
@@ -133,7 +165,9 @@
     "reason": "Missing end-of-life guidance",
     "region": "APAC",
     "industry": "Packaging",
-    "expected_primary_value": "Separate paper sleeve from plastic insert before recycling"
+    "expected_primary_value": "Separate paper sleeve from plastic insert before recycling",
+    "outstanding_count": 11,
+    "field_count": 12
   },
   {
     "supplier_id": "DEMO20-18",
@@ -141,7 +175,9 @@
     "reason": "Outdated certificate expiry",
     "region": "LATAM",
     "industry": "Electronics",
-    "expected_primary_value": "2028-09-30"
+    "expected_primary_value": "2028-09-30",
+    "outstanding_count": 19,
+    "field_count": 20
   },
   {
     "supplier_id": "DEMO20-19",
@@ -149,7 +185,9 @@
     "reason": "Origin claim needs clarification",
     "region": "AMER",
     "industry": "Textiles",
-    "expected_primary_value": "Cotton sourced from Portugal for this demonstration batch"
+    "expected_primary_value": "Cotton sourced from Portugal for this demonstration batch",
+    "outstanding_count": 13,
+    "field_count": 14
   },
   {
     "supplier_id": "DEMO20-20",
@@ -157,6 +195,8 @@
     "reason": "Missing maintenance instructions",
     "region": "APAC",
     "industry": "Industrial",
-    "expected_primary_value": "Inspect every 6 months and replace the filter annually"
+    "expected_primary_value": "Inspect every 6 months and replace the filter annually",
+    "outstanding_count": 17,
+    "field_count": 18
   }
 ]

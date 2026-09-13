@@ -5,6 +5,16 @@ Here are the answers from Demo Cedar Circuits:
 DEMO20-03-F1=60% copper and 40% polymer
 DEMO20-03-F2=Fictional demo evidence DEMO20-03, reporting period 2026
 DEMO20-03-F3=Demo product family 03
+DEMO20-03-F4=0.4 W
+DEMO20-03-F5=24 V DC
+DEMO20-03-F6=Four layers
+DEMO20-03-F7=Replaceable battery module
+DEMO20-03-F8=Five years after delivery
+DEMO20-03-F9=Return through dedicated electronics collection
+DEMO20-03-F10=Revision B, demonstration release 2026
+DEMO20-03-F11=Fictional batch DEMO-2026-09
+DEMO20-03-F12=One finished product
+DEMO20-03-F13=January to December 2026
 
 These are fictional demonstration values.
 Kind regards,

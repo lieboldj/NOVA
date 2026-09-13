@@ -5,6 +5,7 @@ Here are the answers from Demo Dune Fabrics:
 DEMO20-04-F1=Portugal
 DEMO20-04-F2=Fictional demo evidence DEMO20-04, reporting period 2026
 DEMO20-04-F3=Demo product family 04
+DEMO20-04-F4=180 g per square metre
 
 These are fictional demonstration values.
 Kind regards,

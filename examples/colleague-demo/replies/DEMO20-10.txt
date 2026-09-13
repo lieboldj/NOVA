@@ -5,6 +5,14 @@ Here are the answers from Demo Juniper Tools:
 DEMO20-10-F1=2026
 DEMO20-10-F2=Fictional demo evidence DEMO20-10, reporting period 2026
 DEMO20-10-F3=Demo product family 10
+DEMO20-10-F4=1.5 kW
+DEMO20-10-F5=Synthetic lubricant grade DEMO-46
+DEMO20-10-F6=Seven years after delivery
+DEMO20-10-F7=5 to 40 degrees Celsius
+DEMO20-10-F8=Level indoor surface with grounded power
+DEMO20-10-F9=Remove bolted panels before separating modules
+DEMO20-10-F10=Revision B, demonstration release 2026
+DEMO20-10-F11=Fictional batch DEMO-2026-09
 
 These are fictional demonstration values.
 Kind regards,

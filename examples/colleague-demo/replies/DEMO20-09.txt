@@ -5,6 +5,8 @@ Here are the answers from Demo Iris Weaving:
 DEMO20-09-F1=80% cotton and 20% polyester
 DEMO20-09-F2=Fictional demo evidence DEMO20-09, reporting period 2026
 DEMO20-09-F3=Demo product family 09
+DEMO20-09-F4=180 g per square metre
+DEMO20-09-F5=Plain weave
 
 These are fictional demonstration values.
 Kind regards,

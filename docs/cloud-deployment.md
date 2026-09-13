@@ -195,3 +195,17 @@ example configuration match. A live check with the deployed credentials passed A
 anonymization/restoration and structured extraction of `2028-12-31` from fictional,
 sanitized evidence before the cloud switch. No supplier record or email was needed.
 Official model ID: https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash.
+
+## Diverse colleague demo — 2026-09-13
+
+The existing 20 untouched `DEMO20` suppliers were updated using the scoped
+`nova-demo-diversify` one-off Cloud Run job and `scripts/update_colleague_demo.py`.
+The job reads the private `demo-fixtures/colleague-diverse-v2.csv` object from the evidence
+bucket. It checks all 20 identities and refuses cases with sent/approved mail or replies,
+updates fields transactionally, retains superseded drafts and creates fresh unapproved
+requests. Other suppliers are outside its scope. Repeating the same update is idempotent.
+
+There are 231 total fields, including 210 outstanding: one supplier at every count from
+1 through 20. Local transaction/idempotence checks and live API counts/draft references
+passed. All 231 prepared reply values pass the application validators. Industry-specific
+questions are seeded explicitly; NOVA's industry filter does not infer category applicability.

@@ -5,6 +5,10 @@ Here are the answers from Demo Kestrel Mobility:
 DEMO20-11-F1=Fictional Demonstration Plant A
 DEMO20-11-F2=Fictional demo evidence DEMO20-11, reporting period 2026
 DEMO20-11-F3=Demo product family 11
+DEMO20-11-F4=Drawing DEMO-A revision 3
+DEMO20-11-F5=Fictional electric passenger vehicle
+DEMO20-11-F6=Water-based protective coating
+DEMO20-11-F7=Mechanical fasteners
 
 These are fictional demonstration values.
 Kind regards,

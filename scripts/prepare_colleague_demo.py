@@ -236,6 +236,66 @@ SUPPLIERS = [
 ]
 
 
+# Deliberately shuffled so neighboring suppliers have visibly different workloads.
+OUTSTANDING_COUNTS = [1, 5, 12, 3, 20, 8, 2, 15, 4, 10, 6, 18, 7, 14, 9, 16, 11, 19, 13, 17]
+COMMON_QUESTIONS = [
+    ("Product revision reference", "Revision B, demonstration release 2026", "Product identity"),
+    ("Production batch reference", "Fictional batch DEMO-2026-09", "Traceability"),
+    ("Declared functional unit", "One finished product", "Product identity"),
+    ("Assessment reference period", "January to December 2026", "Environmental data"),
+    ("Electricity use per unit", "2.4 kWh per unit", "Energy"),
+    ("Renewable electricity share", "65 percent", "Energy"),
+    ("Waste generated per unit", "0.08 kg per unit", "Environmental data"),
+    ("Main delivery distance", "450 km", "Logistics"),
+    ("Shipment loading assumption", "80 percent load factor", "Logistics"),
+    ("Reusable transport packaging", "Reusable crates for return shipments", "Packaging"),
+    ("Evidence issue date", "2026-09-01", "Evidence"),
+    ("Data measurement approach", "Measured site totals allocated per product", "Evidence"),
+]
+INDUSTRY_QUESTIONS = {
+    "Automotive": [
+        ("Part drawing revision", "Drawing DEMO-A revision 3", "Engineering"),
+        ("Vehicle application", "Fictional electric passenger vehicle", "Engineering"),
+        ("Component surface treatment", "Water-based protective coating", "Materials"),
+        ("Assembly joining method", "Mechanical fasteners", "Manufacturing"),
+        ("Service replacement interval", "Inspect after 60000 km", "Maintenance"),
+        ("Remanufacturing suitability", "Housing suitable for remanufacturing", "Circularity"),
+    ],
+    "Packaging": [
+        ("Board thickness", "1.2 mm", "Packaging specifications"),
+        ("Packaging layer count", "Three layers", "Packaging specifications"),
+        ("Printing ink system", "Water-based ink", "Materials"),
+        ("Adhesive type", "Starch-based adhesive", "Materials"),
+        ("Reusable packaging cycles", "20 cycles under normal use", "Circularity"),
+        ("Flattened storage dimensions", "400 by 300 by 20 mm", "Logistics"),
+    ],
+    "Electronics": [
+        ("Standby power consumption", "0.4 W", "Electrical specifications"),
+        ("Rated operating voltage", "24 V DC", "Electrical specifications"),
+        ("Printed circuit board layers", "Four layers", "Materials"),
+        ("Battery replacement approach", "Replaceable battery module", "Repairability"),
+        ("Firmware support period", "Five years after delivery", "Product support"),
+        ("Electronic waste handling", "Return through dedicated electronics collection", "Circularity"),
+    ],
+    "Textiles": [
+        ("Fabric area weight", "180 g per square metre", "Textile specifications"),
+        ("Fabric construction", "Plain weave", "Textile specifications"),
+        ("Dyeing process", "Low-temperature batch dyeing", "Manufacturing"),
+        ("Washing instructions", "Machine wash at 30 degrees Celsius", "Product care"),
+        ("Finishing treatment", "Mechanical softening", "Manufacturing"),
+        ("Cutting waste recovery", "Offcuts collected for fibre recycling", "Circularity"),
+    ],
+    "Industrial": [
+        ("Rated operating power", "1.5 kW", "Technical specifications"),
+        ("Lubricant specification", "Synthetic lubricant grade DEMO-46", "Maintenance"),
+        ("Replacement parts availability", "Seven years after delivery", "Product support"),
+        ("Operating temperature range", "5 to 40 degrees Celsius", "Technical specifications"),
+        ("Installation requirements", "Level indoor surface with grounded power", "Installation"),
+        ("Disassembly approach", "Remove bolted panels before separating modules", "Circularity"),
+    ],
+}
+
+
 def generate():
     DEST.mkdir(parents=True, exist_ok=True)
     (DEST / "replies").mkdir(exist_ok=True)
@@ -259,6 +319,27 @@ def generate():
                 f"Demo product family {i:02d}",
             ),
         ]
+        target = OUTSTANDING_COUNTS[i - 1]
+        categories = {1: "Supplier-specific request", 2: "Evidence", 3: "Product identity"}
+        if target == 1:
+            label2, type2, _, _, answer2 = fields[1]
+            fields[1] = (label2, type2, answer2, "Complete", answer2)
+        questions = INDUSTRY_QUESTIONS[industry] + COMMON_QUESTIONS
+        for offset, (question, response, category) in enumerate(questions[: max(0, target - 2)], 4):
+            field_status = ["Missing", "Outdated", "Flagged (needs supplier confirmation)"][(offset - 4) % 3]
+            previous = (
+                "" if field_status == "Missing" else "Previous demonstration value; supplier update required"
+            )
+            fields.append(
+                (
+                    question,
+                    "Date" if question == "Evidence issue date" else "Freetext",
+                    previous,
+                    field_status,
+                    response,
+                )
+            )
+            categories[offset] = category
         reply = [f"Hello NOVA team,\n\nHere are the answers from Demo {name}:\n"]
         for j, (field_label, field_type, previous, field_status, value) in enumerate(fields, 1):
             fid = f"{sid}-F{j}"
@@ -273,8 +354,8 @@ def generate():
                             f"{sid}-ARTICLE",
                             "MDF",
                             "DEMO",
-                            industry,
-                            reason,
+                            categories[j],
+                            reason if j <= 3 else categories[j],
                             field_label,
                             field_type,
                             "Yes",
@@ -300,6 +381,8 @@ def generate():
                 "region": region,
                 "industry": industry,
                 "expected_primary_value": answer,
+                "outstanding_count": target,
+                "field_count": len(fields),
             }
         )
     with (DEST / "suppliers.csv").open("w", newline="") as f:
@@ -307,19 +390,19 @@ def generate():
         writer.writeheader()
         writer.writerows(rows)
     parsed = parse_csv((DEST / "suppliers.csv").read_bytes())
-    assert len(parsed) == 60 and len({r["Supplier ID"] for r in parsed}) == 20
+    assert len(parsed) == 231 and len({r["Supplier ID"] for r in parsed}) == 20
     (DEST / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     guide = [
         "# Colleague demonstration: 20 fictional suppliers",
         "",
         "Open https://nova-bnw6dmyvva-ey.a.run.app and sign in using the reviewer access key.",
-        "Search **DEMO20** to show exactly these 20 suppliers. Each has two outstanding fields",
-        "and one existing value to demonstrate unchanged confirmations.",
+        "Search **DEMO20** to show exactly these 20 suppliers. Outstanding workloads range from 1 to 20 fields",
+        "with existing values to demonstrate unchanged confirmations.",
         "",
         "## Five-minute walkthrough",
         "",
         "1. Show the supplier list, then open **Demo Alder Motion** (DEMO20-01).",
-        "2. Review the missing certificate expiry and supporting evidence reference.",
+        "2. Review the one missing certificate expiry; compare with Demo Ember Components, which has 20 outstanding fields.",
         "3. Open the **Email** tab. The request is prepared for the configured test mailbox.",
         "   Click **Approve email & send** when ready. This sends one real demo email.",
         "4. In that mailbox, reply to the request, preserving the entire subject.",
@@ -335,14 +418,20 @@ def generate():
         "",
         "## Supplier list",
         "",
-        "| ID | Supplier | Region / industry | Reason to contact |",
-        "|---|---|---|---|",
+        "| ID | Supplier | Region / industry | Outstanding | Reason to contact |",
+        "|---|---|---|---|---|",
     ]
     for item in manifest:
         guide.append(
-            f"| {item['supplier_id']} | {item['name']} | {item['region']} / {item['industry']} | {item['reason']} |"
+            f"| {item['supplier_id']} | {item['name']} | {item['region']} / {item['industry']} | {item['outstanding_count']} | {item['reason']} |"
         )
     guide += [
+        "",
+        "## Industry and categories",
+        "",
+        "Industry and region filter suppliers using imported metadata. Category applicability is not inferred by the agent.",
+        "This demo explicitly seeds industry-specific questions plus shared product, evidence, energy and logistics categories.",
+        "For example, electronics includes standby power and circuit boards; textiles includes fabric and dyeing questions.",
         "",
         "## Reuse",
         "",
@@ -353,7 +442,7 @@ def generate():
         "",
     ]
     (DEST / "README.md").write_text("\n".join(guide))
-    print("Generated 20 suppliers, 60 fields and 20 matching reply examples.", flush=True)
+    print("Generated 20 suppliers, 231 fields (210 outstanding) and 20 matching reply examples.", flush=True)
     return manifest
 
 
@@ -399,12 +488,16 @@ def load(manifest):
         for case in cases:
             assert case["recipient"] == config["gmail_supplier"]
             detail = api("GET", "/cases/" + case["id"])
-            assert len(detail["fields"]) == 3
+            assert len(detail["fields"]) == next(
+                s["field_count"] for s in manifest if s["supplier_id"] == case["supplier_id"]
+            )
             drafts = api("GET", "/drafts", params={"case_id": case["id"]})
             if not drafts and case["status"] == "open":
                 api("POST", f"/cases/{case['id']}/draft")
             report.append({"supplier_id": case["supplier_id"], "case_id": case["id"]})
-        state.update(cases=report, supplier_count=20, field_count=60, loaded=True)
+        state.update(
+            cases=report, supplier_count=20, field_count=sum(s["field_count"] for s in manifest), loaded=True
+        )
         save(state_path, state)
         final = [c for c in api("GET", "/cases", params={"limit": 500}) if c["supplier_id"] in ids]
         print(

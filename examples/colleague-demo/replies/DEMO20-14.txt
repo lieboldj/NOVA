@@ -5,6 +5,18 @@ Here are the answers from Demo Nacre Textiles:
 DEMO20-14-F1=12 litres per product
 DEMO20-14-F2=Fictional demo evidence DEMO20-14, reporting period 2026
 DEMO20-14-F3=Demo product family 14
+DEMO20-14-F4=180 g per square metre
+DEMO20-14-F5=Plain weave
+DEMO20-14-F6=Low-temperature batch dyeing
+DEMO20-14-F7=Machine wash at 30 degrees Celsius
+DEMO20-14-F8=Mechanical softening
+DEMO20-14-F9=Offcuts collected for fibre recycling
+DEMO20-14-F10=Revision B, demonstration release 2026
+DEMO20-14-F11=Fictional batch DEMO-2026-09
+DEMO20-14-F12=One finished product
+DEMO20-14-F13=January to December 2026
+DEMO20-14-F14=2.4 kWh per unit
+DEMO20-14-F15=65 percent
 
 These are fictional demonstration values.
 Kind regards,

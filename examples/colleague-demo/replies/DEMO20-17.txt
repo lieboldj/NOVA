@@ -5,6 +5,15 @@ Here are the answers from Demo Quartz Wrapping:
 DEMO20-17-F1=Separate paper sleeve from plastic insert before recycling
 DEMO20-17-F2=Fictional demo evidence DEMO20-17, reporting period 2026
 DEMO20-17-F3=Demo product family 17
+DEMO20-17-F4=1.2 mm
+DEMO20-17-F5=Three layers
+DEMO20-17-F6=Water-based ink
+DEMO20-17-F7=Starch-based adhesive
+DEMO20-17-F8=20 cycles under normal use
+DEMO20-17-F9=400 by 300 by 20 mm
+DEMO20-17-F10=Revision B, demonstration release 2026
+DEMO20-17-F11=Fictional batch DEMO-2026-09
+DEMO20-17-F12=One finished product
 
 These are fictional demonstration values.
 Kind regards,
