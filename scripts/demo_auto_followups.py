@@ -102,7 +102,10 @@ def main(phase):
                 )
                 if automatic:
                     auto = automatic[0]
-                    assert auto["approved_by"] == "auto-followup"
+                    assert auto["approved_by"] in (
+                        "automation",
+                        "auto-followup",
+                    )  # Includes historical approvals.
                     assert auto["requested_fields"] == [f"{sid}-F{i}" for i in expected]
                     assert auto["body"].endswith("Thank you,\nSupplier Information Team\n\n" + AI_DISCLOSURE)
                 detail = api("GET", "/cases/" + case["id"])

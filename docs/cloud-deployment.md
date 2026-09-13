@@ -231,9 +231,8 @@ Set `DEMO_AUTO_REPLY=false` on API and worker to stop generating future scripted
 Spelling suggestions are optional separate Gemini output, generated only from sanitized
 sources. NOVA preserves the extracted spelling and verbatim evidence, checks suggestions
 for changes to quantities, identifiers and field types, and stores eligible suggestions
-alongside the proposal. **Use suggested correction** fills the proposal editor; **Save
-proposed value** and a subsequent human approval are still required to change accepted
-data. This is a review aid, not automatic correction or a guarantee about semantics.
+alongside the proposal. **Use suggested correction** fills the proposal editor; the reviewer
+checks the edited value and chooses **Submit reply review** to approve accepted data. This is a review aid, not automatic correction or a guarantee about semantics.
 
 Deployment/send commands (sending is authorized for this demonstration):
 ```bash
@@ -275,8 +274,9 @@ supplier statement; substantive data review remains human.
 
 Initial requests still require reviewer approval. Follow-ups are generated from known field
 references and approved supplier contacts, not arbitrary commands in reply text. They are
-recorded as `kind=auto_followup`, `approved_by=auto-followup`, with a trigger-message audit
-record. Before sending, the worker checks the policy, exact content digest, case revision
+recorded as `kind=auto_followup`, `approved_by=automation`, with a trigger-message audit
+record and a distinct `email.auto_approved` entry. The shared `AUTO_SEND_FOLLOWUPS=true`
+policy and `AUTO_SEND_DELAY_MINUTES=2` give reviewers a window before dispatch. Before sending, the worker checks the policy, exact content digest, case revision
 and whether the questions are still unresolved. Failed extraction or unread evidence does
 not cause an automatic follow-up. A maximum of three rounds per case prevents loops;
 automation stops at the limit and leaves the case for review. Set the flag false on API
@@ -310,3 +310,21 @@ available. Gmail Sent and the actual transmitted AI disclosure were verified for
 automatic follow-ups. The live browser verified their automatic-authorization label and
 question scope. Backend tests: 59 passed, one PostgreSQL-only check skipped; four browser
 tests passed. Deploy/persist the policy with `uv run python -m scripts.enable_auto_followups`.
+
+
+## Delayed automatic email and bulk reply review
+
+`AUTO_SEND_FOLLOWUPS=true` and `AUTO_SEND_DELAY_MINUTES=2` apply to follow-ups after
+review, scheduled reminders, and the existing incomplete-answer follow-ups. Initial requests
+remain pending until reviewer approval. API and worker must use matching settings. Human edits
+increment draft.version and clear approval; the old queued job is cancelled when claimed.
+The Email tab shows the earliest scheduled send time. Saving edits requires fresh human approval.
+
+Supplier review now displays every reply's proposals in one editable table, with approve/reject
+decisions and one submission to `/messages/{id}/approve-all`. Validation and stale-record checks
+precede writes; all decisions commit together. Original text, all attachments, unchanged
+confirmations and suggested spelling corrections remain available. No database migration is needed.
+
+The separate [DEMO100 fixture](../examples/colleague-demo/demo100/README.md) contains 100 fictional
+suppliers, 300 article cases and 6,600 fields. It is packaged for optional import and tested offline;
+it does not seed the hosted database or send emails as part of deployment.

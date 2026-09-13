@@ -3,12 +3,13 @@ import hashlib
 import io
 import json
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from fastapi import HTTPException
 from sqlalchemy import select
 
+from nova.config import get_settings
 from nova.models import Audit, Case, Draft, Job, Message, Proposal, SupplierField, now
 
 CSV_COLUMNS = [
@@ -32,6 +33,7 @@ V2_COLUMNS = CSV_COLUMNS[:3] + ["Country"] + CSV_COLUMNS[3:] + ["Workflow status
 TARGETING_COLUMNS = ["Region", "Industry"]
 OUTSTANDING = {"Missing", "Outdated", "Flagged (needs supplier confirmation)"}
 STATUSES = OUTSTANDING | {"Complete", "N/A (informational field)"}
+AI_DISCLOSURE = "This email was written and sent automatically by an AI system."
 ACTIVE_DRAFTS = ["pending", "approved", "sending", "uncertain"]
 
 
@@ -185,7 +187,26 @@ def invalidate_drafts(db, case):
     case.revision += 1
 
 
-def create_draft(db, case, kind, use_case=None):
+def auto_approve_draft(db, draft, settings):
+    draft.status = "approved"
+    draft.approved_by = "automation"
+    draft.approved_at = now()
+    draft.approved_digest = draft_digest(draft)
+    job = enqueue(db, "send", draft.id, f"send:{draft.id}:{draft.version}")
+    job.available_at = now() + timedelta(minutes=settings.auto_send_delay_minutes)
+    audit(
+        db,
+        "automation",
+        "email.auto_approved",
+        draft.id,
+        version=draft.version,
+        available_at=job.available_at.isoformat(),
+        kind=draft.kind,
+    )
+
+
+def create_draft(db, case, kind, use_case=None, settings=None):
+    settings = settings or get_settings()
     if not case.recipient:
         fail("Approve a supplier email contact before drafting.")
     if pending_review(db, case.id) or blocking_message(db, case.id):
@@ -220,6 +241,8 @@ def create_draft(db, case, kind, use_case=None):
         + "\n".join(lines)
         + "\n\nThank you,\nSupplier Information Team"
     )
+    if kind in ("followup", "reminder"):
+        body += "\n\n" + AI_DISCLOSURE
     draft = Draft(
         case_id=case.id,
         kind=kind,
@@ -234,6 +257,8 @@ def create_draft(db, case, kind, use_case=None):
     case.next_action_at = None
     db.flush()
     audit(db, "backend", "email.drafted", draft.id, kind=kind)
+    if kind in ("followup", "reminder") and settings.auto_send_followups:
+        auto_approve_draft(db, draft, settings)
     return draft
 
 
@@ -262,6 +287,6 @@ def tick(db, settings):
             audit(db, "backend", "case.escalated", case.id)
             counts["escalated"] += 1
             continue
-        create_draft(db, case, kind)
+        create_draft(db, case, kind, settings=settings)
         counts["drafted"] += 1
     return counts

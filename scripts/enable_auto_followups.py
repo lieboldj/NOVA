@@ -17,19 +17,33 @@ def main():
             name,
             f"--region={REGION}",
             f"--image={image}",
-            "--update-env-vars=AUTO_FOLLOWUP_ENABLED=true,AUTO_FOLLOWUP_MAX_ROUNDS=3",
+            "--update-env-vars=AUTO_FOLLOWUP_ENABLED=true,AUTO_FOLLOWUP_MAX_ROUNDS=3,AUTO_SEND_FOLLOWUPS=true,AUTO_SEND_DELAY_MINUTES=2",
         )
-        print(name + ": automatic follow-ups enabled (maximum three rounds)", flush=True)
+        print(
+            name
+            + ": automatic follow-ups enabled (two-minute delay, maximum three incomplete-answer rounds)",
+            flush=True,
+        )
     path = Path(".env")
     content = path.read_text()
-    for key, value in {"AUTO_FOLLOWUP_ENABLED": "true", "AUTO_FOLLOWUP_MAX_ROUNDS": "3"}.items():
+    for key, value in {
+        "AUTO_FOLLOWUP_ENABLED": "true",
+        "AUTO_FOLLOWUP_MAX_ROUNDS": "3",
+        "AUTO_SEND_FOLLOWUPS": "true",
+        "AUTO_SEND_DELAY_MINUTES": "2",
+    }.items():
         if re.search(r"^" + key + "=", content, re.M):
             content = re.sub(r"^" + key + "=.*$", key + "=" + value, content, flags=re.M)
         else:
             content += "\n" + key + "=" + value + "\n"
     path.write_text(content)
     env = json.loads((ROOT / "nova-env.json").read_text())
-    env.update(AUTO_FOLLOWUP_ENABLED="true", AUTO_FOLLOWUP_MAX_ROUNDS="3")
+    env.update(
+        AUTO_FOLLOWUP_ENABLED="true",
+        AUTO_FOLLOWUP_MAX_ROUNDS="3",
+        AUTO_SEND_FOLLOWUPS="true",
+        AUTO_SEND_DELAY_MINUTES="2",
+    )
     save(ROOT / "nova-env.json", env)
 
 

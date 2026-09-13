@@ -30,6 +30,13 @@ class ProposalEdit(Approval):
     value: str = Field(min_length=1, max_length=10000)
 
 
+class ProposalDecision(StrictModel):
+    proposal_id: str = Field(min_length=1)
+    value: str = Field(max_length=10000)
+    action: Literal["approve", "reject"]
+    version: int | None = Field(default=None, ge=1)
+
+
 class SendReconciliation(Approval):
     outcome: Literal["sent", "not_sent"]
     note: str = Field(min_length=5, max_length=2000)

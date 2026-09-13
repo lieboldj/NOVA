@@ -261,8 +261,8 @@ export default function ProcessStarter({
                     <Bot size={22} />
                     <p>
                       Confirm the recipient below. Preparing the request creates
-                      a draft; you will review and approve the email before it
-                      is sent.
+                      a draft. Initial requests require your approval;
+                      follow-ups use the configured automatic sending delay.
                     </p>
                   </div>
                   <form

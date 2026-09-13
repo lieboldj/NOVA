@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { api, dateLabel } from "./api";
 import { Modal, Notice, StatusBadge } from "./components";
 
-function EmailReview({ draft, caseId, config, busy, act }) {
+function EmailReview({ draft, caseId, config, busy, act, sendJob }) {
   const [subject, setSubject] = useState(draft.subject);
   const [body, setBody] = useState(draft.body);
   const dirty = subject !== draft.subject || body !== draft.body;
@@ -22,10 +22,10 @@ function EmailReview({ draft, caseId, config, busy, act }) {
           {draft.kind === "auto_followup"
             ? "Automatic follow-up"
             : draft.kind === "request"
-            ? "Information request"
-            : draft.kind === "reminder"
-              ? "Reminder"
-              : "Follow-up"}
+              ? "Information request"
+              : draft.kind === "reminder"
+                ? "Reminder"
+                : "Follow-up"}
         </strong>
         <StatusBadge status={draft.status} />
       </div>
@@ -36,7 +36,17 @@ function EmailReview({ draft, caseId, config, busy, act }) {
         Version {draft.version} · {dateLabel(draft.created_at)}
       </p>
       {draft.kind === "auto_followup" && (
-        <Notice>Generated and authorized automatically for missing or invalid answers. Supplier data still requires your review.</Notice>
+        <Notice>
+          Generated and authorized automatically for missing or invalid answers.
+          Supplier data still requires your review.
+        </Notice>
+      )}
+      {draft.approved_by === "automation" && draft.status === "approved" && (
+        <Notice>
+          Automatically approved. Queued to send no earlier than{" "}
+          {dateLabel(sendJob?.available_at)}. Save edits or reject before
+          sending starts. Saved edits require fresh approval.
+        </Notice>
       )}
       <label className="field-label">
         Subject
@@ -221,137 +231,198 @@ function Reconcile({ draft, busy, act }) {
   );
 }
 
-function ProposalReview({ proposal, field, busy, act }) {
-  const [value, setValue] = useState(proposal.value);
-  const dirty = value !== proposal.value;
-  const pending = proposal.status === "pending";
-  const unchanged = proposal.value === proposal.old_value;
-  const correction = proposal.evidence?.spelling_correction;
+function ReplyProposalTable({ message, proposals, fields, busy, act }) {
+  const pending = proposals.filter((p) => p.status === "pending");
+  const [entries, setEntries] = useState(() =>
+    Object.fromEntries(
+      pending.map((p) => [
+        p.id,
+        {
+          proposal_id: p.id,
+          version: p.version,
+          value: p.value,
+          action: "approve",
+        },
+      ]),
+    ),
+  );
+  const dirty = pending.some(
+    (p) =>
+      entries[p.id].value !== p.value || entries[p.id].action !== "approve",
+  );
+  function update(id, changes) {
+    setEntries((current) => ({
+      ...current,
+      [id]: { ...current[id], ...changes },
+    }));
+  }
   return (
-    <article
-      className="review-card"
-      data-testid="proposal-review"
+    <form
       data-review-dirty={dirty}
+      onSubmit={(e) => {
+        e.preventDefault();
+        act(
+          () =>
+            api(`/messages/${message.id}/approve-all`, {
+              method: "POST",
+              body: pending.map((p) => entries[p.id]),
+            }),
+          "Reply review saved. Approved values written to the database.",
+        );
+      }}
     >
-      <div className="review-heading">
-        <strong>{field?.data["Field (label)"] || proposal.field_id}</strong>
-        <StatusBadge status={proposal.status} />
+      <div className="reply-table-scroll">
+        <table
+          className="reply-proposal-table"
+          aria-label="Supplier reply values"
+        >
+          <thead>
+            <tr>
+              <th>Field and evidence</th>
+              <th>Accepted value</th>
+              <th>Proposed value</th>
+              <th>Decision</th>
+            </tr>
+          </thead>
+          <tbody>
+            {proposals.map((proposal) => {
+              const field = fields.find((f) => f.id === proposal.field_id);
+              const entry = entries[proposal.id];
+              const correction = proposal.evidence?.spelling_correction;
+              const unchanged = proposal.old_value === proposal.value;
+              return (
+                <tr key={proposal.id} data-testid="proposal-review">
+                  <td>
+                    <strong>
+                      {field?.data["Field (label)"] || proposal.field_id}
+                    </strong>
+                    <p className="muted">
+                      {proposal.field_id} · Version {proposal.version}
+                    </p>
+                    <p className="muted">
+                      {unchanged
+                        ? "Unchanged confirmation"
+                        : proposal.old_value
+                          ? "Changed value"
+                          : "New value"}
+                    </p>
+                    <details>
+                      <summary>Evidence and extraction notes</summary>
+                      <p>{proposal.rationale}</p>
+                      <blockquote>{proposal.evidence?.quote}</blockquote>
+                      <p className="muted">
+                        Evidence: {proposal.evidence?.source_id}
+                        {proposal.evidence?.page
+                          ? ` · Page ${proposal.evidence.page}`
+                          : ""}
+                      </p>
+                      {proposal.evidence?.document_id && (
+                        <a
+                          href={`/api/documents/${proposal.evidence.document_id}`}
+                        >
+                          Download source attachment
+                        </a>
+                      )}
+                    </details>
+                  </td>
+                  <td>
+                    <p>{field?.data["Value submitted"] || "(empty)"}</p>
+                    {proposal.old_value !== field?.data["Value submitted"] && (
+                      <p className="muted">
+                        Before this reply: {proposal.old_value || "(empty)"}
+                      </p>
+                    )}
+                  </td>
+                  <td>
+                    <textarea
+                      aria-label="Proposed value"
+                      rows={3}
+                      value={entry?.value ?? proposal.value}
+                      disabled={!entry || busy}
+                      onChange={(e) =>
+                        update(proposal.id, { value: e.target.value })
+                      }
+                    />
+                    {correction && (
+                      <aside data-testid="spelling-suggestion">
+                        <strong>Suggested spelling correction</strong>
+                        <p>As extracted: {correction.original_value}</p>
+                        <p>Suggestion: {correction.value}</p>
+                        <p className="muted">
+                          {correction.reason} The original reply stays
+                          unchanged.
+                        </p>
+                        {entry && (
+                          <button
+                            type="button"
+                            className="secondary-btn"
+                            disabled={
+                              busy ||
+                              entry.value === correction.value ||
+                              !!correction.validation_errors?.length
+                            }
+                            onClick={() =>
+                              update(proposal.id, { value: correction.value })
+                            }
+                          >
+                            Use suggested correction
+                          </button>
+                        )}
+                      </aside>
+                    )}
+                    {!!proposal.validation_errors?.length && (
+                      <Notice error>
+                        {proposal.validation_errors.join("; ")} Edit the value
+                        or reject it before submitting.
+                      </Notice>
+                    )}
+                  </td>
+                  <td>
+                    {entry ? (
+                      <select
+                        aria-label="Field decision"
+                        value={entry.action}
+                        disabled={busy}
+                        onChange={(e) =>
+                          update(proposal.id, { action: e.target.value })
+                        }
+                      >
+                        <option value="approve">Approve</option>
+                        <option value="reject">Reject</option>
+                      </select>
+                    ) : (
+                      <StatusBadge status={proposal.status} />
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
-      <p className="muted">
-        {proposal.field_id} · Version {proposal.version}
-      </p>
-      <p className="muted">
-        {unchanged
-          ? "Unchanged confirmation"
-          : proposal.old_value
-            ? "Changed value"
-            : "New value"}
-      </p>
-      <div className="value-comparison">
-        <div>
-          <span className="muted">Previous accepted value</span>
-          <p>{proposal.old_value || "(empty)"}</p>
-        </div>
-        <div>
-          <span className="muted">Current accepted value</span>
-          <p>{field?.data["Value submitted"] || "(empty)"}</p>
-        </div>
-      </div>
-      <label className="field-label">
-        Proposed value
-        <textarea
-          aria-label="Proposed value"
-          rows={3}
-          value={value}
-          disabled={!pending || busy}
-          onChange={(e) => setValue(e.target.value)}
-        />
-      </label>
-      {correction && (
-        <aside className="review-card" data-testid="spelling-suggestion">
-          <strong>Suggested spelling correction</strong>
-          <p>As extracted: {correction.original_value}</p>
-          <p>Suggestion: {correction.value}</p>
-          <p className="muted">{correction.reason} The original reply stays unchanged.</p>
-          {pending && (
-            <button
-              className="secondary-btn"
-              disabled={busy || value === correction.value || !!correction.validation_errors?.length}
-              onClick={() => setValue(correction.value)}
-            >
-              Use suggested correction
-            </button>
-          )}
-          <p className="muted">Save the proposed value, then approve it after review.</p>
-        </aside>
-      )}
-      <p>{proposal.rationale}</p>
-      <blockquote>{proposal.evidence?.quote}</blockquote>
-      <p className="muted">
-        Evidence: {proposal.evidence?.source_id}
-        {proposal.evidence?.page ? ` · Page ${proposal.evidence.page}` : ""}
-      </p>
-      {proposal.evidence?.document_id && (
-        <a href={`/api/documents/${proposal.evidence.document_id}`}>
-          Download source attachment
-        </a>
-      )}
-      {!!proposal.validation_errors?.length && (
-        <Notice error>{proposal.validation_errors.join("; ")}</Notice>
-      )}
-      {pending && (
-        <div className="drawer-actions">
-          <button
-            className="secondary-btn"
-            disabled={busy || !dirty || !value.trim()}
-            onClick={() =>
-              act(
-                () =>
-                  api(`/proposals/${proposal.id}`, {
-                    method: "PATCH",
-                    body: { version: proposal.version, value },
-                  }),
-                "Proposal saved. Review the new version before approval.",
-              )
-            }
-          >
-            Save proposed value
-          </button>
-          <button
-            className="secondary-btn"
-            disabled={busy || dirty}
-            onClick={() =>
-              act(
-                () =>
-                  api(`/proposals/${proposal.id}/reject`, {
-                    method: "POST",
-                    body: { version: proposal.version },
-                  }),
-                "Supplier value rejected.",
-              )
-            }
-          >
-            {unchanged ? "Reject confirmation" : "Reject change"}
-          </button>
+      {!!pending.length && (
+        <>
+          <p className="muted">
+            Review every value and all original inputs above. Edit values or
+            select Reject, then submit this reply once. All decisions are saved
+            together.
+          </p>
           <button
             className="primary-btn"
-            disabled={busy || dirty || !!proposal.validation_errors?.length}
-            onClick={() =>
-              act(
-                () =>
-                  api(`/proposals/${proposal.id}/approve`, {
-                    method: "POST",
-                    body: { version: proposal.version },
-                  }),
-                "Approved value written to the database.",
+            disabled={
+              busy ||
+              pending.some(
+                (p) =>
+                  entries[p.id].action === "approve" &&
+                  !entries[p.id].value.trim(),
               )
             }
           >
-            {unchanged ? "Approve confirmation" : "Approve data change"}
+            Submit reply review
           </button>
-        </div>
+        </>
       )}
-    </article>
+    </form>
   );
 }
 
@@ -398,41 +469,45 @@ function SupplierReplyReview({
               matched to a field.
             </p>
           )}
-          {proposals.map((p) => (
-            <ProposalReview
-              key={`${p.id}:${p.version}`}
-              proposal={p}
-              field={fields.find((f) => f.id === p.field_id)}
+          {!!proposals.length && (
+            <ReplyProposalTable
+              key={proposals
+                .map((p) => `${p.id}:${p.version}:${p.status}`)
+                .join("|")}
+              message={message}
+              proposals={proposals}
+              fields={fields}
               busy={busy}
               act={act}
             />
-          ))}
+          )}
         </>
       )}
-      {["needs_review", "evaluated", "failed"].includes(message.status) && (
-        <>
-          <p className="muted">
-            Check the complete reply and every attachment, including unchanged
-            values and additional information. Decide all extracted values for
-            this reply before completing its review.
-          </p>
-          <button
-            className="secondary-btn"
-            disabled={busy || pending}
-            onClick={() =>
-              act(
-                () =>
-                  api(`/messages/${message.id}/review-complete`, {
-                    method: "POST",
-                  }),
-                "Reply review completed.",
-              )
-            }
-          >
-            Complete reply review
-          </button>
-        </>
-      )}
+      {!pending &&
+        ["needs_review", "evaluated", "failed"].includes(message.status) && (
+          <>
+            <p className="muted">
+              Check the complete reply and every attachment, including unchanged
+              values and additional information. Decide all extracted values for
+              this reply before completing its review.
+            </p>
+            <button
+              className="secondary-btn"
+              disabled={busy || pending}
+              onClick={() =>
+                act(
+                  () =>
+                    api(`/messages/${message.id}/review-complete`, {
+                      method: "POST",
+                    }),
+                  "Reply review completed.",
+                )
+              }
+            >
+              Complete reply review
+            </button>
+          </>
+        )}
     </article>
   );
 }
@@ -618,7 +693,7 @@ export default function CaseDrawer({
                     onClick={() =>
                       act(
                         () => api(`/cases/${caseId}/draft`, { method: "POST" }),
-                        "Draft created. Review it before sending.",
+                        "Draft created. Check its approval status and scheduled sending time.",
                       )
                     }
                   >
@@ -639,6 +714,9 @@ export default function CaseDrawer({
                 <EmailReview
                   key={`${d.id}:${d.version}`}
                   draft={d}
+                  sendJob={data.jobs.find(
+                    (j) => j.dedupe_key === `send:${d.id}:${d.version}`,
+                  )}
                   caseId={caseId}
                   config={config}
                   busy={busy}
@@ -651,12 +729,16 @@ export default function CaseDrawer({
             <>
               <Notice>
                 Review every supplier reply and attachment, including unchanged
-                confirmations and information without an extracted value.
-                Approve or reject extracted values, then complete each reply
-                review. Initial email sending is approved separately.
+                confirmations and information without an extracted value. Edit
+                and approve or reject extracted values in one submission per
+                reply. Initial email sending is approved separately.
               </Notice>
-              {config.auto_followup_enabled && (
-                <Notice>Missing or invalid answers trigger automatic follow-ups, up to {config.auto_followup_max_rounds} per case. Valid answers awaiting review are not requested again.</Notice>
+              {config.auto_followup_enabled && config.auto_send_followups && (
+                <Notice>
+                  Missing or invalid answers trigger automatic follow-ups, up to{" "}
+                  {config.auto_followup_max_rounds} per case. Valid answers
+                  awaiting review are not requested again.
+                </Notice>
               )}
               {!config.anymize_configured && config.ai_mode !== "fixture" && (
                 <Notice>

@@ -1,0 +1,301 @@
+Supplier ID,Supplier Name,Country,Region,Industry,NART,Outstanding fields
+DEMO100-001,Demo Alderhaven Motion Works,Germany,EMEA,Automotive,DEMO100-001-A01,1
+DEMO100-001,Demo Alderhaven Motion Works,Germany,EMEA,Automotive,DEMO100-001-A02,10
+DEMO100-001,Demo Alderhaven Motion Works,Germany,EMEA,Automotive,DEMO100-001-A03,19
+DEMO100-002,Demo Alderhaven Fibre Packs,Mexico,LATAM,Packaging,DEMO100-002-A01,8
+DEMO100-002,Demo Alderhaven Fibre Packs,Mexico,LATAM,Packaging,DEMO100-002-A02,17
+DEMO100-002,Demo Alderhaven Fibre Packs,Mexico,LATAM,Packaging,DEMO100-002-A03,6
+DEMO100-003,Demo Alderhaven Signal Devices,Australia,APAC,Electronics,DEMO100-003-A01,15
+DEMO100-003,Demo Alderhaven Signal Devices,Australia,APAC,Electronics,DEMO100-003-A02,4
+DEMO100-003,Demo Alderhaven Signal Devices,Australia,APAC,Electronics,DEMO100-003-A03,13
+DEMO100-004,Demo Alderhaven Woven Materials,France,EMEA,Textiles,DEMO100-004-A01,2
+DEMO100-004,Demo Alderhaven Woven Materials,France,EMEA,Textiles,DEMO100-004-A02,11
+DEMO100-004,Demo Alderhaven Woven Materials,France,EMEA,Textiles,DEMO100-004-A03,20
+DEMO100-005,Demo Alderhaven Process Systems,Brazil,LATAM,Industrial,DEMO100-005-A01,9
+DEMO100-005,Demo Alderhaven Process Systems,Brazil,LATAM,Industrial,DEMO100-005-A02,18
+DEMO100-005,Demo Alderhaven Process Systems,Brazil,LATAM,Industrial,DEMO100-005-A03,7
+DEMO100-006,Demo Alderhaven Drive Components,South Africa,EMEA,Automotive,DEMO100-006-A01,16
+DEMO100-006,Demo Alderhaven Drive Components,South Africa,EMEA,Automotive,DEMO100-006-A02,5
+DEMO100-006,Demo Alderhaven Drive Components,South Africa,EMEA,Automotive,DEMO100-006-A03,14
+DEMO100-007,Demo Alderhaven Circular Cartons,Poland,EMEA,Packaging,DEMO100-007-A01,3
+DEMO100-007,Demo Alderhaven Circular Cartons,Poland,EMEA,Packaging,DEMO100-007-A02,12
+DEMO100-007,Demo Alderhaven Circular Cartons,Poland,EMEA,Packaging,DEMO100-007-A03,1
+DEMO100-008,Demo Alderhaven Sensor Assemblies,Chile,LATAM,Electronics,DEMO100-008-A01,10
+DEMO100-008,Demo Alderhaven Sensor Assemblies,Chile,LATAM,Electronics,DEMO100-008-A02,19
+DEMO100-008,Demo Alderhaven Sensor Assemblies,Chile,LATAM,Electronics,DEMO100-008-A03,8
+DEMO100-009,Demo Alderhaven Technical Fabrics,Turkey,EMEA,Textiles,DEMO100-009-A01,17
+DEMO100-009,Demo Alderhaven Technical Fabrics,Turkey,EMEA,Textiles,DEMO100-009-A02,6
+DEMO100-009,Demo Alderhaven Technical Fabrics,Turkey,EMEA,Textiles,DEMO100-009-A03,15
+DEMO100-010,Demo Alderhaven Precision Tools,Portugal,EMEA,Industrial,DEMO100-010-A01,4
+DEMO100-010,Demo Alderhaven Precision Tools,Portugal,EMEA,Industrial,DEMO100-010-A02,13
+DEMO100-010,Demo Alderhaven Precision Tools,Portugal,EMEA,Industrial,DEMO100-010-A03,2
+DEMO100-011,Demo Briarvale Motion Works,South Korea,APAC,Automotive,DEMO100-011-A01,11
+DEMO100-011,Demo Briarvale Motion Works,South Korea,APAC,Automotive,DEMO100-011-A02,20
+DEMO100-011,Demo Briarvale Motion Works,South Korea,APAC,Automotive,DEMO100-011-A03,9
+DEMO100-012,Demo Briarvale Fibre Packs,Thailand,APAC,Packaging,DEMO100-012-A01,18
+DEMO100-012,Demo Briarvale Fibre Packs,Thailand,APAC,Packaging,DEMO100-012-A02,7
+DEMO100-012,Demo Briarvale Fibre Packs,Thailand,APAC,Packaging,DEMO100-012-A03,16
+DEMO100-013,Demo Briarvale Signal Devices,United States,AMER,Electronics,DEMO100-013-A01,5
+DEMO100-013,Demo Briarvale Signal Devices,United States,AMER,Electronics,DEMO100-013-A02,14
+DEMO100-013,Demo Briarvale Signal Devices,United States,AMER,Electronics,DEMO100-013-A03,3
+DEMO100-014,Demo Briarvale Woven Materials,India,APAC,Textiles,DEMO100-014-A01,12
+DEMO100-014,Demo Briarvale Woven Materials,India,APAC,Textiles,DEMO100-014-A02,1
+DEMO100-014,Demo Briarvale Woven Materials,India,APAC,Textiles,DEMO100-014-A03,10
+DEMO100-015,Demo Briarvale Process Systems,Spain,EMEA,Industrial,DEMO100-015-A01,19
+DEMO100-015,Demo Briarvale Process Systems,Spain,EMEA,Industrial,DEMO100-015-A02,8
+DEMO100-015,Demo Briarvale Process Systems,Spain,EMEA,Industrial,DEMO100-015-A03,17
+DEMO100-016,Demo Briarvale Drive Components,Canada,AMER,Automotive,DEMO100-016-A01,6
+DEMO100-016,Demo Briarvale Drive Components,Canada,AMER,Automotive,DEMO100-016-A02,15
+DEMO100-016,Demo Briarvale Drive Components,Canada,AMER,Automotive,DEMO100-016-A03,4
+DEMO100-017,Demo Briarvale Circular Cartons,Vietnam,APAC,Packaging,DEMO100-017-A01,13
+DEMO100-017,Demo Briarvale Circular Cartons,Vietnam,APAC,Packaging,DEMO100-017-A02,2
+DEMO100-017,Demo Briarvale Circular Cartons,Vietnam,APAC,Packaging,DEMO100-017-A03,11
+DEMO100-018,Demo Briarvale Sensor Assemblies,Germany,EMEA,Electronics,DEMO100-018-A01,20
+DEMO100-018,Demo Briarvale Sensor Assemblies,Germany,EMEA,Electronics,DEMO100-018-A02,9
+DEMO100-018,Demo Briarvale Sensor Assemblies,Germany,EMEA,Electronics,DEMO100-018-A03,18
+DEMO100-019,Demo Briarvale Technical Fabrics,Mexico,LATAM,Textiles,DEMO100-019-A01,7
+DEMO100-019,Demo Briarvale Technical Fabrics,Mexico,LATAM,Textiles,DEMO100-019-A02,16
+DEMO100-019,Demo Briarvale Technical Fabrics,Mexico,LATAM,Textiles,DEMO100-019-A03,5
+DEMO100-020,Demo Briarvale Precision Tools,Australia,APAC,Industrial,DEMO100-020-A01,14
+DEMO100-020,Demo Briarvale Precision Tools,Australia,APAC,Industrial,DEMO100-020-A02,3
+DEMO100-020,Demo Briarvale Precision Tools,Australia,APAC,Industrial,DEMO100-020-A03,12
+DEMO100-021,Demo Cindermere Motion Works,Poland,EMEA,Automotive,DEMO100-021-A01,1
+DEMO100-021,Demo Cindermere Motion Works,Poland,EMEA,Automotive,DEMO100-021-A02,10
+DEMO100-021,Demo Cindermere Motion Works,Poland,EMEA,Automotive,DEMO100-021-A03,19
+DEMO100-022,Demo Cindermere Fibre Packs,Chile,LATAM,Packaging,DEMO100-022-A01,8
+DEMO100-022,Demo Cindermere Fibre Packs,Chile,LATAM,Packaging,DEMO100-022-A02,17
+DEMO100-022,Demo Cindermere Fibre Packs,Chile,LATAM,Packaging,DEMO100-022-A03,6
+DEMO100-023,Demo Cindermere Signal Devices,Turkey,EMEA,Electronics,DEMO100-023-A01,15
+DEMO100-023,Demo Cindermere Signal Devices,Turkey,EMEA,Electronics,DEMO100-023-A02,4
+DEMO100-023,Demo Cindermere Signal Devices,Turkey,EMEA,Electronics,DEMO100-023-A03,13
+DEMO100-024,Demo Cindermere Woven Materials,Portugal,EMEA,Textiles,DEMO100-024-A01,2
+DEMO100-024,Demo Cindermere Woven Materials,Portugal,EMEA,Textiles,DEMO100-024-A02,11
+DEMO100-024,Demo Cindermere Woven Materials,Portugal,EMEA,Textiles,DEMO100-024-A03,20
+DEMO100-025,Demo Cindermere Process Systems,Japan,APAC,Industrial,DEMO100-025-A01,9
+DEMO100-025,Demo Cindermere Process Systems,Japan,APAC,Industrial,DEMO100-025-A02,18
+DEMO100-025,Demo Cindermere Process Systems,Japan,APAC,Industrial,DEMO100-025-A03,7
+DEMO100-026,Demo Cindermere Drive Components,Malaysia,APAC,Automotive,DEMO100-026-A01,16
+DEMO100-026,Demo Cindermere Drive Components,Malaysia,APAC,Automotive,DEMO100-026-A02,5
+DEMO100-026,Demo Cindermere Drive Components,Malaysia,APAC,Automotive,DEMO100-026-A03,14
+DEMO100-027,Demo Cindermere Circular Cartons,Sweden,EMEA,Packaging,DEMO100-027-A01,3
+DEMO100-027,Demo Cindermere Circular Cartons,Sweden,EMEA,Packaging,DEMO100-027-A02,12
+DEMO100-027,Demo Cindermere Circular Cartons,Sweden,EMEA,Packaging,DEMO100-027-A03,1
+DEMO100-028,Demo Cindermere Sensor Assemblies,South Korea,APAC,Electronics,DEMO100-028-A01,10
+DEMO100-028,Demo Cindermere Sensor Assemblies,South Korea,APAC,Electronics,DEMO100-028-A02,19
+DEMO100-028,Demo Cindermere Sensor Assemblies,South Korea,APAC,Electronics,DEMO100-028-A03,8
+DEMO100-029,Demo Cindermere Technical Fabrics,Thailand,APAC,Textiles,DEMO100-029-A01,17
+DEMO100-029,Demo Cindermere Technical Fabrics,Thailand,APAC,Textiles,DEMO100-029-A02,6
+DEMO100-029,Demo Cindermere Technical Fabrics,Thailand,APAC,Textiles,DEMO100-029-A03,15
+DEMO100-030,Demo Cindermere Precision Tools,United States,AMER,Industrial,DEMO100-030-A01,4
+DEMO100-030,Demo Cindermere Precision Tools,United States,AMER,Industrial,DEMO100-030-A02,13
+DEMO100-030,Demo Cindermere Precision Tools,United States,AMER,Industrial,DEMO100-030-A03,2
+DEMO100-031,Demo Dunewick Motion Works,Vietnam,APAC,Automotive,DEMO100-031-A01,11
+DEMO100-031,Demo Dunewick Motion Works,Vietnam,APAC,Automotive,DEMO100-031-A02,20
+DEMO100-031,Demo Dunewick Motion Works,Vietnam,APAC,Automotive,DEMO100-031-A03,9
+DEMO100-032,Demo Dunewick Fibre Packs,Germany,EMEA,Packaging,DEMO100-032-A01,18
+DEMO100-032,Demo Dunewick Fibre Packs,Germany,EMEA,Packaging,DEMO100-032-A02,7
+DEMO100-032,Demo Dunewick Fibre Packs,Germany,EMEA,Packaging,DEMO100-032-A03,16
+DEMO100-033,Demo Dunewick Signal Devices,Mexico,LATAM,Electronics,DEMO100-033-A01,5
+DEMO100-033,Demo Dunewick Signal Devices,Mexico,LATAM,Electronics,DEMO100-033-A02,14
+DEMO100-033,Demo Dunewick Signal Devices,Mexico,LATAM,Electronics,DEMO100-033-A03,3
+DEMO100-034,Demo Dunewick Woven Materials,Australia,APAC,Textiles,DEMO100-034-A01,12
+DEMO100-034,Demo Dunewick Woven Materials,Australia,APAC,Textiles,DEMO100-034-A02,1
+DEMO100-034,Demo Dunewick Woven Materials,Australia,APAC,Textiles,DEMO100-034-A03,10
+DEMO100-035,Demo Dunewick Process Systems,France,EMEA,Industrial,DEMO100-035-A01,19
+DEMO100-035,Demo Dunewick Process Systems,France,EMEA,Industrial,DEMO100-035-A02,8
+DEMO100-035,Demo Dunewick Process Systems,France,EMEA,Industrial,DEMO100-035-A03,17
+DEMO100-036,Demo Dunewick Drive Components,Brazil,LATAM,Automotive,DEMO100-036-A01,6
+DEMO100-036,Demo Dunewick Drive Components,Brazil,LATAM,Automotive,DEMO100-036-A02,15
+DEMO100-036,Demo Dunewick Drive Components,Brazil,LATAM,Automotive,DEMO100-036-A03,4
+DEMO100-037,Demo Dunewick Circular Cartons,South Africa,EMEA,Packaging,DEMO100-037-A01,13
+DEMO100-037,Demo Dunewick Circular Cartons,South Africa,EMEA,Packaging,DEMO100-037-A02,2
+DEMO100-037,Demo Dunewick Circular Cartons,South Africa,EMEA,Packaging,DEMO100-037-A03,11
+DEMO100-038,Demo Dunewick Sensor Assemblies,Poland,EMEA,Electronics,DEMO100-038-A01,20
+DEMO100-038,Demo Dunewick Sensor Assemblies,Poland,EMEA,Electronics,DEMO100-038-A02,9
+DEMO100-038,Demo Dunewick Sensor Assemblies,Poland,EMEA,Electronics,DEMO100-038-A03,18
+DEMO100-039,Demo Dunewick Technical Fabrics,Chile,LATAM,Textiles,DEMO100-039-A01,7
+DEMO100-039,Demo Dunewick Technical Fabrics,Chile,LATAM,Textiles,DEMO100-039-A02,16
+DEMO100-039,Demo Dunewick Technical Fabrics,Chile,LATAM,Textiles,DEMO100-039-A03,5
+DEMO100-040,Demo Dunewick Precision Tools,Turkey,EMEA,Industrial,DEMO100-040-A01,14
+DEMO100-040,Demo Dunewick Precision Tools,Turkey,EMEA,Industrial,DEMO100-040-A02,3
+DEMO100-040,Demo Dunewick Precision Tools,Turkey,EMEA,Industrial,DEMO100-040-A03,12
+DEMO100-041,Demo Emberbrook Motion Works,Sweden,EMEA,Automotive,DEMO100-041-A01,1
+DEMO100-041,Demo Emberbrook Motion Works,Sweden,EMEA,Automotive,DEMO100-041-A02,10
+DEMO100-041,Demo Emberbrook Motion Works,Sweden,EMEA,Automotive,DEMO100-041-A03,19
+DEMO100-042,Demo Emberbrook Fibre Packs,South Korea,APAC,Packaging,DEMO100-042-A01,8
+DEMO100-042,Demo Emberbrook Fibre Packs,South Korea,APAC,Packaging,DEMO100-042-A02,17
+DEMO100-042,Demo Emberbrook Fibre Packs,South Korea,APAC,Packaging,DEMO100-042-A03,6
+DEMO100-043,Demo Emberbrook Signal Devices,Thailand,APAC,Electronics,DEMO100-043-A01,15
+DEMO100-043,Demo Emberbrook Signal Devices,Thailand,APAC,Electronics,DEMO100-043-A02,4
+DEMO100-043,Demo Emberbrook Signal Devices,Thailand,APAC,Electronics,DEMO100-043-A03,13
+DEMO100-044,Demo Emberbrook Woven Materials,United States,AMER,Textiles,DEMO100-044-A01,2
+DEMO100-044,Demo Emberbrook Woven Materials,United States,AMER,Textiles,DEMO100-044-A02,11
+DEMO100-044,Demo Emberbrook Woven Materials,United States,AMER,Textiles,DEMO100-044-A03,20
+DEMO100-045,Demo Emberbrook Process Systems,India,APAC,Industrial,DEMO100-045-A01,9
+DEMO100-045,Demo Emberbrook Process Systems,India,APAC,Industrial,DEMO100-045-A02,18
+DEMO100-045,Demo Emberbrook Process Systems,India,APAC,Industrial,DEMO100-045-A03,7
+DEMO100-046,Demo Emberbrook Drive Components,Spain,EMEA,Automotive,DEMO100-046-A01,16
+DEMO100-046,Demo Emberbrook Drive Components,Spain,EMEA,Automotive,DEMO100-046-A02,5
+DEMO100-046,Demo Emberbrook Drive Components,Spain,EMEA,Automotive,DEMO100-046-A03,14
+DEMO100-047,Demo Emberbrook Circular Cartons,Canada,AMER,Packaging,DEMO100-047-A01,3
+DEMO100-047,Demo Emberbrook Circular Cartons,Canada,AMER,Packaging,DEMO100-047-A02,12
+DEMO100-047,Demo Emberbrook Circular Cartons,Canada,AMER,Packaging,DEMO100-047-A03,1
+DEMO100-048,Demo Emberbrook Sensor Assemblies,Vietnam,APAC,Electronics,DEMO100-048-A01,10
+DEMO100-048,Demo Emberbrook Sensor Assemblies,Vietnam,APAC,Electronics,DEMO100-048-A02,19
+DEMO100-048,Demo Emberbrook Sensor Assemblies,Vietnam,APAC,Electronics,DEMO100-048-A03,8
+DEMO100-049,Demo Emberbrook Technical Fabrics,Germany,EMEA,Textiles,DEMO100-049-A01,17
+DEMO100-049,Demo Emberbrook Technical Fabrics,Germany,EMEA,Textiles,DEMO100-049-A02,6
+DEMO100-049,Demo Emberbrook Technical Fabrics,Germany,EMEA,Textiles,DEMO100-049-A03,15
+DEMO100-050,Demo Emberbrook Precision Tools,Mexico,LATAM,Industrial,DEMO100-050-A01,4
+DEMO100-050,Demo Emberbrook Precision Tools,Mexico,LATAM,Industrial,DEMO100-050-A02,13
+DEMO100-050,Demo Emberbrook Precision Tools,Mexico,LATAM,Industrial,DEMO100-050-A03,2
+DEMO100-051,Demo Fernbridge Motion Works,South Africa,EMEA,Automotive,DEMO100-051-A01,11
+DEMO100-051,Demo Fernbridge Motion Works,South Africa,EMEA,Automotive,DEMO100-051-A02,20
+DEMO100-051,Demo Fernbridge Motion Works,South Africa,EMEA,Automotive,DEMO100-051-A03,9
+DEMO100-052,Demo Fernbridge Fibre Packs,Poland,EMEA,Packaging,DEMO100-052-A01,18
+DEMO100-052,Demo Fernbridge Fibre Packs,Poland,EMEA,Packaging,DEMO100-052-A02,7
+DEMO100-052,Demo Fernbridge Fibre Packs,Poland,EMEA,Packaging,DEMO100-052-A03,16
+DEMO100-053,Demo Fernbridge Signal Devices,Chile,LATAM,Electronics,DEMO100-053-A01,5
+DEMO100-053,Demo Fernbridge Signal Devices,Chile,LATAM,Electronics,DEMO100-053-A02,14
+DEMO100-053,Demo Fernbridge Signal Devices,Chile,LATAM,Electronics,DEMO100-053-A03,3
+DEMO100-054,Demo Fernbridge Woven Materials,Turkey,EMEA,Textiles,DEMO100-054-A01,12
+DEMO100-054,Demo Fernbridge Woven Materials,Turkey,EMEA,Textiles,DEMO100-054-A02,1
+DEMO100-054,Demo Fernbridge Woven Materials,Turkey,EMEA,Textiles,DEMO100-054-A03,10
+DEMO100-055,Demo Fernbridge Process Systems,Portugal,EMEA,Industrial,DEMO100-055-A01,19
+DEMO100-055,Demo Fernbridge Process Systems,Portugal,EMEA,Industrial,DEMO100-055-A02,8
+DEMO100-055,Demo Fernbridge Process Systems,Portugal,EMEA,Industrial,DEMO100-055-A03,17
+DEMO100-056,Demo Fernbridge Drive Components,Japan,APAC,Automotive,DEMO100-056-A01,6
+DEMO100-056,Demo Fernbridge Drive Components,Japan,APAC,Automotive,DEMO100-056-A02,15
+DEMO100-056,Demo Fernbridge Drive Components,Japan,APAC,Automotive,DEMO100-056-A03,4
+DEMO100-057,Demo Fernbridge Circular Cartons,Malaysia,APAC,Packaging,DEMO100-057-A01,13
+DEMO100-057,Demo Fernbridge Circular Cartons,Malaysia,APAC,Packaging,DEMO100-057-A02,2
+DEMO100-057,Demo Fernbridge Circular Cartons,Malaysia,APAC,Packaging,DEMO100-057-A03,11
+DEMO100-058,Demo Fernbridge Sensor Assemblies,Sweden,EMEA,Electronics,DEMO100-058-A01,20
+DEMO100-058,Demo Fernbridge Sensor Assemblies,Sweden,EMEA,Electronics,DEMO100-058-A02,9
+DEMO100-058,Demo Fernbridge Sensor Assemblies,Sweden,EMEA,Electronics,DEMO100-058-A03,18
+DEMO100-059,Demo Fernbridge Technical Fabrics,South Korea,APAC,Textiles,DEMO100-059-A01,7
+DEMO100-059,Demo Fernbridge Technical Fabrics,South Korea,APAC,Textiles,DEMO100-059-A02,16
+DEMO100-059,Demo Fernbridge Technical Fabrics,South Korea,APAC,Textiles,DEMO100-059-A03,5
+DEMO100-060,Demo Fernbridge Precision Tools,Thailand,APAC,Industrial,DEMO100-060-A01,14
+DEMO100-060,Demo Fernbridge Precision Tools,Thailand,APAC,Industrial,DEMO100-060-A02,3
+DEMO100-060,Demo Fernbridge Precision Tools,Thailand,APAC,Industrial,DEMO100-060-A03,12
+DEMO100-061,Demo Glenwick Motion Works,Canada,AMER,Automotive,DEMO100-061-A01,1
+DEMO100-061,Demo Glenwick Motion Works,Canada,AMER,Automotive,DEMO100-061-A02,10
+DEMO100-061,Demo Glenwick Motion Works,Canada,AMER,Automotive,DEMO100-061-A03,19
+DEMO100-062,Demo Glenwick Fibre Packs,Vietnam,APAC,Packaging,DEMO100-062-A01,8
+DEMO100-062,Demo Glenwick Fibre Packs,Vietnam,APAC,Packaging,DEMO100-062-A02,17
+DEMO100-062,Demo Glenwick Fibre Packs,Vietnam,APAC,Packaging,DEMO100-062-A03,6
+DEMO100-063,Demo Glenwick Signal Devices,Germany,EMEA,Electronics,DEMO100-063-A01,15
+DEMO100-063,Demo Glenwick Signal Devices,Germany,EMEA,Electronics,DEMO100-063-A02,4
+DEMO100-063,Demo Glenwick Signal Devices,Germany,EMEA,Electronics,DEMO100-063-A03,13
+DEMO100-064,Demo Glenwick Woven Materials,Mexico,LATAM,Textiles,DEMO100-064-A01,2
+DEMO100-064,Demo Glenwick Woven Materials,Mexico,LATAM,Textiles,DEMO100-064-A02,11
+DEMO100-064,Demo Glenwick Woven Materials,Mexico,LATAM,Textiles,DEMO100-064-A03,20
+DEMO100-065,Demo Glenwick Process Systems,Australia,APAC,Industrial,DEMO100-065-A01,9
+DEMO100-065,Demo Glenwick Process Systems,Australia,APAC,Industrial,DEMO100-065-A02,18
+DEMO100-065,Demo Glenwick Process Systems,Australia,APAC,Industrial,DEMO100-065-A03,7
+DEMO100-066,Demo Glenwick Drive Components,France,EMEA,Automotive,DEMO100-066-A01,16
+DEMO100-066,Demo Glenwick Drive Components,France,EMEA,Automotive,DEMO100-066-A02,5
+DEMO100-066,Demo Glenwick Drive Components,France,EMEA,Automotive,DEMO100-066-A03,14
+DEMO100-067,Demo Glenwick Circular Cartons,Brazil,LATAM,Packaging,DEMO100-067-A01,3
+DEMO100-067,Demo Glenwick Circular Cartons,Brazil,LATAM,Packaging,DEMO100-067-A02,12
+DEMO100-067,Demo Glenwick Circular Cartons,Brazil,LATAM,Packaging,DEMO100-067-A03,1
+DEMO100-068,Demo Glenwick Sensor Assemblies,South Africa,EMEA,Electronics,DEMO100-068-A01,10
+DEMO100-068,Demo Glenwick Sensor Assemblies,South Africa,EMEA,Electronics,DEMO100-068-A02,19
+DEMO100-068,Demo Glenwick Sensor Assemblies,South Africa,EMEA,Electronics,DEMO100-068-A03,8
+DEMO100-069,Demo Glenwick Technical Fabrics,Poland,EMEA,Textiles,DEMO100-069-A01,17
+DEMO100-069,Demo Glenwick Technical Fabrics,Poland,EMEA,Textiles,DEMO100-069-A02,6
+DEMO100-069,Demo Glenwick Technical Fabrics,Poland,EMEA,Textiles,DEMO100-069-A03,15
+DEMO100-070,Demo Glenwick Precision Tools,Chile,LATAM,Industrial,DEMO100-070-A01,4
+DEMO100-070,Demo Glenwick Precision Tools,Chile,LATAM,Industrial,DEMO100-070-A02,13
+DEMO100-070,Demo Glenwick Precision Tools,Chile,LATAM,Industrial,DEMO100-070-A03,2
+DEMO100-071,Demo Hazelreach Motion Works,Malaysia,APAC,Automotive,DEMO100-071-A01,11
+DEMO100-071,Demo Hazelreach Motion Works,Malaysia,APAC,Automotive,DEMO100-071-A02,20
+DEMO100-071,Demo Hazelreach Motion Works,Malaysia,APAC,Automotive,DEMO100-071-A03,9
+DEMO100-072,Demo Hazelreach Fibre Packs,Sweden,EMEA,Packaging,DEMO100-072-A01,18
+DEMO100-072,Demo Hazelreach Fibre Packs,Sweden,EMEA,Packaging,DEMO100-072-A02,7
+DEMO100-072,Demo Hazelreach Fibre Packs,Sweden,EMEA,Packaging,DEMO100-072-A03,16
+DEMO100-073,Demo Hazelreach Signal Devices,South Korea,APAC,Electronics,DEMO100-073-A01,5
+DEMO100-073,Demo Hazelreach Signal Devices,South Korea,APAC,Electronics,DEMO100-073-A02,14
+DEMO100-073,Demo Hazelreach Signal Devices,South Korea,APAC,Electronics,DEMO100-073-A03,3
+DEMO100-074,Demo Hazelreach Woven Materials,Thailand,APAC,Textiles,DEMO100-074-A01,12
+DEMO100-074,Demo Hazelreach Woven Materials,Thailand,APAC,Textiles,DEMO100-074-A02,1
+DEMO100-074,Demo Hazelreach Woven Materials,Thailand,APAC,Textiles,DEMO100-074-A03,10
+DEMO100-075,Demo Hazelreach Process Systems,United States,AMER,Industrial,DEMO100-075-A01,19
+DEMO100-075,Demo Hazelreach Process Systems,United States,AMER,Industrial,DEMO100-075-A02,8
+DEMO100-075,Demo Hazelreach Process Systems,United States,AMER,Industrial,DEMO100-075-A03,17
+DEMO100-076,Demo Hazelreach Drive Components,India,APAC,Automotive,DEMO100-076-A01,6
+DEMO100-076,Demo Hazelreach Drive Components,India,APAC,Automotive,DEMO100-076-A02,15
+DEMO100-076,Demo Hazelreach Drive Components,India,APAC,Automotive,DEMO100-076-A03,4
+DEMO100-077,Demo Hazelreach Circular Cartons,Spain,EMEA,Packaging,DEMO100-077-A01,13
+DEMO100-077,Demo Hazelreach Circular Cartons,Spain,EMEA,Packaging,DEMO100-077-A02,2
+DEMO100-077,Demo Hazelreach Circular Cartons,Spain,EMEA,Packaging,DEMO100-077-A03,11
+DEMO100-078,Demo Hazelreach Sensor Assemblies,Canada,AMER,Electronics,DEMO100-078-A01,20
+DEMO100-078,Demo Hazelreach Sensor Assemblies,Canada,AMER,Electronics,DEMO100-078-A02,9
+DEMO100-078,Demo Hazelreach Sensor Assemblies,Canada,AMER,Electronics,DEMO100-078-A03,18
+DEMO100-079,Demo Hazelreach Technical Fabrics,Vietnam,APAC,Textiles,DEMO100-079-A01,7
+DEMO100-079,Demo Hazelreach Technical Fabrics,Vietnam,APAC,Textiles,DEMO100-079-A02,16
+DEMO100-079,Demo Hazelreach Technical Fabrics,Vietnam,APAC,Textiles,DEMO100-079-A03,5
+DEMO100-080,Demo Hazelreach Precision Tools,Germany,EMEA,Industrial,DEMO100-080-A01,14
+DEMO100-080,Demo Hazelreach Precision Tools,Germany,EMEA,Industrial,DEMO100-080-A02,3
+DEMO100-080,Demo Hazelreach Precision Tools,Germany,EMEA,Industrial,DEMO100-080-A03,12
+DEMO100-081,Demo Ivoryfen Motion Works,Brazil,LATAM,Automotive,DEMO100-081-A01,1
+DEMO100-081,Demo Ivoryfen Motion Works,Brazil,LATAM,Automotive,DEMO100-081-A02,10
+DEMO100-081,Demo Ivoryfen Motion Works,Brazil,LATAM,Automotive,DEMO100-081-A03,19
+DEMO100-082,Demo Ivoryfen Fibre Packs,South Africa,EMEA,Packaging,DEMO100-082-A01,8
+DEMO100-082,Demo Ivoryfen Fibre Packs,South Africa,EMEA,Packaging,DEMO100-082-A02,17
+DEMO100-082,Demo Ivoryfen Fibre Packs,South Africa,EMEA,Packaging,DEMO100-082-A03,6
+DEMO100-083,Demo Ivoryfen Signal Devices,Poland,EMEA,Electronics,DEMO100-083-A01,15
+DEMO100-083,Demo Ivoryfen Signal Devices,Poland,EMEA,Electronics,DEMO100-083-A02,4
+DEMO100-083,Demo Ivoryfen Signal Devices,Poland,EMEA,Electronics,DEMO100-083-A03,13
+DEMO100-084,Demo Ivoryfen Woven Materials,Chile,LATAM,Textiles,DEMO100-084-A01,2
+DEMO100-084,Demo Ivoryfen Woven Materials,Chile,LATAM,Textiles,DEMO100-084-A02,11
+DEMO100-084,Demo Ivoryfen Woven Materials,Chile,LATAM,Textiles,DEMO100-084-A03,20
+DEMO100-085,Demo Ivoryfen Process Systems,Turkey,EMEA,Industrial,DEMO100-085-A01,9
+DEMO100-085,Demo Ivoryfen Process Systems,Turkey,EMEA,Industrial,DEMO100-085-A02,18
+DEMO100-085,Demo Ivoryfen Process Systems,Turkey,EMEA,Industrial,DEMO100-085-A03,7
+DEMO100-086,Demo Ivoryfen Drive Components,Portugal,EMEA,Automotive,DEMO100-086-A01,16
+DEMO100-086,Demo Ivoryfen Drive Components,Portugal,EMEA,Automotive,DEMO100-086-A02,5
+DEMO100-086,Demo Ivoryfen Drive Components,Portugal,EMEA,Automotive,DEMO100-086-A03,14
+DEMO100-087,Demo Ivoryfen Circular Cartons,Japan,APAC,Packaging,DEMO100-087-A01,3
+DEMO100-087,Demo Ivoryfen Circular Cartons,Japan,APAC,Packaging,DEMO100-087-A02,12
+DEMO100-087,Demo Ivoryfen Circular Cartons,Japan,APAC,Packaging,DEMO100-087-A03,1
+DEMO100-088,Demo Ivoryfen Sensor Assemblies,Malaysia,APAC,Electronics,DEMO100-088-A01,10
+DEMO100-088,Demo Ivoryfen Sensor Assemblies,Malaysia,APAC,Electronics,DEMO100-088-A02,19
+DEMO100-088,Demo Ivoryfen Sensor Assemblies,Malaysia,APAC,Electronics,DEMO100-088-A03,8
+DEMO100-089,Demo Ivoryfen Technical Fabrics,Sweden,EMEA,Textiles,DEMO100-089-A01,17
+DEMO100-089,Demo Ivoryfen Technical Fabrics,Sweden,EMEA,Textiles,DEMO100-089-A02,6
+DEMO100-089,Demo Ivoryfen Technical Fabrics,Sweden,EMEA,Textiles,DEMO100-089-A03,15
+DEMO100-090,Demo Ivoryfen Precision Tools,South Korea,APAC,Industrial,DEMO100-090-A01,4
+DEMO100-090,Demo Ivoryfen Precision Tools,South Korea,APAC,Industrial,DEMO100-090-A02,13
+DEMO100-090,Demo Ivoryfen Precision Tools,South Korea,APAC,Industrial,DEMO100-090-A03,2
+DEMO100-091,Demo Junipercrest Motion Works,Spain,EMEA,Automotive,DEMO100-091-A01,11
+DEMO100-091,Demo Junipercrest Motion Works,Spain,EMEA,Automotive,DEMO100-091-A02,20
+DEMO100-091,Demo Junipercrest Motion Works,Spain,EMEA,Automotive,DEMO100-091-A03,9
+DEMO100-092,Demo Junipercrest Fibre Packs,Canada,AMER,Packaging,DEMO100-092-A01,18
+DEMO100-092,Demo Junipercrest Fibre Packs,Canada,AMER,Packaging,DEMO100-092-A02,7
+DEMO100-092,Demo Junipercrest Fibre Packs,Canada,AMER,Packaging,DEMO100-092-A03,16
+DEMO100-093,Demo Junipercrest Signal Devices,Vietnam,APAC,Electronics,DEMO100-093-A01,5
+DEMO100-093,Demo Junipercrest Signal Devices,Vietnam,APAC,Electronics,DEMO100-093-A02,14
+DEMO100-093,Demo Junipercrest Signal Devices,Vietnam,APAC,Electronics,DEMO100-093-A03,3
+DEMO100-094,Demo Junipercrest Woven Materials,Germany,EMEA,Textiles,DEMO100-094-A01,12
+DEMO100-094,Demo Junipercrest Woven Materials,Germany,EMEA,Textiles,DEMO100-094-A02,1
+DEMO100-094,Demo Junipercrest Woven Materials,Germany,EMEA,Textiles,DEMO100-094-A03,10
+DEMO100-095,Demo Junipercrest Process Systems,Mexico,LATAM,Industrial,DEMO100-095-A01,19
+DEMO100-095,Demo Junipercrest Process Systems,Mexico,LATAM,Industrial,DEMO100-095-A02,8
+DEMO100-095,Demo Junipercrest Process Systems,Mexico,LATAM,Industrial,DEMO100-095-A03,17
+DEMO100-096,Demo Junipercrest Drive Components,Australia,APAC,Automotive,DEMO100-096-A01,6
+DEMO100-096,Demo Junipercrest Drive Components,Australia,APAC,Automotive,DEMO100-096-A02,15
+DEMO100-096,Demo Junipercrest Drive Components,Australia,APAC,Automotive,DEMO100-096-A03,4
+DEMO100-097,Demo Junipercrest Circular Cartons,France,EMEA,Packaging,DEMO100-097-A01,13
+DEMO100-097,Demo Junipercrest Circular Cartons,France,EMEA,Packaging,DEMO100-097-A02,2
+DEMO100-097,Demo Junipercrest Circular Cartons,France,EMEA,Packaging,DEMO100-097-A03,11
+DEMO100-098,Demo Junipercrest Sensor Assemblies,Brazil,LATAM,Electronics,DEMO100-098-A01,20
+DEMO100-098,Demo Junipercrest Sensor Assemblies,Brazil,LATAM,Electronics,DEMO100-098-A02,9
+DEMO100-098,Demo Junipercrest Sensor Assemblies,Brazil,LATAM,Electronics,DEMO100-098-A03,18
+DEMO100-099,Demo Junipercrest Technical Fabrics,South Africa,EMEA,Textiles,DEMO100-099-A01,7
+DEMO100-099,Demo Junipercrest Technical Fabrics,South Africa,EMEA,Textiles,DEMO100-099-A02,16
+DEMO100-099,Demo Junipercrest Technical Fabrics,South Africa,EMEA,Textiles,DEMO100-099-A03,5
+DEMO100-100,Demo Junipercrest Precision Tools,Poland,EMEA,Industrial,DEMO100-100-A01,14
+DEMO100-100,Demo Junipercrest Precision Tools,Poland,EMEA,Industrial,DEMO100-100-A02,3
+DEMO100-100,Demo Junipercrest Precision Tools,Poland,EMEA,Industrial,DEMO100-100-A03,12

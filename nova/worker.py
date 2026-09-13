@@ -74,6 +74,10 @@ def send_job(factory, settings, job_id, token, target_id):
                 draft.status = "superseded"
             job.status = "cancelled"
             return
+        if draft.approved_by == "automation" and not settings.auto_send_followups:
+            draft.status, job.status = "superseded", "cancelled"
+            audit(db, "worker", "email.auto_approval_cancelled", draft.id)
+            return
         if draft.kind == "auto_followup":
             from nova.followups import still_authorized
 
@@ -191,10 +195,10 @@ def evaluate_job(factory, settings, job_id, token, target_id):
     # Identifiers are handled locally first; all free text then crosses the Anymize boundary.
     def redact(value):
         if isinstance(value, str):
-            value = known_redaction(value, case)
+            # Replace complete row references before supplier/article prefixes can split them.
             for field_id, alias in sorted(aliases.items(), key=lambda item: -len(item[0])):
                 value = re.sub(r"(?<![\w])" + re.escape(field_id) + r"(?![\w])", lambda _: alias, value)
-            return value
+            return known_redaction(value, case)
         if isinstance(value, list):
             return [redact(item) for item in value]
         if isinstance(value, dict):
@@ -237,7 +241,9 @@ def evaluate_job(factory, settings, job_id, token, target_id):
         if field.data["Field Type"] == "Date":
             for source_date in re.findall(r"(?<!\d)\d{4}-\d{2}-\d{2}(?!\d)", candidate.evidence.quote):
                 if validate_value(field, source_date):
-                    errors.append("Source contains an invalid calendar date; supplier clarification required.")
+                    errors.append(
+                        "Source contains an invalid calendar date; supplier clarification required."
+                    )
                     break
         if "upload" in field.data["Field Type"].lower():
             if not src["document_id"]:

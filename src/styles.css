@@ -179,3 +179,29 @@ blockquote { margin:14px 0; padding:12px; border-left:3px solid var(--blue); bac
 .process-preview { margin-top:20px; border-top:1px solid var(--line); padding-top:12px; }
 .audience-option { display:flex; align-items:flex-start; gap:10px; line-height:1.6; cursor:pointer; }
 .audience-option input { flex-shrink:0; margin-top:5px; }
+
+.reply-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.reply-proposal-table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.reply-proposal-table th,
+.reply-proposal-table td {
+  padding: 12px 8px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border, #dfe3e8);
+  overflow-wrap: anywhere;
+}
+.reply-proposal-table th:nth-child(1) { width: 29%; }
+.reply-proposal-table th:nth-child(2) { width: 18%; }
+.reply-proposal-table th:nth-child(3) { width: 36%; }
+.reply-proposal-table th:nth-child(4) { width: 17%; }
+.reply-proposal-table textarea,
+.reply-proposal-table select { width: 100%; min-width: 0; }
+.reply-proposal-table blockquote { margin: 8px 0; }

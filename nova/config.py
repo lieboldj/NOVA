@@ -2,7 +2,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
-from pydantic import SecretStr
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -39,6 +39,8 @@ class Settings(BaseSettings):
     gmail_push_webhook: str = ""
     demo_auto_reply: bool = False
     demo_reply_delay_seconds: int = 5
+    auto_send_followups: bool = True
+    auto_send_delay_minutes: int = Field(default=2, ge=0)
     auto_followup_enabled: bool = False
     auto_followup_max_rounds: int = 3
     smtp_host: str = ""

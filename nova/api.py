@@ -34,6 +34,7 @@ from nova.schemas import (
     ContactApproval,
     DraftEdit,
     ImportApproval,
+    ProposalDecision,
     ProposalEdit,
     SendReconciliation,
 )
@@ -144,7 +145,7 @@ def create_app(settings=None, engine=None):
         title="NOVA Backend",
         version="0.1.0",
         lifespan=lifespan,
-        description="Supplier follow-up API. Emails and supplier data changes require human approval.",
+        description="Supplier follow-up API. Initial emails and supplier data changes require human approval; follow-ups and reminders support delayed automation.",
     )
     app.state.settings, app.state.engine = settings, engine
     app.state.factory = sessions(engine)
@@ -168,6 +169,8 @@ def create_app(settings=None, engine=None):
             "response_days": settings.response_days,
             "max_reminders": settings.max_reminders,
             "demo_auto_reply": settings.demo_auto_reply,
+            "auto_send_followups": settings.auto_send_followups,
+            "auto_send_delay_minutes": settings.auto_send_delay_minutes,
             "auto_followup_enabled": settings.auto_followup_enabled,
             "auto_followup_max_rounds": settings.auto_followup_max_rounds,
         }
@@ -322,7 +325,7 @@ def create_app(settings=None, engine=None):
             if (case.last_reply_at and case.last_reply_at > case.last_sent_at)
             else "reminder"
         )
-        return record(create_draft(db, case, kind))
+        return record(create_draft(db, case, kind, settings=settings))
 
     @app.get("/drafts", tags=["Email"])
     def drafts(db: DB, actor: Reviewer, case_id: str | None = None):
@@ -442,6 +445,88 @@ def create_app(settings=None, engine=None):
                 record(d) for d in db.scalars(select(Document).where(Document.message_id == message.id))
             ]
         }
+
+    @app.post("/messages/{message_id}/approve-all", tags=["Data review"])
+    def approve_reply(message_id: str, body: list[ProposalDecision], db: DB, actor: Reviewer):
+        message = locked_child(db, Message, message_id)
+        case = locked(db, Case, message.case_id)
+        if message.status not in ("needs_review", "evaluated", "failed"):
+            fail("Reply changed or processing is still active; reload before review")
+        proposals = db.scalars(
+            select(Proposal)
+            .where(Proposal.message_id == message.id, Proposal.status == "pending")
+            .order_by(Proposal.id)
+            .with_for_update()
+        ).all()
+        decisions = {entry.proposal_id: entry for entry in body}
+        if len(decisions) != len(body) or set(decisions) != {p.id for p in proposals}:
+            fail("Submit exactly one decision for every pending proposal in this reply")
+        checked = []
+        approved_fields = set()
+        # Validate every decision before any mutation. The case lock serializes reply reviews.
+        for proposal in proposals:
+            entry = decisions[proposal.id]
+            if entry.version is not None and entry.version != proposal.version:
+                fail("Proposal changed; reload and review the current version")
+            field = locked(db, SupplierField, proposal.field_id)
+            if entry.action == "approve":
+                if field.revision != proposal.field_revision:
+                    fail("Underlying data changed; this proposal cannot be applied")
+                if field.id in approved_fields:
+                    fail("Choose only one approved value per field in this reply")
+                approved_fields.add(field.id)
+                errors = proposal_errors(db, proposal, field, entry.value)
+                if entry.value == proposal.value:
+                    errors = list(dict.fromkeys(errors + proposal.validation_errors))
+                if errors:
+                    fail(f"{field.id}: " + "; ".join(errors), 422)
+            checked.append((proposal, field, entry))
+        for proposal, field, entry in checked:
+            if entry.action == "approve":
+                before = field.data.copy()
+                extracted_value = proposal.value
+                if proposal.value != entry.value:
+                    proposal.version += 1
+                proposal.value, proposal.validation_errors = entry.value, []
+                field.data = before | {
+                    "Value submitted": entry.value,
+                    "Status": "Complete",
+                    "Submission date": message.created_at.date().isoformat(),
+                }
+                if "Workflow status" in before:
+                    field.data = field.data | {"Workflow status": "Closed"}
+                field.revision += 1
+                proposal.status = "approved"
+                audit(
+                    db,
+                    actor,
+                    "change.approved",
+                    proposal.id,
+                    field_id=field.id,
+                    before=before,
+                    after=field.data,
+                    evidence=proposal.evidence,
+                    extracted_value=extracted_value,
+                    version=proposal.version,
+                )
+            else:
+                proposal.status = "rejected"
+                audit(
+                    db,
+                    actor,
+                    "change.rejected",
+                    proposal.id,
+                    field_id=field.id,
+                    value=proposal.value,
+                    evidence=proposal.evidence,
+                )
+            proposal.reviewed_by = actor
+        if approved_fields:
+            invalidate_drafts(db, case)
+        message.status = "reviewed"
+        audit(db, actor, "reply.reviewed", message.id)
+        finish_review(db, case)
+        return record(message) | {"proposals": [record(p) for p in proposals]}
 
     @app.post("/messages/{message_id}/review-complete", tags=["Replies"])
     def review_message(message_id: str, db: DB, actor: Reviewer):

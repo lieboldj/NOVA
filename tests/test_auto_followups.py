@@ -13,6 +13,8 @@ from tests.conftest import AUTOMATION, REVIEW, approve_email, fixture_csv, reply
 def setup(env):
     client, factory, settings = env
     settings.auto_followup_enabled = True
+    settings.auto_send_followups = True
+    settings.auto_send_delay_minutes = 0
     rows = list(csv.DictReader(io.StringIO(fixture_csv())))
     for n in (4, 5, 6):
         rows.append(rows[0] | {"Row ID": f"F{n}", "Field (label)": f"Question {n}"})
@@ -50,7 +52,7 @@ def test_four_of_six_sends_only_two_without_data_approval(env):
     )
     run_once(factory, settings)
     followup = automatic(client)[0]
-    assert followup["status"] == "approved" and followup["approved_by"] == "auto-followup"
+    assert followup["status"] == "approved" and followup["approved_by"] == "automation"
     assert followup["requested_fields"] == ["F5", "F6"]
     assert followup["body"].endswith("Thank you,\nSupplier Information Team\n\n" + AI_DISCLOSURE)
     assert "[F1]" not in followup["body"]

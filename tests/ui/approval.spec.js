@@ -202,10 +202,13 @@ test("email approval and data approval remain separate across reloads", async ({
     animations: "disabled",
   });
   await page
-    .getByRole("button", { name: "Approve data change", exact: true })
+    .getByRole("button", { name: "Submit reply review", exact: true })
     .click();
   await expect(
-    page.getByText("Approved value written to the database.", { exact: true }),
+    page.getByText(
+      "Reply review saved. Approved values written to the database.",
+      { exact: true },
+    ),
   ).toBeVisible();
   detail = await (
     await request.get(`/api/cases/${caseId}`, { headers: apiHeaders })
@@ -213,10 +216,7 @@ test("email approval and data approval remain separate across reloads", async ({
   expect(detail.fields[0].data["Value submitted"]).toBe(
     "Verified recycled content",
   );
-  expect(detail.status).toBe("data_review");
-  await page
-    .getByRole("button", { name: "Complete reply review", exact: true })
-    .click();
+  expect(detail.status).toBe("closed");
   await expect
     .poll(
       async () =>
@@ -382,11 +382,8 @@ test("supplier review shows unchanged values, all replies and unused attachments
     extracted.getByRole("link", { name: "energy.txt", exact: true }),
   ).toBeVisible();
   await expect(
-    extracted.getByRole("button", {
-      name: "Complete reply review",
-      exact: true,
-    }),
-  ).toBeDisabled();
+    extracted.getByRole("button", { name: "Submit reply review", exact: true }),
+  ).toBeEnabled();
   await expect(
     unextracted.getByText(/No extracted values are available/),
   ).toBeVisible();
@@ -407,35 +404,25 @@ test("supplier review shows unchanged values, all replies and unused attachments
     unextracted.getByText("Reviewed", { exact: true }),
   ).toBeVisible();
   await extracted
-    .getByRole("button", { name: "Approve confirmation", exact: true })
-    .click();
-  await extracted
-    .getByRole("button", { name: "Approve data change", exact: true })
-    .first()
-    .click();
-  await expect(
-    extracted.getByRole("button", { name: "Approve data change", exact: true }),
-  ).toHaveCount(1);
-  await extracted
-    .getByRole("button", { name: "Approve data change", exact: true })
-    .click();
-  await expect(
-    extracted.getByRole("button", {
-      name: "Complete reply review",
-      exact: true,
-    }),
-  ).toBeEnabled();
+    .getByTestId("proposal-review")
+    .filter({ hasText: "ALL-F2" })
+    .getByLabel("Proposed value")
+    .fill("Reusable cardboard packaging");
   await page.screenshot({
     path: ".data/screenshots/all-supplier-inputs.png",
     fullPage: true,
   });
-  expect(
-    (await (await request.get(`/api/cases/${caseId}`, { headers })).json())
-      .status,
-  ).toBe("data_review");
+  // One browser submission applies all three fields, including the unchanged confirmation.
   await extracted
-    .getByRole("button", { name: "Complete reply review", exact: true })
+    .getByRole("button", { name: "Submit reply review", exact: true })
     .click();
+  await expect(extracted.getByText("Reviewed", { exact: true })).toBeVisible();
+  const detail = await (
+    await request.get(`/api/cases/${caseId}`, { headers })
+  ).json();
+  expect(
+    detail.fields.find((f) => f.id === "ALL-F2").data["Value submitted"],
+  ).toBe("Reusable cardboard packaging");
   await expect
     .poll(
       async () =>

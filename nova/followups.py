@@ -2,15 +2,18 @@
 
 from sqlalchemy import func, select
 
-from nova.models import Audit, Draft, Message, Proposal, SupplierField, now
-from nova.workflow import ACTIVE_DRAFTS, OUTSTANDING, audit, draft_digest, enqueue, validate_value
+from nova.models import Audit, Draft, Message, Proposal, SupplierField
+from nova.workflow import ACTIVE_DRAFTS, AI_DISCLOSURE, OUTSTANDING, audit, auto_approve_draft, validate_value
 
-AI_DISCLOSURE = "This email was written and sent automatically by an AI system."
-AUTO_ACTOR = "auto-followup"
+AUTO_ACTOR = "automation"
 
 
 def still_authorized(db, settings, case, draft):
-    if not settings.auto_followup_enabled or draft.approved_by != AUTO_ACTOR:
+    if (
+        not settings.auto_send_followups
+        or not settings.auto_followup_enabled
+        or draft.approved_by != AUTO_ACTOR
+    ):
         return False
     marker = db.scalar(
         select(Audit).where(
@@ -54,7 +57,11 @@ def unanswered_fields(db, case, message):
 
 
 def plan_followup(db, settings, case, message):
-    if not settings.auto_followup_enabled or message.status not in ("evaluated", "needs_review"):
+    if (
+        not settings.auto_send_followups
+        or not settings.auto_followup_enabled
+        or message.status not in ("evaluated", "needs_review")
+    ):
         return None
     if case.status in ("paused", "closed", "escalated") or not case.recipient:
         return None
@@ -132,14 +139,10 @@ def plan_followup(db, settings, case, message):
         requested_fields=[f.id for f in fields],
         case_revision=case.revision,
         version=1,
-        status="approved",
-        approved_by=AUTO_ACTOR,
-        approved_at=now(),
     )
     db.add(draft)
     db.flush()
-    draft.approved_digest = draft_digest(draft)
-    enqueue(db, "send", draft.id, f"send:{draft.id}:{draft.version}")
+    auto_approve_draft(db, draft, settings)
     audit(
         db,
         AUTO_ACTOR,

@@ -26,6 +26,7 @@ def env(tmp_path):
         ai_mode="fixture",
         anonymizer_mode="fixture",
         mail_mode="simulation",
+        auto_send_followups=False,
     )
     engine = make_engine(settings.database_url)
     if test_url.startswith("postgresql"):

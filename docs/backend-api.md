@@ -14,9 +14,14 @@ Keep credentials in the trusted frontend server; do not ship them in browser Jav
 3. Load `GET /proposals?case_id=...`. Show `field_id`, `old_value`, `value`, evidence, validation errors,
    status, and version. Retrieve original evidence through `GET /messages/{message_id}` and
    `GET /documents/{document_id}`. PDF pages are one-based.
-4. Approve each accepted change with `POST /proposals/{id}/approve`, body `{"version": 1}`. Reject a proposal
-   through `/reject` with the same version body. Edits use `PATCH /proposals/{id}` with
-   `{"version": 1, "value": "2028-12-31"}` and require approval of the returned new version.
+4. Review one complete reply in the editable field table. Submit `POST /messages/{id}/approve-all`
+   with a JSON list such as `[{"proposal_id":"...","value":"2028-12-31","action":"approve","version":1}]`.
+   Include exactly one decision for every pending proposal in that reply; action is `approve` or `reject`.
+   Edited approval values are validated, then the entire batch commits in one transaction, with one field
+   audit per decision. The reply becomes reviewed and case completion runs once. A rejected field retains
+   its accepted value. Any invalid value, stale version/field revision or wrong membership rejects the
+   whole batch. `version` is optional for integration compatibility; the UI always sends it to detect edits.
+   No-proposal replies can be reviewed with an empty list. Legacy per-proposal endpoints remain available.
 5. Download `GET /exports/submissions.csv`. It contains accepted values only.
 
 `409` means the record is stale, already acted upon, blocked, or inconsistent with the requested action.
@@ -60,10 +65,11 @@ An `evaluated` message has extracted value proposals, including unchanged confir
 `needs_review` means no supported candidates were produced. Every message remains a review item:
 `GET /cases/{id}/messages` includes its complete original body and all attachment metadata, even when
 no proposal cites that input. Original attachments remain available through protected downloads.
-After checking the full reply and every attachment, a reviewer must call
-`POST /messages/{id}/review-complete`. That reply's pending proposals must be approved or rejected first;
-other replies can be reviewed independently. The case cannot close or produce a follow-up until all
-received messages are reviewed and all proposals are decided. Automation cannot complete a review.
+After checking the full reply and every attachment, submit the bulk review above. Other replies are
+reviewed independently; the case cannot close until every reply and proposal is reviewed. The legacy
+`POST /messages/{id}/review-complete` is also available once that reply has no pending proposals.
+Automation cannot approve supplier data or complete a review. When incomplete-answer automation is enabled,
+it can request unresolved answers while received values still await human review.
 
 ## Cases, reminders and partial replies
 
@@ -82,7 +88,18 @@ check drafts a follow-up only for unresolved fields.
 
 The response deadline begins when an email is sent/simulated, not when a draft is created or approved.
 Incoming replies pause the deadline and supersede unsent drafts. A missing reply produces a reminder draft,
-which still requires approval. The default maximum is two sent reminders before escalation.
+which is automatically approved when `AUTO_SEND_FOLLOWUPS=true` (default). Follow-ups after review use
+that same policy; initial `request` drafts always remain pending for human approval. Automated sends wait
+`AUTO_SEND_DELAY_MINUTES` (default 2, nonnegative) using `Job.available_at`. The audit actor is `automation`
+and action is `email.auto_approved`, including the version and earliest send time. Editing increments the
+version, clears approval and requires a new human decision; rejection or superseding invalidates the send.
+The worker checks version, digest and case revision at dispatch. Save edits before dispatch starts;
+unsaved browser text cannot stop delivery. Turning the flag off also cancels queued automated sends.
+The default maximum is two sent reminders before escalation.
+
+`AUTO_FOLLOWUP_ENABLED=true` additionally permits bounded incomplete-answer follow-ups during data review;
+these also require `AUTO_SEND_FOLLOWUPS=true` and use the same delay. Their default cap is three rounds.
+All automated email templates include the AI disclosure below the team sign-off.
 
 ## Uncertain sending outcomes
 
@@ -161,7 +178,7 @@ eligibility/blocking reasons, the number of cases missing required targeting met
 
 `POST /processes/start` accepts `{"preview_token":"...","case_ids":["..."]}`. Select any nonempty subset
 of eligible cases from the preview, up to 500. The server locks and revalidates the complete selection
-before creating a pending email per article case. Changed cases return `409` and require a new preview;
+before creating an email per article case. Initial requests are pending; follow-ups follow the configured automatic approval policy. Changed cases return `409` and require a new preview;
 unpreviewed cases return `422`. Retries cannot duplicate active requests. Each case records a
 `process.initiated` audit event with the human actor, original command, criteria, and draft ID.
 Emails use the existing individual review, approval, and delivery endpoints. Both process endpoints

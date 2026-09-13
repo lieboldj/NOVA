@@ -206,7 +206,13 @@ def install_initiation_routes(app, settings, DB, Reviewer):
                 fail("A selected case changed; preview the request again before starting.")
         drafts = []
         for case in selected:
-            draft = create_draft(db, case, "request" if not case.last_sent_at else "followup", use_case="MDF")
+            draft = create_draft(
+                db,
+                case,
+                "request" if not case.last_sent_at else "followup",
+                use_case="MDF",
+                settings=settings,
+            )
             audit(
                 db,
                 actor,
